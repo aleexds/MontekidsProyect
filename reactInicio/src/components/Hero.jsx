@@ -73,7 +73,7 @@ export default function Hero() {
                 src={kidsHero} 
               />
               
-              {/* Tarjeta flotante inferior */}
+              {/* Tarjeta flotante inferior opaca */}
               <div className="absolute bottom-4 left-4 right-4 bg-surface-container-lowest dark:bg-zinc-900 p-3.5 rounded-xl flex items-center justify-between shadow-lg border border-surface-container-high/40 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold animate-bounce">
