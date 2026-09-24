@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import logoMontekids from '../img/logoMontekids.png';
+import logoDark from '../img/logoDarkMontekids.png';
 
 export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
@@ -35,10 +36,19 @@ export default function Navbar() {
       <nav className="w-full bg-surface-container-lowest border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3 relative z-30">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <img src={logoMontekids} alt="Logo MonteKids" />
-          </div>
+          {/* Logo dinámico (Modo Claro / Modo Oscuro) */}
+          <a href="#inicio" className="flex items-center gap-2">
+            <img 
+              src={logoMontekids} 
+              alt="Logo MonteKids" 
+              className="h-9 sm:h-20 w-auto block dark:hidden transition-opacity duration-300"
+            />
+            <img 
+              src={logoDark} 
+              alt="Logo MonteKids Dark" 
+              className="h-9 sm:h-20 w-auto hidden dark:block transition-opacity duration-300"
+            />
+          </a>
 
           {/* Links de Navegación */}
           <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-on-surface-variant">
@@ -131,7 +141,7 @@ export default function Navbar() {
               {/* Área de Chat / Mensajes */}
               <div className="flex-1 p-5 overflow-y-auto space-y-4">
                 <div className="bg-surface-container-low p-4 rounded-2xl rounded-tl-sm text-sm text-on-surface leading-relaxed border border-surface-container-high">
-                  👋 ¡Hola! Soy el asistente virtual de Montekids[cite: 15]. ¿En qué te puedo colaborar hoy? Puedo brindarte información sobre:
+                  👋 ¡Hola! Soy el asistente virtual de Montekids. ¿En qué te puedo colaborar hoy? Puedo brindarte información sobre:
                   <ul className="mt-2 space-y-1 list-disc list-inside text-xs text-on-surface-variant">
                     <li>Proceso de matrícula y admisiones</li>
                     <li>Planes de estimulación temprana</li>
