@@ -27,6 +27,7 @@ export default function Hero() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  className="animate-draw-underline"
                   d="M 6,10 Q 100,6 194,10"
                   stroke="currentColor"
                   strokeWidth="6"
