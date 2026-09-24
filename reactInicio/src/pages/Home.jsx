@@ -5,6 +5,8 @@ import Philosophy from '../components/Philosophy';
 import Programs from '../components/Programs';
 import Testimonials from '../components/Testimonials';
 import LocationMap from '../components/LocationMap';
+import CtaBanner from '../components/CtaBanner';
+import Footer from '../components/Footer';
 import AiDrawer from '../components/AiDrawer';
 
 export default function Home() {
@@ -20,8 +22,10 @@ export default function Home() {
         <Programs />
         <Testimonials />
         <LocationMap />
+        <CtaBanner />
       </main>
 
+      <Footer />
       <AiDrawer isOpen={aiOpen} onClose={() => setAiOpen(false)} />
     </div>
   );
