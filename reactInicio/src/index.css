@@ -130,3 +130,23 @@ body {
   animation: drawStrokeVisible 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: 800ms; /* Inicia justo cuando concluye el rebote del Hero */
 }
+
+/* --- EFECTO INTERACTIVO TIPO COOLORS EN LETRAS --- */
+
+/* Clase para cada letra interactiva */
+.interactive-letter {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Efecto Hover: Eleva, amplía y aplica un leve giro lúdico */
+.interactive-letter:hover {
+  transform: translateY(-6px) scale(1.25) rotate(-4deg);
+}
+
+/* Alteración de rotación alterna para letras pares para darle dinamismo infantil */
+.interactive-letter:nth-child(even):hover {
+  transform: translateY(-6px) scale(1.25) rotate(4deg);
+}
