@@ -28,9 +28,9 @@ html {
 }
 
 /* Escalas de tamaño global de texto */
-html.text-sm-size { font-size: 15px; } /* Normal */
-html.text-md-size { font-size: 17px; } /* Mediano (+13%) */
-html.text-lg-size { font-size: 19px; } /* Grande (+26%) */
+html.text-sm-size { font-size: 15px; }
+html.text-md-size { font-size: 17px; }
+html.text-lg-size { font-size: 19px; }
 
 /* Aplicación global de Nunito a todos los Encabezados / Títulos */
 h1, h2, h3, h4, h5, h6 {
@@ -46,7 +46,60 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Ocultar barra de scroll para un acabado limpio */
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* --- ANIMACIONES INFANTILES Y AMIGABLES --- */
+
+/* Entradas suaves desde abajo con leve rebote */
+@keyframes popUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  70% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Deslizamiento lateral suave para el Drawer */
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Efecto flotante constante para elementos lúdicos */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-pop-up {
+  animation: popUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Clases para retraso en cascada */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
