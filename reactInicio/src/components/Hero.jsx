@@ -47,7 +47,7 @@ export default function Hero() {
               <img 
                 class="w-full h-full object-cover" 
                 alt="Niños en salón Montessori" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFiZg0YoqUiKhrUk4PcNt58V1-83MKmUWZQBBzcSg24ZPxJWc7AYN2ZEGoEVdDQrnFk2m-c5cGRA3-vuz-QdgdQ5-ollTyVHy4PgjL0zPluqcAm0oIzsV2R_6h1lg0oJssyUMgwP8ztaKIYJu6dKeKPVoufwa52j7Z0x19Raxjzb3tu9oyPuCKnT_m5wqRyFPenKADXHS67tNmiuQxPYAD8a7EqYXE2D6EO7QBgmu2FjYpHaBB4-6R3w" 
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwRouT6yIZ9PU_7AGE--jTPmQm5ZgAEjICLU9hZMbo5awqZQM-b7tbwZY&s=10" 
               />
               <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex items-center gap-3">
