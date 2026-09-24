@@ -12,6 +12,13 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transición y colores cuando está activo el Modo Oscuro */
+html.dark body {
+  background-color: #121212;
+  color: #f1f5f9;
 }
 
 /* Ocultar barra de scroll para un acabado limpio de la app */
