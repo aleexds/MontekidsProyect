@@ -107,19 +107,26 @@ body {
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 
-/* --- ANIMACIÓN DE TRAZADO SVG PARA EL SUBRAYADO --- */
-@keyframes drawStroke {
-  from {
+/* --- ANIMACIÓN DE TRAZADO Y APARICIÓN DEL SUBRAYADO --- */
+@keyframes drawStrokeVisible {
+  0% {
+    opacity: 0;
     stroke-dashoffset: 220;
   }
-  to {
+  10% {
+    opacity: 1;
+    stroke-dashoffset: 220;
+  }
+  100% {
+    opacity: 1;
     stroke-dashoffset: 0;
   }
 }
 
 .animate-draw-underline {
+  opacity: 0; /* Permanece invisible mientras dura el bounce */
   stroke-dasharray: 220;
   stroke-dashoffset: 220;
-  animation: drawStroke 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 600ms; /* Inicia justo después de la entrada de las letras */
+  animation: drawStrokeVisible 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 800ms; /* Inicia justo cuando concluye el rebote del Hero */
 }
