@@ -1,17 +1,17 @@
 
-
 export default function CtaBanner() {
   return (
     <section class="w-full px-4 sm:px-6 lg:px-8 py-12" id="visita">
       <div class="max-w-7xl mx-auto">
+        {/* Usamos colores inline directos bg-gradient para el morado/púrpura de Stitch */}
         <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#4E00DE] to-[#A323D1] text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
           
-          {/* Elementos decorativos de fondo */}
-          <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-cyan-400/20 blur-3xl pointer-events-none"></div>
-          <div class="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-amber-400/20 blur-3xl pointer-events-none"></div>
+          {/* Destellos de luz en el fondo */}
+          <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#00dbeb]/25 blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-[#ffa71a]/20 blur-3xl pointer-events-none"></div>
 
           <div class="relative z-10 max-w-3xl flex flex-col items-start">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider mb-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider mb-4">
               <span class="material-symbols-outlined text-[18px]">stars</span>
               <span>Admisiones 2027</span>
             </div>
@@ -25,13 +25,14 @@ export default function CtaBanner() {
             </p>
 
             <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+              {/* Botón WhatsApp Blanco con Texto Oscuro e Ícono Verde */}
               <a 
                 href="https://wa.me/" 
                 target="_blank" 
                 rel="noreferrer"
-                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-on-surface font-bold text-sm shadow-lg hover:bg-slate-100 transition-all text-center"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#1d1149] font-bold text-sm shadow-lg hover:bg-slate-100 transition-all text-center"
               >
-                <span class="material-symbols-outlined text-emerald-600 text-[22px]">chat</span>
+                <span class="material-symbols-outlined text-[#25D366] text-[22px]">chat</span>
                 <span>Chatear por WhatsApp</span>
               </a>
             </div>
