@@ -1,4 +1,5 @@
 import kidsHero from '../img/kidsHero.jpg';
+import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 
 export default function Hero() {
   return (
@@ -14,12 +15,33 @@ export default function Hero() {
             <span className="font-bold text-xs text-primary uppercase tracking-wider">Centro de Estimulación Temprana</span>
           </div>
 
-          {/* Título Principal */}
+          {/* Título Principal con Letras Interactivas estilo Coolors */}
           <h1 className="animate-pop-bounce delay-100 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-on-surface tracking-tight leading-tight transition-colors">
-            El Lugar Donde <span className="text-tertiary">Aprender</span> y <span className="text-primary-container">Crecer</span> es una{' '}
-            <span className="text-secondary-container">Aventura</span>{' '}
-            <span className="relative inline-block text-secondary-container pb-1">
-              Mágica
+            El Lugar Donde{' '}
+            <AnimatedInteractiveWord 
+              word="Aprender" 
+              baseColorClass="text-tertiary" 
+              hoverColorClass="hover:text-primary" 
+            />
+            {' '}y{' '}
+            <AnimatedInteractiveWord 
+              word="Crecer" 
+              baseColorClass="text-primary-container" 
+              hoverColorClass="hover:text-tertiary" 
+            />
+            {' '}es una{' '}
+            <AnimatedInteractiveWord 
+              word="Aventura" 
+              baseColorClass="text-secondary-container" 
+              hoverColorClass="hover:text-primary" 
+            />
+            {' '}
+            <span className="relative inline-block pb-1">
+              <AnimatedInteractiveWord 
+                word="Mágica" 
+                baseColorClass="text-secondary-container" 
+                hoverColorClass="hover:text-tertiary" 
+              />
               <svg
                 className="absolute -left-[7.5%] -bottom-4 w-[115%] h-5 text-secondary-container pointer-events-none overflow-visible"
                 viewBox="0 0 200 16"
