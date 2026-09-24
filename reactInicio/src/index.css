@@ -136,7 +136,8 @@ body {
 /* Clase para cada letra interactiva */
 .interactive-letter {
   display: inline-block;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+  /* Transición de 0.5s para que el retorno al color base tras el temporizador sea progresivo y suave */
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.5s ease;
   cursor: pointer;
   user-select: none;
 }
