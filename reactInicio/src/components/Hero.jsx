@@ -1,3 +1,4 @@
+import kidsHero from '../img/kidsHero.jpg';
 
 
 export default function Hero() {
@@ -47,7 +48,7 @@ export default function Hero() {
               <img 
                 class="w-full h-full object-cover" 
                 alt="Niños en salón Montessori" 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwRouT6yIZ9PU_7AGE--jTPmQm5ZgAEjICLU9hZMbo5awqZQM-b7tbwZY&s=10" 
+                src={kidsHero} 
               />
               <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl flex items-center justify-between shadow-md">
                 <div class="flex items-center gap-3">
