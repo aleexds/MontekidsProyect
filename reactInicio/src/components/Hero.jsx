@@ -15,17 +15,17 @@ export default function Hero() {
             <span className="font-bold text-xs text-primary uppercase tracking-wider">Centro de Estimulación Temprana</span>
           </div>
 
-          {/* Título Principal */}
+          {/* Título Principal con los Colores del Diseño Original */}
           <h1 className="animate-pop-bounce delay-100 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-on-surface tracking-tight leading-tight transition-colors">
             El Lugar Donde{' '}
-            <AnimatedInteractiveWord word="Aprender" startIndex={0} />
+            <AnimatedInteractiveWord word="Aprender" colorClass="text-tertiary" />
             {' '}y{' '}
-            <AnimatedInteractiveWord word="Crecer" startIndex={2} />
+            <AnimatedInteractiveWord word="Crecer" colorClass="text-primary-container" />
             {' '}es una{' '}
-            <AnimatedInteractiveWord word="Aventura" startIndex={4} />
+            <AnimatedInteractiveWord word="Aventura" colorClass="text-secondary-container" />
             {' '}
             <span className="relative inline-block pb-1">
-              <AnimatedInteractiveWord word="Mágica" startIndex={1} />
+              <AnimatedInteractiveWord word="Mágica" colorClass="text-secondary-container" />
               <svg
                 className="absolute -left-[7.5%] -bottom-4 w-[115%] h-5 text-secondary-container pointer-events-none overflow-visible"
                 viewBox="0 0 200 16"
