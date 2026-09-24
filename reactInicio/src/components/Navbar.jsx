@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import logoMontekids from '../img/logoMontekids.png';
 
 export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
@@ -36,9 +37,7 @@ export default function Navbar() {
           
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <span className="font-extrabold text-xl text-on-surface">
-              Monte<span className="text-secondary-container">kids</span>
-            </span>
+            <img src={logoMontekids} alt="Logo MonteKids" />
           </div>
 
           {/* Links de Navegación */}
