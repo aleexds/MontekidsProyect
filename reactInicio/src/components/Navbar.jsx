@@ -1,75 +1,68 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-export default function Navbar({ onOpenAi }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+export default function Navbar() {
+  const [isDark, setIsDark] = useState(false);
+
+  // Sincronizar el estado con la clase 'dark' en el elemento <html>
+  useEffect(() => {
+
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-sm">
-      <div class="h-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-        {/* Logo Montekids */}
-        <a href="#inicio" class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary-container text-3xl font-bold">spa</span>
-          <span class="font-bold text-2xl text-on-surface tracking-tight">Montekids</span>
-        </a>
+    <nav className="w-full bg-white dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          {/* Tu logo existente */}
+          <span className="font-extrabold text-xl text-slate-800 dark:text-white">
+            Monte<span className="text-secondary-container">kids</span>
+          </span>
+        </div>
 
-        {/* Navegación por Anclajes (Desktop) */}
-        <nav class="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-surface-container-low text-sm font-bold">
-          <a class="px-4 py-2 rounded-full text-primary hover:bg-surface-container-high transition-all" href="#inicio">Inicio</a>
-          <a class="px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#filosofia">Filosofía</a>
-          <a class="px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#aulas">Aulas</a>
-          <a class="px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#opiniones">Opiniones</a>
-          <a class="px-4 py-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#ubicacion">Ubicación & Contacto</a>
-        </nav>
+        {/* Links de Navegación */}
+        <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600 dark:text-zinc-300">
+          <a href="#inicio" className="hover:text-primary transition-colors">Inicio</a>
+          <a href="#filosofia" className="hover:text-primary transition-colors">Filosofía</a>
+          <a href="#aulas" className="hover:text-primary transition-colors">Aulas</a>
+          <a href="#opiniones" className="hover:text-primary transition-colors">Opiniones</a>
+          <a href="#ubicacion" className="hover:text-primary transition-colors">Ubicación & Contacto</a>
+        </div>
 
-        {/* Acciones de la Derecha */}
-        <div class="flex items-center gap-2">
-          <button 
-            type="button"
-            onClick={onOpenAi}
-            class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-sm shadow-sm hover:brightness-105 transition-all"
+        {/* Acciones & Selector de Tema */}
+        <div className="flex items-center gap-3">
+          
+          {/* Botón de Cambio de Tema */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Cambiar tema"
+            className="p-2.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all flex items-center justify-center shadow-sm"
           >
-            <span class="material-symbols-outlined text-[18px]">smart_toy</span>
+            <span className="material-symbols-outlined text-[20px]">
+              {isDark ? 'light_mode' : 'dark_mode'}
+            </span>
+          </button>
+
+          {/* Botón Asistente IA / Iniciar Sesión */}
+          <button className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500 text-white font-bold text-xs">
+            <span className="material-symbols-outlined text-[18px]">smart_toy</span>
             <span>Asistente IA</span>
           </button>
 
-          <Link 
-            to="/login" 
-            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-tertiary text-white font-bold text-sm shadow-md hover:bg-tertiary/90 transition-all"
-          >
-            <span class="material-symbols-outlined text-[18px]">lock</span>
+          <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary text-white font-bold text-xs">
+            <span className="material-symbols-outlined text-[18px]">lock</span>
             <span>Iniciar Sesión</span>
-          </Link>
-
-          {/* Menú Hamburguesa para Celulares */}
-          <button 
-            type="button" 
-            onClick={() => setMenuOpen(!menuOpen)}
-            class="lg:hidden p-2 rounded-full bg-surface-container-low text-on-surface"
-          >
-            <span class="material-symbols-outlined">{menuOpen ? 'close' : 'menu'}</span>
           </button>
+
         </div>
       </div>
-
-      {/* Menú Desplegable Responsive */}
-      {menuOpen && (
-        <div class="lg:hidden bg-surface border-b border-surface-container-low px-6 py-4 flex flex-col gap-3 font-bold shadow-lg">
-          <a onClick={() => setMenuOpen(false)} href="#inicio" class="py-2 text-primary">Inicio</a>
-          <a onClick={() => setMenuOpen(false)} href="#filosofia" class="py-2 text-on-surface-variant">Filosofía</a>
-          <a onClick={() => setMenuOpen(false)} href="#aulas" class="py-2 text-on-surface-variant">Aulas</a>
-          <a onClick={() => setMenuOpen(false)} href="#opiniones" class="py-2 text-on-surface-variant">Opiniones</a>
-          <a onClick={() => setMenuOpen(false)} href="#ubicacion" class="py-2 text-on-surface-variant">Ubicación & Contacto</a>
-          <button 
-            type="button"
-            onClick={() => { setMenuOpen(false); onOpenAi(); }}
-            class="flex items-center justify-center gap-2 py-2.5 rounded-full bg-primary-container text-on-primary-container mt-2"
-          >
-            <span class="material-symbols-outlined text-[18px]">smart_toy</span>
-            <span>Abrir Asistente IA</span>
-          </button>
-        </div>
-      )}
-    </header>
+    </nav>
   );
 }
