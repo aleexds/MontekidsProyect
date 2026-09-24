@@ -106,3 +106,20 @@ body {
 .delay-100 { animation-delay: 100ms; }
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
+
+/* --- ANIMACIÓN DE TRAZADO SVG PARA EL SUBRAYADO --- */
+@keyframes drawStroke {
+  from {
+    stroke-dashoffset: 220;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-underline {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: drawStroke 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 600ms; /* Inicia justo después de la entrada de las letras */
+}
