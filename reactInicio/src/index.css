@@ -1,26 +1,5 @@
-/* 1. Importación de Fuentes e Íconos de Google */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
-
-/* 2. Importación de Tailwind CDN en lugar de directivas @tailwind */
-@import "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
-
-/* 3. Variables de Colores Globales Montekids */
-:root {
-  --primary: #006971;
-  --primary-container: #00dbeb; /* Cyan */
-  --on-primary-container: #005c63;
-  --secondary: #855400;
-  --secondary-container: #ffa71a; /* Orange */
-  --tertiary: #b70072;
-  --tertiary-container: #f5009b; /* Magenta */
-  --purple-montekids: #a323d1;
-  --indigo-montekids: #4e00de;
-  --background: #fdf8ff;
-  --surface-container-low: #f7f1ff;
-  --on-surface: #1d1149;
-  --on-surface-variant: #3b494b;
-}
 
 html {
   scroll-behavior: smooth;
@@ -28,9 +7,14 @@ html {
 }
 
 body {
-  background-color: var(--background);
-  color: var(--on-surface);
+  background-color: #fdf8ff;
+  color: #1d1149;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Ocultar barra de scroll para un acabado limpio de la app */
+::-webkit-scrollbar {
+  display: none;
 }
