@@ -26,13 +26,13 @@
               "tertiary-container": "#f5009b",
               "indigo-montekids": "#4e00de", // Deep Indigo Montekids
               "purple-montekids": "#a323d1", // Purple Montekids
-              "background": "#fdf8ff",
-              "surface": "#fdf8ff",
-              "surface-container-lowest": "#ffffff",
-              "surface-container-low": "#f7f1ff",
-              "surface-container-high": "#ece4ff",
-              "on-surface": "#1d1149",
-              "on-surface-variant": "#3b494b"
+              "background": "var(--bg-main)",
+              "surface": "var(--bg-main)",
+              "surface-container-lowest": "var(--bg-surface-lowest)",
+              "surface-container-low": "var(--bg-surface-low)",
+              "surface-container-high": "var(--bg-surface-high)",
+              "on-surface": "var(--text-main)",
+              "on-surface-variant": "var(--text-variant)"
             },
             fontFamily: {
               sans: ["Plus Jakarta Sans", "sans-serif"]
@@ -42,7 +42,7 @@
       };
     </script>
   </head>
-  <body class="bg-background font-sans text-on-surface antialiased">
+  <body class="bg-background font-sans text-on-surface antialiased transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
