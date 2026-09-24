@@ -15,7 +15,7 @@ export default function Hero() {
             <span className="font-bold text-xs text-primary uppercase tracking-wider">Centro de Estimulación Temprana</span>
           </div>
 
-          {/* Título Principal con Letras Multicolores Estilo Coolors */}
+          {/* Título Principal */}
           <h1 className="animate-pop-bounce delay-100 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-on-surface tracking-tight leading-tight transition-colors">
             El Lugar Donde{' '}
             <AnimatedInteractiveWord word="Aprender" startIndex={0} />
