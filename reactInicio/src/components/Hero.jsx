@@ -2,7 +2,7 @@ import kidsHero from '../img/kidsHero.jpg';
 
 export default function Hero() {
   return (
-    <section className="relative w-full overflow-hidden px-4 sm:px-6 lg:px-8 py-12 lg:py-20 transition-colors duration-300" id="inicio">
+    <section className="relative w-full overflow-hidden px-4 sm:px-6 lg:px-8 pt-0 pb-12 lg:pb-20 transition-colors duration-300" id="inicio">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         
         {/* Columna Texto */}

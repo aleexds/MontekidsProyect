@@ -16,7 +16,7 @@ export default function Home() {
     <div class="min-h-screen bg-background text-on-surface">
       <Navbar onOpenAi={() => setAiOpen(true)} />
       
-      <main class="pt-20">
+      <main class="pt-10">
         <Hero />
         <Philosophy />
         <Programs />

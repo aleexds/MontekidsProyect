@@ -17,7 +17,7 @@ export default function Navbar() {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <nav className="w-full bg-white dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
+    <nav className="sticky top-0 z-50 w-full bg-white dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-1">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Logo */}
