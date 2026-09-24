@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import logoMontekids from '../img/logoMontekids.png';
 
 export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
+  const [fontSizeIndex, setFontSizeIndex] = useState(0); // 0: Normal, 1: Mediano, 2: Grande
 
-  // Sincronizar el estado con la clase 'dark' en el elemento <html>
+  const fontClasses = ['text-sm-size', 'text-md-size', 'text-lg-size'];
+  const fontLabels = ['A', 'A+', 'A++'];
+
+  // Manejador del Tema (Modo Oscuro)
   useEffect(() => {
-
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -14,19 +16,34 @@ export default function Navbar() {
     }
   }, [isDark]);
 
-  const toggleTheme = () => setIsDark(!isDark);
+  // Manejador del Tamaño de Fuente Global
+  const toggleFontSize = () => {
+    const nextIndex = (fontSizeIndex + 1) % fontClasses.length;
+    
+    // Remover clases previas de tamaño de la etiqueta <html>
+    fontClasses.forEach(cls => document.documentElement.classList.remove(cls));
+    
+    // Aplicar la nueva clase si no es la normal (índice 0)
+    if (nextIndex !== 0) {
+      document.documentElement.classList.add(fontClasses[nextIndex]);
+    }
+
+    setFontSizeIndex(nextIndex);
+  };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-1">
+    <nav className="w-full bg-surface-container-lowest border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <img src={logoMontekids} alt="Montekids" className="h-20 w-auto" />
+          <span className="font-extrabold text-xl text-on-surface">
+            Monte<span className="text-secondary-container">kids</span>
+          </span>
         </div>
 
         {/* Links de Navegación */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600 dark:text-zinc-300">
+        <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-on-surface-variant">
           <a href="#inicio" className="hover:text-primary transition-colors">Inicio</a>
           <a href="#filosofia" className="hover:text-primary transition-colors">Filosofía</a>
           <a href="#aulas" className="hover:text-primary transition-colors">Aulas</a>
@@ -34,22 +51,32 @@ export default function Navbar() {
           <a href="#ubicacion" className="hover:text-primary transition-colors">Ubicación & Contacto</a>
         </div>
 
-        {/* Acciones & Selector de Tema */}
-        <div className="flex items-center gap-3">
+        {/* Acciones & Controles de Accesibilidad */}
+        <div className="flex items-center gap-2 sm:gap-3">
           
-          {/* Botón de Cambio de Tema */}
+          {/* Botón Aumentar/Cambiar Tamaño de Texto */}
           <button
-            onClick={toggleTheme}
-            aria-label="Cambiar tema"
-            className="p-2.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-all flex items-center justify-center shadow-sm"
+            onClick={toggleFontSize}
+            title="Cambiar tamaño de texto"
+            className="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-extrabold text-xs hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm"
           >
-            <span className="material-symbols-outlined text-[20px]">
+            <span className="material-symbols-outlined text-[16px] mr-1">text_fields</span>
+            {fontLabels[fontSizeIndex]}
+          </button>
+
+          {/* Botón Modo Oscuro */}
+          <button
+            onClick={() => setIsDark(!isDark)}
+            aria-label="Cambiar tema"
+            className="p-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm"
+          >
+            <span className="material-symbols-outlined text-[18px]">
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
           </button>
 
-          {/* Botón Asistente IA / Iniciar Sesión */}
-          <button className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500 text-white font-bold text-xs">
+          {/* Botones de Acción */}
+          <button className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-xs">
             <span className="material-symbols-outlined text-[18px]">smart_toy</span>
             <span>Asistente IA</span>
           </button>
