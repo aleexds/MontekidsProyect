@@ -24,7 +24,13 @@ html.dark {
 html {
   scroll-behavior: smooth;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: font-size 0.2s ease;
 }
+
+/* Escalas de tamaño global de texto */
+html.text-sm-size { font-size: 15px; } /* Normal */
+html.text-md-size { font-size: 17px; } /* Mediano (+13%) */
+html.text-lg-size { font-size: 19px; } /* Grande (+26%) */
 
 /* Aplicación global de Nunito a todos los Encabezados / Títulos */
 h1, h2, h3, h4, h5, h6 {
