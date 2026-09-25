@@ -17,7 +17,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
   // Medidor de fuerza de contraseña
   const getPasswordStrength = (pass) => {
     if (!pass) return { score: 0, text: 'Sin contraseña', class: 'text-on-surface-variant' };
-    if (pass.length < 6) return { score: 1, text: 'Débil', class: 'text-error' };
+    if (pass.length < 6) return { score: 1, text: 'Débil', class: 'text-[#2e9e66]' };
     if (pass.length < 10) return { score: 2, text: 'Buena', class: 'text-secondary-container' };
     return { score: 3, text: 'Fuerte y Segura', class: 'text-primary' };
   };
@@ -268,7 +268,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               {/* Indicadores de fortaleza de clave */}
               <div className="flex items-center gap-1.5 mt-2">
                 <div className="flex-1 h-1.5 rounded-full bg-surface-container-high overflow-hidden">
-                  <div className={`h-full bg-error transition-all duration-300 ${strength.score >= 1 ? 'w-full' : 'w-0'}`}></div>
+                  <div className={`h-full bg-[#4ade80] transition-all duration-300 ${strength.score >= 1 ? 'w-full' : 'w-0'}`}></div>
                 </div>
                 <div className="flex-1 h-1.5 rounded-full bg-surface-container-high overflow-hidden">
                   <div className={`h-full bg-secondary-container transition-all duration-300 ${strength.score >= 2 ? 'w-full' : 'w-0'}`}></div>
