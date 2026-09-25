@@ -46,20 +46,20 @@ export default function Footer() {
             <div className="space-y-2 text-xs text-on-surface-variant font-medium">
               <p className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px] text-primary">location_on</span>
-                San José, Costa Rica
+                El Roble, Puntarenas
               </p>
               <p className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px] text-primary">call</span>
-                +506 2200-0000
+                +506 8790 9556
               </p>
               <p className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px] text-primary">mail</span>
-                hola@montekids.com
+                direccion@montekidsacademy.com
               </p>
             </div>
             <div className="mt-4 p-2.5 rounded-xl bg-surface-container-high/60 flex items-center gap-2 text-xs font-bold text-on-surface">
               <span className="material-symbols-outlined text-tertiary text-[18px]">schedule</span>
-              <span>Horario: Lun a Vie 07:00 - 17:00 hrs</span>
+              <span>Horario: Lun a Vie 06:00 - 6:00 hrs</span>
             </div>
           </div>
 
