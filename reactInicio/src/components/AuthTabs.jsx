@@ -1,33 +1,41 @@
 export default function AuthTabs({ activeTab, setActiveTab }) {
   return (
-    <div className="w-full bg-surface-container-low px-6 py-3 flex items-center justify-center">
-      <div className="inline-flex p-1 rounded-full bg-surface-container shadow-[inset_0_2px_4px_rgba(30,18,74,0.06)] max-w-md w-full">
+    <div className="w-full bg-surface-container-low border-b border-surface-container-high p-2 flex items-center justify-center font-sans">
+      <div className="relative flex w-full max-w-md bg-surface-container-lowest p-1 rounded-2xl shadow-inner border border-surface-container-high/60">
+        
+        {/* Fondo animado desglizable con el tono oscuro/original */}
+        <div
+          className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#005B60] rounded-xl shadow-sm transition-all duration-300 ease-out ${
+            activeTab === 'login' ? 'left-1' : 'left-[calc(50%+2px)]'
+          }`}
+        />
+
+        {/* Botón 1: Iniciar Sesión */}
         <button
-          type="button"
           onClick={() => setActiveTab('login')}
-          className={`flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
+          className={`relative z-10 flex-1 py-2.5 text-xs font-bold font-heading rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
             activeTab === 'login'
-              ? 'bg-surface-container-lowest text-on-surface shadow-[0_4px_12px_rgba(30,18,74,0.08)]'
-              : 'text-on-surface-variant hover:text-on-surface'
+              ? 'text-white'
+              : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40'
           }`}
         >
-          <span className="material-symbols-outlined text-[18px] text-primary">key</span>
+          <span className="material-symbols-outlined text-[18px]">login</span>
           <span>Iniciar Sesión</span>
         </button>
 
+        {/* Botón 2: Registrarse */}
         <button
-          type="button"
           onClick={() => setActiveTab('register')}
-          className={`flex-1 py-2.5 px-4 rounded-full text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
+          className={`relative z-10 flex-1 py-2.5 text-xs font-bold font-heading rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
             activeTab === 'register'
-              ? 'bg-surface-container-lowest text-on-surface shadow-[0_4px_12px_rgba(30,18,74,0.08)]'
-              : 'text-on-surface-variant hover:text-on-surface'
+              ? 'text-white'
+              : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40'
           }`}
         >
-          <span className="material-symbols-outlined text-[18px] text-tertiary">celebration</span>
-          <span>Registrar Familia</span>
-          <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-tertiary-container text-on-tertiary-container tracking-wider">NUEVO</span>
+          <span className="material-symbols-outlined text-[18px]">person_add</span>
+          <span>Registrarse</span>
         </button>
+
       </div>
     </div>
   );
