@@ -150,3 +150,23 @@ body {
 .interactive-letter:nth-child(even):hover {
   transform: translateY(-6px) scale(1.25) rotate(4deg);
 }
+
+/* Animación suave para los círculos de luz flotantes */
+@keyframes ambient-glow {
+  0%, 100% {
+    transform: translateY(0px) scale(1) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-18px) scale(1.1) rotate(10deg);
+    opacity: 0.45;
+  }
+}
+
+.animate-glow-slow {
+  animation: ambient-glow 8s ease-in-out infinite;
+}
+
+.animate-glow-reverse {
+  animation: ambient-glow 10s ease-in-out infinite reverse;
+}
