@@ -8,8 +8,7 @@ export default function Routing() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-      </Routes>
-      <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/LOGIN" element={<Login />} />
       </Routes>
     </BrowserRouter>

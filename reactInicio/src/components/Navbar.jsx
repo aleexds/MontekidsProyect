@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import logoMontekids from '../img/logoMontekids.png';
 import logoDark from '../img/logoDarkMontekids.png';
 
@@ -93,10 +94,13 @@ export default function Navbar() {
             </button>
 
             {/* Botón Iniciar Sesión */}
-            <button className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary text-white font-bold text-xs hover:brightness-110 active:scale-95 transition-all shadow-sm">
+            <Link 
+              to="/LOGIN" 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary text-white font-bold text-xs hover:brightness-110 active:scale-95 transition-all shadow-sm cursor-pointer"
+            >
               <span className="material-symbols-outlined text-[18px]">lock</span>
               <span>Iniciar Sesión</span>
-            </button>
+            </Link>
 
           </div>
         </div>
