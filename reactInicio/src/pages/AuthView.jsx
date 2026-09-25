@@ -13,8 +13,8 @@ export default function AuthView() {
       {/* 1. Navbar */}
       <AuthNavbar />
 
-      {/* 2. Contenido Central de Login / Registro */}
-      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+      {/* 2. Contenido Central de Login / Registro con Animación Bounce */}
+      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center animate-page-bounce">
         <div className="w-full max-w-[1180px] mx-auto">
           
           {/* Header Superior: Certificaciones */}
@@ -84,7 +84,7 @@ export default function AuthView() {
                     Accede al reporte de actividades diarias, bitácora fotográfica de estimulación sensorial, canciones infantiles del aula y canal de comunicación directa con las maestras guías.
                   </p>
 
-                  {/* CONTENEDORES CON HOVER (Desplazamiento horizontal e iluminación) */}
+                  {/* CONTENEDORES CON HOVER */}
                   <div className="mt-6 flex flex-col gap-3 font-sans">
                     <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl transition-all duration-300 hover:bg-white/20 hover:translate-x-2 hover:border-white/25 cursor-default">
                       <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shrink-0">
@@ -117,7 +117,7 @@ export default function AuthView() {
             </div>
           </div>
 
-          {/* FOOTNOTE DE CONFIANZA: TARJETAS CON ELEVACIÓN EN HOVER (-translate-y-1 + shadow-lg) */}
+          {/* FOOTNOTE DE CONFIANZA */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
             
             <div className="group flex items-center gap-3 p-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-transparent hover:border-surface-container-high transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default">

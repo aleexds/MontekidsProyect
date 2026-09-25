@@ -171,3 +171,26 @@ body {
 .animate-glow-reverse {
   animation: ambient-glow 10s ease-in-out infinite reverse;
 }
+
+/* Animación de entrada tipo Bounce para la vista completa */
+@keyframes pageEntryBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) scale(1.005);
+  }
+  80% {
+    transform: translateY(-2px) scale(0.998);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-page-bounce {
+  animation: pageEntryBounce 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
