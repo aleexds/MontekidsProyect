@@ -51,14 +51,24 @@ export default function AuthView() {
 
               {/* LADO DERECHO: Panel Lateral Decorativo */}
               <div className="lg:col-span-5 relative bg-gradient-to-br from-primary via-inverse-surface to-tertiary p-8 sm:p-10 lg:p-12 flex flex-col justify-between text-white overflow-hidden">
-                <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-primary-container/20 blur-2xl pointer-events-none"></div>
-                <div className="absolute bottom-10 -left-10 w-44 h-44 rounded-full bg-tertiary-container/20 blur-3xl pointer-events-none"></div>
+                
+                {/* --- EFECTO GLASSMORPHISM & LUCES AMBIENTALES DE FONDO --- */}
+                {/* Luz superior derecha */}
+                <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-primary-container blur-3xl pointer-events-none animate-glow-slow"></div>
+                
+                {/* Luz inferior izquierda */}
+                <div className="absolute -bottom-12 -left-12 w-52 h-52 rounded-full bg-tertiary-container blur-3xl pointer-events-none animate-glow-reverse"></div>
+                
+                {/* Capa sutil de malla frosted glass sobre todo el panel */}
+                <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-[1px] pointer-events-none"></div>
 
+                {/* --- CONTENIDO PRINCIPAL --- */}
                 <div className="relative z-10 flex items-center justify-between">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold">
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold shadow-inner">
                     <span className="material-symbols-outlined text-[16px] text-secondary-fixed">award_star</span>
-                    <span>Montessori Digital AMI</span>
+                    <span className="font-sans">Montessori Digital AMI</span>
                   </div>
+                  
                   <div className="flex items-center gap-0.5 text-secondary-container">
                     {[...Array(5)].map((_, i) => (
                       <span key={i} className="material-symbols-outlined text-[18px]">star</span>
@@ -67,7 +77,7 @@ export default function AuthView() {
                 </div>
 
                 <div className="relative z-10 my-8">
-                  <div className="inline-block mb-3 p-2 rounded-2xl bg-white/20 backdrop-blur-sm">
+                  <div className="inline-block mb-3 p-2.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 shadow-sm">
                     <span className="material-symbols-outlined text-[32px] text-primary-fixed">child_care</span>
                   </div>
 
@@ -81,21 +91,21 @@ export default function AuthView() {
                   </p>
 
                   <div className="mt-6 flex flex-col gap-3 font-sans">
-                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-2xl transition hover:bg-white/20">
+                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl">
                       <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">phone_iphone</span>
                       </div>
                       <span className="text-xs font-bold">Monitoreo y bitácora en tiempo real</span>
                     </div>
 
-                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-2xl transition hover:bg-white/20">
+                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl">
                       <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">palette</span>
                       </div>
                       <span className="text-xs font-bold">Registro de hitos motrices y fonéticos</span>
                     </div>
 
-                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-2xl transition hover:bg-white/20">
+                    <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl">
                       <div className="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">military_tech</span>
                       </div>
