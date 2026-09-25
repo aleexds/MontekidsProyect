@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 
 export default function AuthForm({ activeTab, setActiveTab }) {
   // Estado para mostrar / ocultar contraseña
@@ -45,7 +46,10 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               <span>Ciclo Escolar 2025 • Trimestre de Primavera</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-              ¡Hola de Nuevo! <span className="inline-block animate-bounce">👋</span>
+              <AnimatedInteractiveWord word="¡Hola" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="de" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="Nuevo!" baseColorClass="text-on-surface" />{' '}
+              <span className="inline-block animate-bounce">👋</span>
             </h1>
             <p className="text-sm text-on-surface-variant mt-1">
               Ingresa a tu cuenta para continuar con el seguimiento en vivo de tu pequeño explorador y revisar sus bitácoras sensoriales.
@@ -170,7 +174,12 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               <span>Inscripción Familiar • Ciclo 2025</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-              Crea tu Cuenta de Familia 🌱
+              <AnimatedInteractiveWord word="Crea" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="tu" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="Cuenta" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="de" baseColorClass="text-on-surface" />{' '}
+              <AnimatedInteractiveWord word="Familia" baseColorClass="text-on-surface" />{' '}
+              🌱
             </h2>
             <p className="text-sm text-on-surface-variant mt-1">
               Vincula de forma segura el acceso directo al aula y a la bitácora personalizada de tu hijo en Montekids.
