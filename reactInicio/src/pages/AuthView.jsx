@@ -8,9 +8,9 @@ export default function AuthView() {
   const [activeTab, setActiveTab] = useState('login');
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col justify-between transition-colors duration-300">
+    <div className="min-h-screen bg-surface flex flex-col justify-between transition-colors duration-300 font-sans">
       
-      {/* 1. Navbar adaptado con la misma lógica de accesibilidad y logos */}
+      {/* 1. Navbar */}
       <AuthNavbar />
 
       {/* 2. Contenido Central de Login / Registro */}
@@ -29,7 +29,7 @@ export default function AuthView() {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-tertiary">favorite</span>
-              <span className="text-xs text-tertiary font-bold tracking-wide uppercase">
+              <span className="text-xs text-tertiary font-bold tracking-wide uppercase font-sans">
                 Comunidad Montekids • +1,400 Familias Conectadas
               </span>
             </div>
@@ -70,14 +70,17 @@ export default function AuthView() {
                   <div className="inline-block mb-3 p-2 rounded-2xl bg-white/20 backdrop-blur-sm">
                     <span className="material-symbols-outlined text-[32px] text-primary-fixed">child_care</span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+
+                  {/* TÍTULO CON NUNITO */}
+                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug font-heading">
                     Acompañando el Crecimiento de tu Hijo 🌟
                   </h2>
-                  <p className="text-sm text-white/85 mt-3 leading-relaxed">
+
+                  <p className="text-sm text-white/85 mt-3 leading-relaxed font-sans">
                     Accede al reporte de actividades diarias, bitácora fotográfica de estimulación sensorial, canciones infantiles del aula y canal de comunicación directa con las maestras guías.
                   </p>
 
-                  <div className="mt-6 flex flex-col gap-3">
+                  <div className="mt-6 flex flex-col gap-3 font-sans">
                     <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3 rounded-2xl transition hover:bg-white/20">
                       <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">phone_iphone</span>
@@ -101,7 +104,7 @@ export default function AuthView() {
                   </div>
                 </div>
 
-                <div className="relative z-10 text-[11px] opacity-70">
+                <div className="relative z-10 text-[11px] opacity-70 font-sans">
                   Montekids Early Childhood & Stimulation Center
                 </div>
               </div>
@@ -110,14 +113,14 @@ export default function AuthView() {
           </div>
 
           {/* Footnote de Confianza */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
             <div className="flex items-center gap-3 p-4 bg-surface-container-lowest rounded-2xl shadow-sm">
               <div className="w-9 h-9 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-[20px]">lock_clock</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface">Privacidad Blindada</div>
-                <div className="text-[11px] text-on-surface-variant">Cumplimiento estricto COPPA y GDPR-K</div>
+                <div className="text-xs font-bold text-on-surface font-heading">Privacidad Blindada</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">Cumplimiento estricto COPPA y GDPR-K</div>
               </div>
             </div>
 
@@ -126,8 +129,8 @@ export default function AuthView() {
                 <span className="material-symbols-outlined text-[20px]">verified_user</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface">Asociación AMI</div>
-                <div className="text-[11px] text-on-surface-variant">Metodología Montessori verificada</div>
+                <div className="text-xs font-bold text-on-surface font-heading">Asociación AMI</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">Metodología Montessori verificada</div>
               </div>
             </div>
 
@@ -136,8 +139,8 @@ export default function AuthView() {
                 <span className="material-symbols-outlined text-[20px]">support_agent</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface">Soporte a Familias</div>
-                <div className="text-[11px] text-on-surface-variant">Mesa de ayuda pedagógica 24/7</div>
+                <div className="text-xs font-bold text-on-surface font-heading">Soporte a Familias</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">Mesa de ayuda pedagógica 24/7</div>
               </div>
             </div>
           </div>
@@ -145,7 +148,7 @@ export default function AuthView() {
         </div>
       </main>
 
-      {/* 3. Tu Footer original importado */}
+      {/* 3. Footer */}
       <Footer />
 
     </div>
