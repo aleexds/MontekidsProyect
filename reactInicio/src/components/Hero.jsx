@@ -68,7 +68,7 @@ export default function Hero() {
           {/* Botones */}
           <div className="animate-pop-bounce delay-300 mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <a 
-              href="https://wa.me/" 
+              href="https://wa.me/50687909556"
               target="_blank" 
               rel="noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#25D366] text-white font-bold shadow-md hover:scale-105 active:scale-95 transition-all duration-200 text-center"

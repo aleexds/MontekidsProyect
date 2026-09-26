@@ -30,7 +30,7 @@ export default function CtaBanner() {
             <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
               {/* Botón WhatsApp Blanco con Texto Oscuro e Ícono Verde */}
               <a 
-                href="https://wa.me/" 
+                href="https://wa.me/50687909556"
                 target="_blank" 
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white text-[#1d1149] font-bold text-sm shadow-lg hover:bg-slate-100 transition-all text-center"
