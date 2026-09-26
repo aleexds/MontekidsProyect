@@ -194,3 +194,16 @@ body {
 .animate-page-bounce {
   animation: pageEntryBounce 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+/* --- FILTROS DE ACCESIBILIDAD PARA DALTONISMO --- */
+html.filter-protanopia {
+  filter: url('#protanopia');
+}
+
+html.filter-deuteranopia {
+  filter: url('#deuteranopia');
+}
+
+html.filter-tritanopia {
+  filter: url('#tritanopia');
+}

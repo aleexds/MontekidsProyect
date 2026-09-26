@@ -1,16 +1,22 @@
 
 
+import { useLanguage } from '../context/LanguageContext';
+
 export default function LocationMap() {
+  const { t } = useLanguage();
+
   return (
     <section className="w-full px-4 sm:px-6 lg:px-8 py-16 bg-surface-container-low" id="ubicacion">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="inline-block px-4 py-1 rounded-full bg-primary-container text-on-primary-container font-bold text-xs uppercase tracking-wider mb-2">
-            Ubicación & Contacto Directo
+            {t('location.badge', 'Ubicación & Contacto Directo')}
           </span>
-          <h2 className="text-3xl font-extrabold text-on-surface">Visítanos y Ponte en Contacto</h2>
+          <h2 className="text-3xl font-extrabold text-on-surface">
+            {t('location.title', 'Visítanos y Ponte en Contacto')}
+          </h2>
           <p className="text-on-surface-variant mt-2 text-sm sm:text-base">
-            ¿Quieres conocer nuestras instalaciones o consultar sobre cupos? Escríbenos directamente o visítanos.
+            {t('location.desc', '¿Quieres conocer nuestras instalaciones o consultar sobre cupos? Escríbenos directamente o visítanos.')}
           </p>
         </div>
 
@@ -20,26 +26,28 @@ export default function LocationMap() {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Atención de 6:00 AM - 6:00 PM</span>
+                <span>{t('location.hoursBadge', 'Atención de 6:00 AM - 6:00 PM')}</span>
               </div>
               
-              <h3 className="text-xl font-bold text-on-surface">Sede Central Montekids</h3>
+              <h3 className="text-xl font-bold text-on-surface">
+                {t('location.hqTitle', 'Sede Central Montekids')}
+              </h3>
               <p className="text-sm text-on-surface-variant flex items-start gap-2">
                 <span className="material-symbols-outlined text-primary text-[20px]">location_on</span>
-                <span>Av. 5A, Provincia de Puntarenas, El Roble, El Roble 2, 60101</span>
+                <span>{t('location.address', 'Av. 5A, Provincia de Puntarenas, El Roble, El Roble 2, 60101')}</span>
               </p>
 
               <div className="p-4 rounded-xl bg-surface-container-low space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Horario:</span>
-                  <span className="font-bold">Lun - Vie: 6:00 AM - 6:00 PM</span>
+                  <span className="text-on-surface-variant">{t('location.scheduleLabel', 'Horario:')}</span>
+                  <span className="font-bold">{t('location.scheduleVal', 'Lun - Vie: 6:00 AM - 6:00 PM')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Teléfono:</span>
+                  <span className="text-on-surface-variant">{t('location.phoneLabel', 'Teléfono:')}</span>
                   <a href="tel:+50687909556" className="font-bold text-primary hover:underline">+506 8790 9556</a>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-on-surface-variant">Correo:</span>
+                  <span className="text-on-surface-variant">{t('location.emailLabel', 'Correo:')}</span>
                   <a href="mailto:direccion@montekidsacademy.com" className="font-bold text-primary hover:underline">direccion@montekidsacademy.com</a>
                 </div>
               </div>
@@ -53,7 +61,7 @@ export default function LocationMap() {
                 className="w-full py-3 rounded-full bg-[#25D366] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md hover:brightness-105 transition-all"
               >
                 <span className="material-symbols-outlined text-[20px]">chat</span>
-                <span>Iniciar Chat por WhatsApp</span>
+                <span>{t('location.btnWhatsapp', 'Iniciar Chat por WhatsApp')}</span>
               </a>
             </div>
           </div>

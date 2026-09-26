@@ -1,7 +1,10 @@
 import kidsHero from '../img/kidsHero.jpg';
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative w-full overflow-hidden px-4 sm:px-6 lg:px-8 py-12 lg:py-20 transition-colors duration-300" id="inicio">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -12,30 +15,32 @@ export default function Hero() {
           {/* Badge Superior */}
           <div className="animate-pop-bounce inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high shadow-sm mb-4 transition-colors">
             <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
-            <span className="font-bold text-xs text-primary uppercase tracking-wider">Centro de Estimulación Temprana</span>
+            <span className="font-bold text-xs text-primary uppercase tracking-wider">
+              {t('hero.badge', 'Centro de Estimulación Temprana')}
+            </span>
           </div>
 
           {/* Título Principal con Letras Interactivas (Hover Color Aleatorio) */}
           <h1 className="animate-pop-bounce delay-100 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-on-surface tracking-tight leading-tight transition-colors">
-            El Lugar Donde{' '}
+            {t('hero.titleStart', 'El Lugar Donde')}{' '}
             <AnimatedInteractiveWord 
-              word="Aprender" 
+              word={t('hero.wordLearn', 'Aprender')} 
               baseColorClass="text-tertiary" 
             />
-            {' '}y{' '}
+            {' '}{t('hero.and', 'y')}{' '}
             <AnimatedInteractiveWord 
-              word="Crecer" 
+              word={t('hero.wordGrow', 'Crecer')} 
               baseColorClass="text-primary-container" 
             />
-            {' '}es una{' '}
+            {' '}{t('hero.isAn', 'es una')}{' '}
             <AnimatedInteractiveWord 
-              word="Aventura" 
+              word={t('hero.wordAdventure', 'Aventura')} 
               baseColorClass="text-secondary-container" 
             />
             {' '}
             <span className="relative inline-block pb-1">
               <AnimatedInteractiveWord 
-                word="Mágica" 
+                word={t('hero.wordMagical', 'Mágica')} 
                 baseColorClass="text-secondary-container" 
               />
               <svg
@@ -57,7 +62,7 @@ export default function Hero() {
 
           {/* Descripción */}
           <p className="animate-pop-bounce delay-200 mt-4 text-base sm:text-lg text-on-surface-variant max-w-2xl leading-relaxed transition-colors">
-            Estimulación temprana, desarrollo psicomotor y aprendizaje activo para niños de 2 a 5 años en un entorno seguro, afectivo y guiado por la curiosidad natural.
+            {t('hero.desc', 'Estimulación temprana, desarrollo psicomotor y aprendizaje activo para niños de 2 a 5 años en un entorno seguro, afectivo y guiado por la curiosidad natural.')}
           </p>
 
           {/* Botones */}
@@ -69,14 +74,14 @@ export default function Hero() {
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#25D366] text-white font-bold shadow-md hover:scale-105 active:scale-95 transition-all duration-200 text-center"
             >
               <span className="material-symbols-outlined">chat</span>
-              <span>Hablar por WhatsApp</span>
+              <span>{t('hero.btnWhatsapp', 'Hablar por WhatsApp')}</span>
             </a>
             <a 
               href="#ubicacion" 
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-surface-container-high text-on-surface font-bold hover:bg-surface-container-low hover:scale-105 active:scale-95 transition-all duration-200 text-center"
             >
               <span className="material-symbols-outlined">location_on</span>
-              <span>Ver Ubicación</span>
+              <span>{t('hero.btnLocation', 'Ver Ubicación')}</span>
             </a>
           </div>
         </div>
@@ -98,16 +103,21 @@ export default function Hero() {
                     <span className="material-symbols-outlined">auto_stories</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-on-surface">Sesión Sensorial Activa</h4>
-                    <p className="text-xs text-on-surface-variant">Motricidad Fina & Coordinación</p>
+                    <h4 className="font-bold text-sm text-on-surface">
+                      {t('hero.sensoryTitle', 'Sesión Sensorial Activa')}
+                    </h4>
+                    <p className="text-xs text-on-surface-variant">
+                      {t('hero.sensoryDesc', 'Motricidad Fina & Coordinación')}
+                    </p>
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs">En Vivo</span>
+                <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs">
+                  {t('hero.live', 'En Vivo')}
+                </span>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

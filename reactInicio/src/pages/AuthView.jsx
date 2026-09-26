@@ -3,9 +3,11 @@ import AuthNavbar from '../components/AuthNavbar';
 import AuthTabs from '../components/AuthTabs';
 import AuthForm from '../components/AuthForm';
 import Footer from '../components/Footer';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AuthView() {
   const [activeTab, setActiveTab] = useState('login');
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-surface flex flex-col justify-between transition-colors duration-300 font-sans">
@@ -24,13 +26,13 @@ export default function AuthView() {
                 ✓
               </span>
               <span className="text-xs text-on-surface-variant font-medium">
-                Plataforma Certificada AMI • Encriptación Biométrica de Grado Escolar
+                {t('auth.certBar', 'Plataforma Certificada AMI • Encriptación Biométrica de Grado Escolar')}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-tertiary">favorite</span>
               <span className="text-xs text-tertiary font-bold tracking-wide uppercase font-sans">
-                Comunidad Montekids • +1,400 Familias Conectadas
+                {t('auth.communityBar', 'Comunidad Montekids • +1,400 Familias Conectadas')}
               </span>
             </div>
           </div>
@@ -61,7 +63,7 @@ export default function AuthView() {
                 <div className="relative z-10 flex items-center justify-between">
                   <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold shadow-inner transition-transform duration-300 hover:scale-105">
                     <span className="material-symbols-outlined text-[16px] text-secondary-fixed">award_star</span>
-                    <span className="font-sans">Montessori Digital AMI</span>
+                    <span className="font-sans">{t('auth.montessoriBadge', 'Montessori Digital AMI')}</span>
                   </div>
                   
                   <div className="flex items-center gap-0.5 text-secondary-container">
@@ -77,11 +79,11 @@ export default function AuthView() {
                   </div>
 
                   <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug font-heading">
-                    Acompañando el Crecimiento de tu Hijo 🌟
+                    {t('auth.heroTitle', 'Acompañando el Crecimiento de tu Hijo 🌟')}
                   </h2>
 
                   <p className="text-sm text-white/85 mt-3 leading-relaxed font-sans">
-                    Accede al reporte de actividades diarias, bitácora fotográfica de estimulación sensorial, canciones infantiles del aula y canal de comunicación directa con las maestras guías.
+                    {t('auth.heroDesc', 'Accede al reporte de actividades diarias, bitácora fotográfica de estimulación sensorial, canciones infantiles del aula y canal de comunicación directa con las maestras guías.')}
                   </p>
 
                   {/* CONTENEDORES CON HOVER */}
@@ -90,21 +92,21 @@ export default function AuthView() {
                       <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">phone_iphone</span>
                       </div>
-                      <span className="text-xs font-bold">Monitoreo y bitácora en tiempo real</span>
+                      <span className="text-xs font-bold">{t('auth.heroF1', 'Monitoreo y bitácora en tiempo real')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl transition-all duration-300 hover:bg-white/20 hover:translate-x-2 hover:border-white/25 cursor-default">
                       <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">palette</span>
                       </div>
-                      <span className="text-xs font-bold">Registro de hitos motrices y fonéticos</span>
+                      <span className="text-xs font-bold">{t('auth.heroF2', 'Registro de hitos motrices y fonéticos')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 p-3 rounded-2xl transition-all duration-300 hover:bg-white/20 hover:translate-x-2 hover:border-white/25 cursor-default">
                       <div className="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold shrink-0">
                         <span className="material-symbols-outlined text-[18px]">military_tech</span>
                       </div>
-                      <span className="text-xs font-bold">Portal seguro de logros y micro-premios</span>
+                      <span className="text-xs font-bold">{t('auth.heroF3', 'Portal seguro de logros y micro-premios')}</span>
                     </div>
                   </div>
                 </div>
@@ -125,8 +127,8 @@ export default function AuthView() {
                 <span className="material-symbols-outlined text-[20px]">lock_clock</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface font-heading">Privacidad Blindada</div>
-                <div className="text-[11px] text-on-surface-variant font-sans">Cumplimiento estricto COPPA y GDPR-K</div>
+                <div className="text-xs font-bold text-on-surface font-heading">{t('auth.trust1Title', 'Privacidad Blindada')}</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">{t('auth.trust1Desc', 'Cumplimiento estricto COPPA y GDPR-K')}</div>
               </div>
             </div>
 
@@ -135,8 +137,8 @@ export default function AuthView() {
                 <span className="material-symbols-outlined text-[20px]">verified_user</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface font-heading">Asociación AMI</div>
-                <div className="text-[11px] text-on-surface-variant font-sans">Metodología Montessori verificada</div>
+                <div className="text-xs font-bold text-on-surface font-heading">{t('auth.trust2Title', 'Asociación AMI')}</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">{t('auth.trust2Desc', 'Metodología Montessori verificada')}</div>
               </div>
             </div>
 
@@ -145,8 +147,8 @@ export default function AuthView() {
                 <span className="material-symbols-outlined text-[20px]">support_agent</span>
               </div>
               <div>
-                <div className="text-xs font-bold text-on-surface font-heading">Soporte a Familias</div>
-                <div className="text-[11px] text-on-surface-variant font-sans">Mesa de ayuda pedagógica 24/7</div>
+                <div className="text-xs font-bold text-on-surface font-heading">{t('auth.trust3Title', 'Soporte a Familias')}</div>
+                <div className="text-[11px] text-on-surface-variant font-sans">{t('auth.trust3Desc', 'Mesa de ayuda pedagógica 24/7')}</div>
               </div>
             </div>
 
