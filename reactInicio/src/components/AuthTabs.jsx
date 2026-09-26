@@ -1,4 +1,8 @@
+import { useLanguage } from '../context/LanguageContext';
+
 export default function AuthTabs({ activeTab, setActiveTab }) {
+  const { t } = useLanguage();
+
   return (
     <div className="w-full bg-surface-container-low border-b border-surface-container-high p-2 flex items-center justify-center font-sans">
       <div className="relative flex w-full max-w-md bg-surface-container-lowest p-1 rounded-2xl shadow-inner border border-surface-container-high/60">
@@ -20,7 +24,7 @@ export default function AuthTabs({ activeTab, setActiveTab }) {
           }`}
         >
           <span className="material-symbols-outlined text-[18px]">login</span>
-          <span>Iniciar Sesión</span>
+          <span>{t('auth.tabLogin', 'Iniciar Sesión')}</span>
         </button>
 
         {/* Botón 2: Registrarse */}
@@ -33,7 +37,7 @@ export default function AuthTabs({ activeTab, setActiveTab }) {
           }`}
         >
           <span className="material-symbols-outlined text-[18px]">person_add</span>
-          <span>Registrarse</span>
+          <span>{t('auth.tabRegister', 'Registrarse')}</span>
         </button>
 
       </div>

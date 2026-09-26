@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AuthForm({ activeTab, setActiveTab }) {
+  const { t } = useLanguage();
+
   // Estado para mostrar / ocultar contraseña
   const [showPassword, setShowPassword] = useState(false);
 
@@ -17,10 +20,10 @@ export default function AuthForm({ activeTab, setActiveTab }) {
 
   // Medidor de fuerza de contraseña
   const getPasswordStrength = (pass) => {
-    if (!pass) return { score: 0, text: 'Sin contraseña', class: 'text-on-surface-variant' };
-    if (pass.length < 6) return { score: 1, text: 'Débil', class: 'text-[#2e9e66]' };
-    if (pass.length < 10) return { score: 2, text: 'Buena', class: 'text-secondary-container' };
-    return { score: 3, text: 'Fuerte y Segura', class: 'text-primary' };
+    if (!pass) return { score: 0, text: t('auth.passNone', 'Sin contraseña'), class: 'text-on-surface-variant' };
+    if (pass.length < 6) return { score: 1, text: t('auth.passWeak', 'Débil'), class: 'text-[#2e9e66]' };
+    if (pass.length < 10) return { score: 2, text: t('auth.passGood', 'Buena'), class: 'text-secondary-container' };
+    return { score: 3, text: t('auth.passStrong', 'Fuerte y Segura'), class: 'text-primary' };
   };
 
   const strength = getPasswordStrength(regPassword);
@@ -43,23 +46,23 @@ export default function AuthForm({ activeTab, setActiveTab }) {
           <div className="mb-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs mb-2">
               <span className="w-2 h-2 rounded-full bg-secondary-container"></span>
-              <span>Ciclo Escolar 2025 • Trimestre de Primavera</span>
+              <span>{t('auth.schoolCycle', 'Ciclo Escolar 2025 • Trimestre de Primavera')}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-              <AnimatedInteractiveWord word="¡Hola" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="de" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="Nuevo!" baseColorClass="text-on-surface" />{' '}
+              {t('auth.loginWord1') && <AnimatedInteractiveWord word={t('auth.loginWord1')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.loginWord2') && <AnimatedInteractiveWord word={t('auth.loginWord2')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.loginWord3') && <AnimatedInteractiveWord word={t('auth.loginWord3')} baseColorClass="text-on-surface" />}{' '}
               <span className="inline-block animate-bounce">👋</span>
             </h1>
             <p className="text-sm text-on-surface-variant mt-1">
-              Ingresa a tu cuenta para continuar con el seguimiento en vivo de tu pequeño explorador y revisar sus bitácoras sensoriales.
+              {t('auth.loginSubtitle', 'Ingresa a tu cuenta para continuar con el seguimiento en vivo de tu pequeño explorador y revisar sus bitácoras sensoriales.')}
             </p>
           </div>
 
           {/* Botón Google Workspace */}
           <button
             type="button"
-            className="w-full mb-6 py-3 px-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container text-on-surface font-bold text-sm shadow-[0_2px_8px_rgba(30,18,74,0.06)] transition-all flex items-center justify-center gap-3 active:scale-95"
+            className="w-full mb-6 py-3 px-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container text-on-surface font-bold text-sm shadow-[0_2px_8px_rgba(30,18,74,0.06)] transition-all flex items-center justify-center gap-3 active:scale-95 cursor-pointer"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.8 5 12 5z" fill="#EA4335" />
@@ -67,14 +70,14 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               <path d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.4 0-.8.2-1.6.4-2.4L1.6 7c-.8 1.6-1.3 3.4-1.3 5.3s.5 3.7 1.3 5.3l3.7-2.9z" fill="#FBBC05" />
               <path d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.2 0-5.8-2.3-6.7-5.3L1.6 15.9C3.5 19.7 7.4 23 12 23z" fill="#34A853" />
             </svg>
-            <span>Continuar con Google Workspace Escolar</span>
+            <span>{t('auth.googleAuth', 'Continuar con Google Workspace Escolar')}</span>
           </button>
 
           {/* Divisor */}
           <div className="relative flex items-center justify-center mb-6">
             <div className="w-full h-[1px] bg-surface-container-high"></div>
             <span className="absolute px-3 bg-surface-container-lowest text-[10px] font-bold text-outline uppercase tracking-wider">
-              o con tus credenciales
+              {t('auth.orDivider', 'o con tus credenciales')}
             </span>
           </div>
 
@@ -82,7 +85,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label className="block text-xs font-bold text-on-surface mb-1.5">
-                Correo Electrónico Registrado
+                {t('auth.emailLabel', 'Correo Electrónico Registrado')}
               </label>
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">
@@ -93,7 +96,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="ej. mama.mateo@email.com"
+                  placeholder={t('auth.emailPlaceholder', 'ej. mama.mateo@email.com')}
                   className="w-full h-[52px] pl-12 pr-4 bg-surface-container-lowest rounded-2xl text-on-surface text-sm shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
               </div>
@@ -101,9 +104,9 @@ export default function AuthForm({ activeTab, setActiveTab }) {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-on-surface">Contraseña</label>
+                <label className="text-xs font-bold text-on-surface">{t('auth.passwordLabel', 'Contraseña')}</label>
                 <a href="#forgot" className="text-xs font-bold text-primary hover:underline">
-                  ¿Olvidaste tu contraseña?
+                  {t('auth.forgotPassword', '¿Olvidaste tu contraseña?')}
                 </a>
               </div>
               <div className="relative flex items-center">
@@ -115,7 +118,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder', '••••••••')}
                   className="w-full h-[52px] pl-12 pr-12 bg-surface-container-lowest rounded-2xl text-on-surface text-sm shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
                 <button
@@ -134,7 +137,9 @@ export default function AuthForm({ activeTab, setActiveTab }) {
             <div className="flex items-center justify-between py-1">
               <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input type="checkbox" defaultChecked className="w-4 h-4 rounded accent-primary cursor-pointer" />
-                <span className="text-xs text-on-surface-variant">Recordar en este dispositivo por 30 días</span>
+                <span className="text-xs text-on-surface-variant">
+                  {t('auth.rememberMe', 'Recordar en este dispositivo por 30 días')}
+                </span>
               </label>
               <div className="flex items-center gap-1 text-[11px] font-bold text-secondary px-2.5 py-0.5 rounded-full bg-secondary-fixed">
                 <span className="material-symbols-outlined text-[14px]">shield</span>
@@ -147,20 +152,20 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               type="submit"
               className="mt-2 w-full h-[54px] rounded-full bg-tertiary hover:brightness-110 text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(183,0,114,0.30)] active:scale-95 transition-all cursor-pointer"
             >
-              <span>Ingresar al Aula Virtual</span>
+              <span>{t('auth.submitLogin', 'Ingresar al Aula Virtual')}</span>
               <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
             </button>
           </form>
 
           {/* Footer Callout */}
           <div className="mt-6 p-3 rounded-2xl bg-surface-container-low text-center text-xs text-on-surface-variant">
-            <span>¿Aún no tienes cuenta registrada para tu hijo? </span>
+            <span>{t('auth.noAccountText', '¿Aún no tienes cuenta registrada para tu hijo?')} </span>
             <button
               type="button"
               onClick={() => setActiveTab('register')}
-              className="font-bold text-primary hover:underline inline-flex items-center gap-0.5 ml-1"
+              className="font-bold text-primary hover:underline inline-flex items-center gap-0.5 ml-1 cursor-pointer"
             >
-              Registrarse Aquí ✨
+              {t('auth.registerLink', 'Registrarse Aquí ✨')}
             </button>
           </div>
         </div>
@@ -171,25 +176,25 @@ export default function AuthForm({ activeTab, setActiveTab }) {
           <div className="mb-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-xs font-bold mb-2">
               <span className="material-symbols-outlined text-[14px]">school</span>
-              <span>Inscripción Familiar • Ciclo 2025</span>
+              <span>{t('auth.regSchoolCycle', 'Inscripción Familiar • Ciclo 2025')}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">
-              <AnimatedInteractiveWord word="Crea" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="tu" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="Cuenta" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="de" baseColorClass="text-on-surface" />{' '}
-              <AnimatedInteractiveWord word="Familia" baseColorClass="text-on-surface" />{' '}
+              {t('auth.regWord1') && <AnimatedInteractiveWord word={t('auth.regWord1')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.regWord2') && <AnimatedInteractiveWord word={t('auth.regWord2')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.regWord3') && <AnimatedInteractiveWord word={t('auth.regWord3')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.regWord4') && <AnimatedInteractiveWord word={t('auth.regWord4')} baseColorClass="text-on-surface" />}{' '}
+              {t('auth.regWord5') && <AnimatedInteractiveWord word={t('auth.regWord5')} baseColorClass="text-on-surface" />}{' '}
               🌱
             </h2>
             <p className="text-sm text-on-surface-variant mt-1">
-              Vincula de forma segura el acceso directo al aula y a la bitácora personalizada de tu hijo en Montekids.
+              {t('auth.regSubtitle', 'Vincula de forma segura el acceso directo al aula y a la bitácora personalizada de tu hijo en Montekids.')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             <div>
               <label className="block text-xs font-bold text-on-surface mb-1">
-                Nombre Completo del Apoderado o Tutor
+                {t('auth.regNameLabel', 'Nombre Completo del Apoderado o Tutor')}
               </label>
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">
@@ -200,7 +205,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
-                  placeholder="ej. Valeria Quirós Fernández"
+                  placeholder={t('auth.regNamePlaceholder', 'ej. Valeria Quirós Fernández')}
                   className="w-full h-[50px] pl-12 pr-4 bg-surface-container-lowest rounded-2xl text-on-surface text-sm shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
               </div>
@@ -208,7 +213,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
 
             <div>
               <label className="block text-xs font-bold text-on-surface mb-1">
-                Correo Electrónico de Contacto
+                {t('auth.regEmailLabel', 'Correo Electrónico de Contacto')}
               </label>
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">
@@ -219,7 +224,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
-                  placeholder="tu.correo@ejemplo.com"
+                  placeholder={t('auth.regEmailPlaceholder', 'tu.correo@ejemplo.com')}
                   className="w-full h-[50px] pl-12 pr-4 bg-surface-container-lowest rounded-2xl text-on-surface text-sm shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
               </div>
@@ -227,9 +232,11 @@ export default function AuthForm({ activeTab, setActiveTab }) {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-bold text-on-surface">Código de Aula / Alumno</label>
+                <label className="text-xs font-bold text-on-surface">
+                  {t('auth.regCodeLabel', 'Código de Aula / Alumno')}
+                </label>
                 <span className="text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full">
-                  Proporcionado en Recepción
+                  {t('auth.regCodeBadge', 'Proporcionado en Recepción')}
                 </span>
               </div>
               <div className="relative flex items-center">
@@ -241,7 +248,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={regCode}
                   onChange={(e) => setRegCode(e.target.value)}
-                  placeholder="ej. MK-2025-EXPLO-88"
+                  placeholder={t('auth.regCodePlaceholder', 'ej. MK-2025-EXPLO-88')}
                   className="w-full h-[50px] pl-12 pr-4 bg-surface-container-lowest rounded-2xl text-on-surface text-sm uppercase tracking-wider shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
               </div>
@@ -249,7 +256,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
 
             <div>
               <label className="block text-xs font-bold text-on-surface mb-1">
-                Crear Contraseña Segura
+                {t('auth.createPassLabel', 'Crear Contraseña Segura')}
               </label>
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">
@@ -260,7 +267,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
                   required
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
-                  placeholder="Mínimo 8 caracteres"
+                  placeholder={t('auth.createPassPlaceholder', 'Mínimo 8 caracteres')}
                   className="w-full h-[50px] pl-12 pr-12 bg-surface-container-lowest rounded-2xl text-on-surface text-sm shadow-[0_2px_6px_rgba(30,18,74,0.04)] focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
                 />
                 <button
@@ -293,7 +300,14 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               <label className="flex items-start gap-2 cursor-pointer select-none">
                 <input type="checkbox" required className="w-4 h-4 mt-0.5 rounded accent-primary cursor-pointer" />
                 <span className="text-xs text-on-surface-variant leading-snug">
-                  Acepto los <a href="#terms" className="text-primary font-bold hover:underline">Términos de Servicio</a> y autorizo el tratamiento bajo la <a href="#privacy" className="text-primary font-bold hover:underline">Política AMI</a>.
+                  {t('auth.termsText1', 'Acepto los')}{' '}
+                  <a href="#terms" className="text-primary font-bold hover:underline">
+                    {t('auth.termsLink', 'Términos de Servicio')}
+                  </a>{' '}
+                  {t('auth.termsText2', 'y autorizo el tratamiento bajo la')}{' '}
+                  <a href="#privacy" className="text-primary font-bold hover:underline">
+                    {t('auth.privacyLink', 'Política AMI')}
+                  </a>.
                 </span>
               </label>
             </div>
@@ -302,19 +316,19 @@ export default function AuthForm({ activeTab, setActiveTab }) {
               type="submit"
               className="mt-1 w-full h-[54px] rounded-full bg-primary hover:brightness-110 text-white font-bold text-sm tracking-wide flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(0,105,113,0.30)] active:scale-95 transition-all cursor-pointer"
             >
-              <span>Crear Cuenta de Familia ✨</span>
+              <span>{t('auth.submitRegister', 'Crear Cuenta de Familia ✨')}</span>
               <span className="material-symbols-outlined text-[20px]">assignment_turned_in</span>
             </button>
           </form>
 
           <div className="mt-6 p-3 rounded-2xl bg-surface-container-low text-center text-xs text-on-surface-variant">
-            <span>¿Ya tienes una cuenta de tutor activa? </span>
+            <span>{t('auth.haveAccountText', '¿Ya tienes una cuenta de tutor activa?')} </span>
             <button
               type="button"
               onClick={() => setActiveTab('login')}
-              className="font-bold text-primary hover:underline inline-flex items-center gap-0.5 ml-1"
+              className="font-bold text-primary hover:underline inline-flex items-center gap-0.5 ml-1 cursor-pointer"
             >
-              Iniciar Sesión Aquí 🔒
+              {t('auth.loginLink', 'Iniciar Sesión Aquí 🔒')}
             </button>
           </div>
         </div>

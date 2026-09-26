@@ -1,6 +1,11 @@
 
 import Routing from './routes/Routing';
+import { LanguageProvider } from './context/LanguageContext';
 
 export default function App() {
-  return <Routing />;
+  return (
+    <LanguageProvider>
+      <Routing />
+    </LanguageProvider>
+  );
 }

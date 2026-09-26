@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logoMontekids from '../img/logoMontekids.png';
 import logoDark from '../img/logoDarkMontekids.png';
+import ColorblindToggle from './ColorblindToggle';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AuthNavbar() {
+  const { t } = useLanguage();
   const [isDark, setIsDark] = useState(false);
   const [fontSizeIndex, setFontSizeIndex] = useState(0);
 
@@ -58,6 +62,12 @@ export default function AuthNavbar() {
             {fontLabels[fontSizeIndex]}
           </button>
 
+          {/* Botón Filtro Daltonismo */}
+          <ColorblindToggle />
+
+          {/* Botón Idioma */}
+          <LanguageToggle />
+
           {/* Botón Modo Oscuro */}
           <button
             onClick={() => setIsDark(!isDark)}
@@ -75,7 +85,7 @@ export default function AuthNavbar() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-xs hover:brightness-105 active:scale-95 transition-all shadow-sm font-sans"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            <span className="hidden sm:inline">Volver a Página Principal</span>
+            <span className="hidden sm:inline">{t('nav.backToHome', 'Volver a Página Principal')}</span>
           </Link>
 
         </div>
