@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AnimatedInteractiveWord from './AnimatedInteractiveWord';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ForgotPasswordForm() {
+  const { t } = useLanguage();
   const [viewState, setViewState] = useState('form'); // 'form' | 'success'
   const [email, setEmail] = useState('valeria.quiros@gmail.com');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -13,7 +16,7 @@ export default function ForgotPasswordForm() {
 
   const inputRefs = useRef([]);
 
-  // Temporizador simplificado sin setState síncronos
+  // Temporizador para el código de verificación
   useEffect(() => {
     if (viewState !== 'success' || timer <= 0) return;
 
@@ -69,7 +72,7 @@ export default function ForgotPasswordForm() {
             <span className="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-1">
               arrow_back
             </span>
-            <span>Volver al Login</span>
+            <span>{t('forgotPassword.backToLogin')}</span>
           </Link>
 
           {/* Toggle manual de prueba visual */}
@@ -96,18 +99,19 @@ export default function ForgotPasswordForm() {
           </div>
         </div>
 
-        {/* CABECERA */}
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-md text-label-md mb-3.5">
-            <span className="material-symbols-outlined text-[16px]">lock_reset</span>
-            <span>Recuperación Segura de Credenciales</span>
+        <div className="w-full max-w-xl mx-auto flex flex-col justify-center animate-fadeIn">
+          {/* CABECERA */}
+          <div className="mb-8">
+            <h1 className="text-[32px] sm:text-[30px] leading-[1.15] tracking-tight mb-3 font-headline-xl font-extrabold flex flex-wrap gap-x-2 items-center">
+              <AnimatedInteractiveWord word={t('forgotPassword.title1')} baseColorClass="text-[#1e1035]" />
+              <AnimatedInteractiveWord word={t('forgotPassword.title2')} baseColorClass="text-[#1e1035]" />
+              <AnimatedInteractiveWord word={t('forgotPassword.title3')} baseColorClass="text-[#1e1035]" />
+              <span className="inline-block animate-bounce">🔑</span>
+            </h1>
+            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              {t('forgotPassword.desc')}
+            </p>
           </div>
-          <h1 className="text-[32px] sm:text-[38px] leading-[1.15] text-[#1e1035] tracking-tight mb-3 font-headline-xl font-extrabold">
-            ¿Olvidaste tu Contraseña? 🔑
-          </h1>
-          <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-            Ingresa el correo electrónico asociado a tu cuenta de familiar o tutor y te enviaremos las instrucciones de restablecimiento de forma inmediata.
-          </p>
         </div>
 
         {/* ESTADO 1: FORMULARIO */}
@@ -116,10 +120,9 @@ export default function ForgotPasswordForm() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <label htmlFor="email" className="font-label-lg text-label-lg text-[#1e1035] font-bold flex items-center gap-1">
-                  <span>Correo Electrónico Registrado</span>
+                  <span>{t('forgotPassword.emailLabel')}</span>
                   <span className="text-tertiary">*</span>
                 </label>
-                <span className="font-body-sm text-body-sm text-outline">Apoderado o Docente</span>
               </div>
               <div className="relative flex items-center">
                 <div className="absolute left-4 flex items-center pointer-events-none text-outline">
@@ -131,7 +134,7 @@ export default function ForgotPasswordForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ejemplo@montekids.com"
+                  placeholder={t('forgotPassword.emailPlaceholder')}
                   className="w-full h-14 pl-12 pr-4 bg-surface-container-lowest text-on-surface rounded-2xl font-body-md text-body-md outline-none transition-all placeholder:text-outline-variant focus:ring-4 focus:ring-tertiary/20"
                   style={{ boxShadow: 'inset 0 0 0 1.5px #ede8f5' }}
                 />
@@ -143,7 +146,7 @@ export default function ForgotPasswordForm() {
                 <span className="material-symbols-outlined text-[19px] text-[#005c63]">info</span>
               </div>
               <div className="text-xs sm:text-[13px] leading-relaxed font-body-sm font-semibold text-[#005c63]">
-                El enlace de verificación expirará en <span className="font-extrabold underline underline-offset-2">15 minutos</span> por razones de estricta seguridad escolar y resguardo integral infantil bajo protocolo COPPA.
+                {t('forgotPassword.expirationNotice')}
               </div>
             </div>
 
@@ -156,42 +159,43 @@ export default function ForgotPasswordForm() {
               {isLoading ? (
                 <span className="flex items-center gap-2">
                   <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
-                  <span>Enviando enlace seguro...</span>
+                  <span>Enviando...</span>
                 </span>
               ) : (
                 <span className="relative z-10 flex items-center gap-2">
-                  <span>Enviar Enlace de Recuperación</span>
+                  <span>{t('forgotPassword.submitBtn')}</span>
                   <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
                 </span>
               )}
             </button>
           </form>
         ) : (
-          /* ESTADO 2: CÓDIGO/CONFIRMACIÓN */
+          /* ESTADO 2: CÓDIGO/CONFIRMACIÓN (TRADUCIDO) */
           <div className="flex flex-col gap-5">
             <div className="p-6 sm:p-7 rounded-3xl bg-[#ecfdf5] shadow-xs flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-[#10b981] text-white flex items-center justify-center mb-4 shadow-[0_8px_20px_rgba(16,185,129,0.35)] animate-bounce">
                 <span className="material-symbols-outlined text-[34px] font-black">check</span>
               </div>
               <h3 className="text-xl sm:text-2xl text-[#064e3b] font-black mb-2">
-                ¡Correo de recuperación enviado!
+                {t('forgotPassword.successTitle')}
               </h3>
               <p className="font-body-md text-body-md text-[#065f46] max-w-md mb-4 leading-relaxed">
-                Hemos enviado las instrucciones a <strong className="underline decoration-wavy decoration-[#10b981]">{email}</strong>.
+                {t('forgotPassword.successInstructions')}{' '}
+                <strong className="underline decoration-wavy decoration-[#10b981]">{email}</strong>.
               </p>
 
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[#065f46] font-body-sm text-body-sm font-bold shadow-xs">
                 <span className="material-symbols-outlined text-[18px] text-[#10b981]">timer</span>
                 <span>
                   {!canResend ? (
-                    `Reenviar correo disponible en 00:${timer < 10 ? `0${timer}` : timer}`
+                    `${t('forgotPassword.resendAvailableIn')} 00:${timer < 10 ? `0${timer}` : timer}`
                   ) : (
                     <button
                       type="button"
                       onClick={handleResendCode}
                       className="text-tertiary font-bold underline cursor-pointer hover:text-primary"
                     >
-                      ¡Reenviar correo de verificación!
+                      {t('forgotPassword.resendNow')}
                     </button>
                   )}
                 </span>
@@ -222,34 +226,45 @@ export default function ForgotPasswordForm() {
                 className="w-full sm:w-auto px-6 h-12 rounded-full bg-surface-container-high text-on-surface font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 hover:bg-surface-container transition-all"
               >
                 <span className="material-symbols-outlined text-[18px]">edit</span>
-                <span>Verificar otra dirección</span>
+                <span>{t('forgotPassword.verifyAnotherEmail')}</span>
               </button>
               <Link
                 to="/login"
                 className="w-full sm:w-auto px-6 h-12 rounded-full bg-[#F5009B] text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 hover:bg-[#e0008d] transition-all shadow-md"
               >
                 <span className="material-symbols-outlined text-[18px]">login</span>
-                <span>Ir a Iniciar Sesión</span>
+                <span>{t('forgotPassword.goToLogin')}</span>
               </Link>
+            </div>
+            <div className="p-4 rounded-2xl bg-[#effbfd] text-[#005c63] flex items-start gap-3 shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-[#00dbeb]/30 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="material-symbols-outlined text-[19px] text-[#005c63]">info</span>
+              </div>
+              <div className="text-xs sm:text-[13px] leading-relaxed font-body-sm font-semibold text-[#005c63]">
+                {t('forgotPassword.expirationNotice')}
+              </div>
             </div>
           </div>
         )}
 
+        {/* FOOTER CON TRADUCCIONES TRADUCIBLES Y TEXTOS TÉCNICOS ESTÁTICOS */}
         <div className="mt-4 pt-4 flex flex-wrap items-center justify-between gap-3 text-on-surface-variant font-body-sm text-body-sm">
           <span className="flex items-center gap-1.5">
             <span className="material-symbols-outlined text-[16px] text-secondary">contact_support</span>
-            <span>¿Ya no tienes acceso a este buzón?</span>
+            <span>{t('forgotPassword.noAccess')}</span>
           </span>
-          <a href="#secretaria" className="font-bold text-tertiary hover:underline">Contactar a Secretaría Escolar</a>
+          <a href="#secretaria" className="font-bold text-tertiary hover:underline">
+            {t('forgotPassword.contactSchool')}
+          </a>
         </div>
       </div>
 
       <div className="mt-8 pt-4 flex items-center justify-between text-outline text-[12px] font-body-sm">
         <span className="flex items-center gap-1.5">
           <span className="material-symbols-outlined text-[15px] text-[#005B60]">shield</span>
-          <span>Encriptación AES-256 Bit</span>
+          <span>{t('forgotPassword.encryptionLabel')} AES-256 Bit</span>
         </span>
-        <span>ID de Sesión: MTK-SEC-8942-AUTH</span>
+        <span>{t('forgotPassword.sessionIdLabel')}: MTK-SEC-8942-AUTH</span>
       </div>
     </div>
   );
