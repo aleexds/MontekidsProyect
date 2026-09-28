@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom'; // 1. Importar Link
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -105,9 +106,11 @@ export default function AuthForm({ activeTab, setActiveTab }) {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-bold text-on-surface">{t('auth.passwordLabel', 'Contraseña')}</label>
-                <a href="#forgot" className="text-xs font-bold text-primary hover:underline">
+                
+                {/* 2. Enlace configurado con React Router */}
+                <Link to="/forgot-password" className="text-xs font-bold text-primary hover:underline">
                   {t('auth.forgotPassword', '¿Olvidaste tu contraseña?')}
-                </a>
+                </Link>
               </div>
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-4 text-on-surface-variant text-[20px] pointer-events-none">
