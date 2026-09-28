@@ -4,7 +4,7 @@ import Home from '../pages/Home';
 import Login from "../pages/AuthView"
 import ForgotPasswordView from '../pages/ForgotPasswordView';
 
-export default function Routing() {
+export default function Routing() { 
   return (
     <BrowserRouter>
       <Routes>
