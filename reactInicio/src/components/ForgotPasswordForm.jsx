@@ -6,21 +6,21 @@ export default function ForgotPasswordForm() {
   const [email, setEmail] = useState('valeria.quiros@gmail.com');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(59);
-  const [canResend, setCanResend] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Derivamos canResend directamente del valor del timer
+  const canResend = timer === 0;
 
   const inputRefs = useRef([]);
 
+  // Temporizador simplificado sin setState síncronos
   useEffect(() => {
-    let interval = null;
-    if (viewState === 'success' && timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setCanResend(true);
-      clearInterval(interval);
-    }
+    if (viewState !== 'success' || timer <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
     return () => clearInterval(interval);
   }, [viewState, timer]);
 
@@ -31,8 +31,14 @@ export default function ForgotPasswordForm() {
       setIsLoading(false);
       setViewState('success');
       setTimer(59);
-      setCanResend(false);
     }, 600);
+  };
+
+  const handleResendCode = () => {
+    if (!canResend) return;
+    setTimer(59);
+    setOtp(['', '', '', '', '', '']);
+    inputRefs.current[0]?.focus();
   };
 
   const handleOtpChange = (index, value) => {
@@ -177,7 +183,17 @@ export default function ForgotPasswordForm() {
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[#065f46] font-body-sm text-body-sm font-bold shadow-xs">
                 <span className="material-symbols-outlined text-[18px] text-[#10b981]">timer</span>
                 <span>
-                  {timer > 0 ? `Reenviar correo disponible en 00:${timer < 10 ? `0${timer}` : timer}` : '¡Ya puedes reenviar el correo!'}
+                  {!canResend ? (
+                    `Reenviar correo disponible en 00:${timer < 10 ? `0${timer}` : timer}`
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendCode}
+                      className="text-tertiary font-bold underline cursor-pointer hover:text-primary"
+                    >
+                      ¡Reenviar correo de verificación!
+                    </button>
+                  )}
                 </span>
               </div>
             </div>
