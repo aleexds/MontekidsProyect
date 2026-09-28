@@ -2,7 +2,7 @@
 import AuthNavbar from '../components/AuthNavbar';
 import Footer from '../components/Footer';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
-import SecurityPanel from '../components/SecurityPanel';
+import SecurityPanel from '../components/SecutiryPanel';
 
 export default function ForgotPasswordView() {
   return (
