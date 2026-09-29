@@ -260,7 +260,7 @@ const translations = {
   },
   timeline: {
     headerTitle: "Bitácora del Día de Mateo",
-    today: "Hoy, 28 de Octubre, 2024",
+    today: "Hoy, 28 de Octubre, 2026",
     inSession: "En Jornada Matutina",
     completedSuccess: "Completado con Éxito",
     completedAt: "Completado a las 11:15 AM",
@@ -588,7 +588,7 @@ const translations = {
   },
   timeline: {
     headerTitle: "Mateo's Daily Log",
-    today: "Today, October 28, 2024",
+    today: "Today, October 28, 2026",
     inSession: "In Morning Session",
     completedSuccess: "Successfully Completed",
     completedAt: "Completed at 11:15 AM",
@@ -915,7 +915,7 @@ const translations = {
       },
       timeline: {
         headerTitle: "Mateo 的每日日志",
-        today: "今天，2024年10月28日",
+        today: "今天，2026年10月28日",
         inSession: "上午活动中",
         completedSuccess: "顺利完成",
         completedAt: "完成于 11:15 AM",
