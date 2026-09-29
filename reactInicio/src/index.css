@@ -207,3 +207,24 @@ html.filter-deuteranopia {
 html.filter-tritanopia {
   filter: url('#tritanopia');
 }
+
+/* Adaptación visual de Calendar.js al sistema de diseño Montekids */
+.calendar-js-wrapper .calendar {
+  border-radius: 1.5rem !important;
+  border: 1px solid rgba(186, 201, 203, 0.4) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  background-color: transparent !important;
+}
+
+.calendar-js-wrapper .calendar .header {
+  background-color: var(--color-surface-container-low, #f7f1ff) !important;
+  border-bottom: 1px solid rgba(186, 201, 203, 0.4) !important;
+  border-top-left-radius: 1.5rem !important;
+  border-top-right-radius: 1.5rem !important;
+}
+
+.calendar-js-wrapper .calendar .event {
+  border-radius: 0.75rem !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}

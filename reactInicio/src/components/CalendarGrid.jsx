@@ -1,182 +1,287 @@
-export function CalendarGrid({ onSelectEvent, onAgendaQuickPeek }) {
+import { useMemo } from 'react';
+
+const ALL_EVENTS = [
+  {
+    id: 'evt-1',
+    title: 'Taller Fonemático y Estimulación',
+    date: new Date(2026, 9, 9), // Octubre 9, 2026
+    dateText: '09 Octubre, 2026',
+    time: '09:00 AM - 10:30 AM',
+    category: 'workshops',
+    categoryLabel: 'Estimulación AMI',
+    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
+    dotColor: 'bg-emerald-500',
+    description: 'Sesión práctica de desarrollo de lenguaje y habilidades fonológicas.'
+  },
+  {
+    id: 'evt-2',
+    title: 'Circuito Sensorial de Primavera',
+    date: new Date(2026, 9, 17), // Octubre 17, 2026
+    dateText: '17 Octubre, 2026',
+    time: '10:00 AM - 12:00 PM',
+    category: 'special',
+    categoryLabel: 'Lúdico / Huerta',
+    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
+    dotColor: 'bg-amber-500',
+    description: 'Actividades al aire libre para exploración táctil y motricidad gruesa.'
+  },
+  {
+    id: 'evt-3',
+    title: 'Taller Fonemático Avanzado',
+    date: new Date(2026, 9, 23), // Octubre 23, 2026
+    dateText: '23 Octubre, 2026',
+    time: '09:00 AM - 10:30 AM',
+    category: 'workshops',
+    categoryLabel: 'Estimulación AMI',
+    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
+    dotColor: 'bg-emerald-500',
+    description: 'Continuación del taller de fonemas enfocado en articulación y vocabulario.'
+  },
+  {
+    id: 'evt-4',
+    title: 'Reunión Trimestral de Familias',
+    date: new Date(2026, 9, 27), // Octubre 27, 2026
+    dateText: '27 Octubre, 2026',
+    time: '04:00 PM - 05:30 PM',
+    category: 'meetings',
+    categoryLabel: 'Reunión Familias',
+    badgeColor: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 dark:bg-fuchsia-950/40 dark:text-fuchsia-300',
+    dotColor: 'bg-fuchsia-500',
+    description: 'Presentación de informes de avance académico y emocional del periodo.'
+  },
+  {
+    id: 'evt-5',
+    title: 'Día del Sombrero Loco',
+    date: new Date(2026, 9, 31), // Octubre 31, 2026
+    dateText: '31 Octubre, 2026',
+    time: 'Durante la jornada',
+    category: 'special',
+    categoryLabel: 'Lúdico / Huerta',
+    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
+    dotColor: 'bg-amber-500',
+    description: 'Celebración temática interactiva. Recuerda traer el material reciclado.'
+  }
+];
+
+const DAYS_OF_WEEK = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+export function CalendarGrid({
+  activeView = 'mes',
+  activeCategory = 'all',
+  onSelectEvent,
+  currentDate = new Date()
+}) {
+  const filteredEvents = useMemo(() => {
+    return ALL_EVENTS.filter((evt) => {
+      const matchesCategory = activeCategory === 'all' || evt.category === activeCategory;
+      const matchesMonth = 
+        evt.date.getMonth() === currentDate.getMonth() && 
+        evt.date.getFullYear() === currentDate.getFullYear();
+      return matchesCategory && matchesMonth;
+    });
+  }, [activeCategory, currentDate]);
+
+  const daysToRender = useMemo(() => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    if (activeView === 'semana') {
+      const startOfWeek = new Date(year, month, 15);
+      const dayOfWeek = startOfWeek.getDay();
+      const sunday = new Date(startOfWeek);
+      sunday.setDate(startOfWeek.getDate() - dayOfWeek);
+
+      const weekDays = [];
+      for (let i = 0; i < 7; i++) {
+        const nextDay = new Date(sunday);
+        nextDay.setDate(sunday.getDate() + i);
+        weekDays.push(nextDay);
+      }
+      return weekDays;
+    }
+
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const daysArray = [];
+
+    for (let i = 0; i < firstDayIndex; i++) {
+      daysArray.push(null);
+    }
+    for (let day = 1; day <= totalDays; day++) {
+      daysArray.push(new Date(year, month, day));
+    }
+
+    return daysArray;
+  }, [currentDate, activeView]);
+
+  // -------------------------------------------------------------
+  // VISTA: AGENDA
+  // -------------------------------------------------------------
+  if (activeView === 'agenda') {
+    return (
+      <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-sm border border-outline-variant/30 transition-all duration-300 font-sans">
+        <div className="flex items-center justify-between pb-4 mb-6 border-b border-surface-container-low">
+          <div className="flex items-center gap-3">
+            <span className="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              {filteredEvents.length} Eventos este mes
+            </span>
+            <h3 className="text-lg font-bold text-on-surface">Próximas Actividades</h3>
+          </div>
+          <span className="text-xs text-on-surface-variant font-medium">Orden cronológico</span>
+        </div>
+
+        {filteredEvents.length === 0 ? (
+          <div className="text-center py-12 text-on-surface-variant">
+            <span className="material-symbols-outlined text-4xl mb-2">event_busy</span>
+            <p className="text-sm font-medium">No hay eventos para este filtro o mes seleccionado.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {filteredEvents.map((evt) => (
+              <div
+                key={evt.id}
+                id={evt.id}
+                onClick={() => onSelectEvent && onSelectEvent(evt.id)}
+                className="group flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border border-surface-container-low bg-surface-container-lowest hover:bg-surface-container-low hover:border-primary/20 transition-all duration-200 cursor-pointer gap-4"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex flex-col items-center justify-center bg-surface-container-low border border-surface-container-high rounded-xl px-3 py-2 min-w-[70px] text-center shadow-2xs">
+                    <span className="text-xs font-bold uppercase text-primary">
+                      {evt.dateText.split(' ')[1]}
+                    </span>
+                    <span className="text-xl font-black text-on-surface">
+                      {evt.dateText.split(' ')[0]}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${evt.badgeColor}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${evt.dotColor}`}></span>
+                        {evt.categoryLabel}
+                      </span>
+                      <span className="text-xs text-on-surface-variant flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">schedule</span>
+                        {evt.time}
+                      </span>
+                    </div>
+
+                    <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors text-base">
+                      {evt.title}
+                    </h4>
+                    <p className="text-xs text-on-surface-variant mt-1 line-clamp-1">
+                      {evt.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // VISTA: MES Y SEMANA
+  // -------------------------------------------------------------
   return (
-    <div className="bg-surface-container-lowest rounded-3xl p-4 md:p-space-lg shadow-[0_4px_24px_-2px_rgba(29,17,73,0.06)] flex flex-col font-sans">
-      {/* Banner de Estado del Mes */}
-      <div className="flex flex-wrap items-center justify-between pb-space-sm mb-space-sm gap-2">
-        <div className="flex items-center gap-2">
-          <h2 className="font-['Nunito'] text-xl font-bold text-on-surface">Cuadrícula Mensual</h2>
-          <span className="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">
-            Semana 4 de 5
+    <div className="bg-surface-container-lowest rounded-3xl p-5 md:p-6 shadow-[0_4px_24px_-2px_rgba(29,17,73,0.06)] flex flex-col font-sans">
+      <div className="flex flex-wrap items-center justify-between pb-3 mb-4 gap-2 border-b border-surface-container-low">
+        <div className="flex items-center gap-3">
+          <span className="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+            {filteredEvents.length} Eventos este mes
           </span>
         </div>
+
         <div className="flex flex-wrap items-center gap-4 text-body-sm font-body-sm text-on-surface-variant">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-secondary-container"></span>
+            <span className="w-3 h-3 rounded-full bg-[#fea618]"></span>
             <span>Lúdico / Huerta</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-tertiary"></span>
+            <span className="w-3 h-3 rounded-full bg-[#b70072]"></span>
             <span>Reunión Familias</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-primary-container"></span>
+            <span className="w-3 h-3 rounded-full bg-[#006971]"></span>
             <span>Estimulación AMI</span>
           </div>
         </div>
       </div>
 
-      {/* Días de la semana */}
-      <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2 text-center">
-        {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((day, idx) => (
-          <div
-            key={day}
-            className={`py-2 font-label-md text-label-md uppercase tracking-wider ${
-              idx >= 5 ? 'text-secondary font-bold' : 'text-on-surface-variant'
-            }`}
-          >
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Cuadrícula de días */}
-      <div className="grid grid-cols-7 gap-1 md:gap-2 auto-rows-fr">
-        {/* Sept 30 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/50 opacity-40 flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant">30</span>
-          <span className="font-label-sm text-label-sm text-outline-variant">Sept</span>
+      <div className="w-full border border-surface-container-low rounded-2xl overflow-hidden bg-surface-container-low dark:bg-zinc-800/90">
+        <div className="grid grid-cols-7 bg-surface-container-low dark:bg-zinc-800 text-center border-b border-surface-container-low dark:border-zinc-700/60">
+          {DAYS_OF_WEEK.map((day) => (
+            <div key={day} className="py-2.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
+              {day}
+            </div>
+          ))}
         </div>
 
-        {/* Oct 01 - 04 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between group cursor-pointer">
-          <span className="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface font-bold">01</span>
-          <div className="text-[10px] text-outline-variant font-label-sm">Comienzo Ciclo</div>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between group cursor-pointer">
-          <span className="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface font-bold">02</span>
-          <div className="p-1 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-[10px] truncate">Música Suave</div>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">03</span>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">04</span>
-        </div>
+        <div className="grid grid-cols-7 auto-rows-fr bg-surface-container-low/20 dark:bg-zinc-900/60 gap-[1px]">
+          {daysToRender.map((date, idx) => {
+            if (!date) {
+              return (
+                <div
+                  key={`empty-${idx}`}
+                  className="bg-white dark:bg-zinc-800/50 min-h-[90px] p-1.5 opacity-30"
+                ></div>
+              );
+            }
 
-        {/* Fin de semana 05-06 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-secondary/70 font-semibold">05</span>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-secondary/70 font-semibold">06</span>
-        </div>
+            const dayNum = date.getDate();
+            const dayEvents = filteredEvents.filter(
+              (e) => e.date.toDateString() === date.toDateString()
+            );
 
-        {/* Semana 2: Oct 07 - 13 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">07</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">08</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">09</span>
-          <div className="px-1.5 py-0.5 rounded-md bg-primary-fixed/60 text-on-primary-fixed-variant font-label-sm text-[10px] font-bold truncate">Taller Fonemas</div>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">10</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">11</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between"><span className="font-label-md font-semibold text-secondary/70">12</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between"><span className="font-label-md font-semibold text-secondary/70">13</span></div>
+            // Verificamos si la celda actual corresponde al día de hoy real
+            const today = new Date();
+            const isToday = 
+              date.getDate() === today.getDate() &&
+              date.getMonth() === today.getMonth() &&
+              date.getFullYear() === today.getFullYear();
 
-        {/* Semana 3: Oct 14 - 20 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">14</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">15</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">16</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">17</span>
-          <div className="px-1.5 py-0.5 rounded-md bg-primary-container/40 text-on-primary-container font-label-sm text-[10px] font-bold truncate">Circuito Sensorial</div>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">18</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between"><span className="font-label-md font-semibold text-secondary/70">19</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between"><span className="font-label-md font-semibold text-secondary/70">20</span></div>
+            return (
+              <div
+                key={date.toISOString()}
+                className={`min-h-[90px] p-1.5 flex flex-col justify-between transition-colors ${
+                  isToday 
+                    ? 'bg-primary-container/25 dark:bg-primary/20 ring-2 ring-primary ring-inset z-10' 
+                    : 'bg-white dark:bg-zinc-800/90 dark:hover:bg-zinc-700/80 hover:bg-surface-container-lowest/80'
+                }`}
+              >
+                <div className="text-right">
+                  <span
+                    className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                      isToday
+                        ? 'bg-primary text-on-primary shadow-sm'
+                        : dayEvents.length > 0
+                        ? 'bg-primary-container text-on-primary-container dark:bg-primary/20 dark:text-cyan-300'
+                        : 'text-on-surface-variant'
+                    }`}
+                  >
+                    {dayNum}
+                  </span>
+                </div>
 
-        {/* Semana 4: Oct 21 - 27 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">21</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">22</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">23</span>
-          <div className="px-1.5 py-0.5 rounded-md bg-primary-fixed/60 text-on-primary-fixed-variant font-label-sm text-[10px] font-bold truncate">Taller Fonemas</div>
+                <div className="flex flex-col gap-1 mt-1 overflow-y-auto max-h-[60px]">
+                  {dayEvents.map((evt) => (
+                    <button
+                      key={evt.id}
+                      type="button"
+                      onClick={() => onSelectEvent && onSelectEvent(evt.id)}
+                      className={`text-left text-white text-[10px] font-bold px-1.5 py-1 rounded-md truncate shadow-sm transition-transform hover:scale-[1.02] cursor-pointer ${evt.dotColor}`}
+                      title={`${evt.title} - ${evt.time}`}
+                    >
+                      {evt.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">24</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">25</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/60 flex flex-col justify-between"><span className="font-label-md font-semibold text-secondary/70">26</span></div>
-        
-        {/* Oct 27 (Reunión) */}
-        <div 
-          onClick={() => onSelectEvent('evento-reunion')}
-          className="min-h-[105px] p-2 rounded-2xl bg-tertiary-fixed/30 hover:bg-tertiary-fixed/50 transition-all flex flex-col justify-between shadow-sm cursor-pointer border-2 border-tertiary/20"
-        >
-          <div className="flex items-center justify-between">
-            <span className="font-['Nunito'] text-lg text-tertiary font-extrabold">27</span>
-            <span className="material-symbols-outlined text-tertiary text-[18px]">videocam</span>
-          </div>
-          <div className="p-1 rounded-xl bg-tertiary text-on-tertiary font-label-sm text-[10px] font-bold shadow-sm leading-tight">
-            Reunión Familias 16:00
-          </div>
-        </div>
-
-        {/* Semana 5: Oct 28 (HOY) - 31 */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-highest flex flex-col justify-between shadow-[0_8px_24px_-4px_rgba(78,0,222,0.25)] relative transform hover:-translate-y-0.5 transition-transform">
-          <div className="flex items-center justify-between">
-            <span className="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-['Nunito'] text-sm font-black">28</span>
-            <span className="px-2 py-0.5 rounded-full bg-inverse-surface text-inverse-on-surface font-label-sm text-[10px] font-extrabold uppercase tracking-wide">Hoy</span>
-          </div>
-          <div className="p-1 rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-[10px] font-semibold flex items-center gap-1 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-            <span>Clase Sensorial</span>
-          </div>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low flex flex-col justify-between"><span className="font-label-md font-bold text-on-surface-variant">29</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors flex flex-col justify-between">
-          <span className="font-label-md text-label-md text-on-surface-variant font-bold">30</span>
-          <div className="px-1.5 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[10px] font-bold truncate">Prep. Disfraces</div>
-        </div>
-
-        {/* Oct 31 (Sombrero Loco) */}
-        <div 
-          onClick={() => onSelectEvent('evento-sombrero')}
-          className="min-h-[105px] p-2 rounded-2xl bg-secondary-fixed/40 hover:bg-secondary-fixed/60 transition-all flex flex-col justify-between cursor-pointer shadow-sm border-2 border-secondary/30"
-        >
-          <div className="flex items-center justify-between">
-            <span className="font-['Nunito'] text-lg text-secondary font-extrabold">31</span>
-            <span className="material-symbols-outlined text-secondary text-[18px]">celebration</span>
-          </div>
-          <div className="p-1 rounded-xl bg-secondary-container text-on-secondary-fixed font-label-sm text-[10px] font-extrabold shadow-sm leading-tight truncate">
-            🎩 Sombrero Loco & Huerta
-          </div>
-        </div>
-
-        {/* Noviembre Previsualización */}
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/50 opacity-70 flex flex-col justify-between">
-          <div className="flex justify-between">
-            <span className="font-label-md text-label-md text-on-surface-variant">01</span>
-            <span className="font-label-sm text-[10px] text-outline">Nov</span>
-          </div>
-          <span className="font-label-sm text-[10px] text-outline-variant">Asueto Escolar</span>
-        </div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/40 opacity-70 flex flex-col justify-between"><span className="font-label-md text-secondary/60">02</span></div>
-        <div className="min-h-[105px] p-2 rounded-2xl bg-surface-container-low/40 opacity-70 flex flex-col justify-between"><span className="font-label-md text-secondary/60">03</span></div>
-      </div>
-
-      {/* Vista rápida Nov 05 */}
-      <div className="mt-space-md pt-space-sm bg-surface-container-low rounded-2xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">Próxima Semana: Mar 05 Nov</span>
-          <span className="font-label-md text-label-md text-on-surface font-semibold">Taller de Lectura Compartida con Familias (Biblioteca Nido)</span>
-        </div>
-        <button 
-          type="button" 
-          onClick={onAgendaQuickPeek}
-          className="font-label-sm text-label-sm text-primary hover:underline font-bold flex items-center gap-1 cursor-pointer shrink-0"
-        >
-          <span>Agendar</span>
-          <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-        </button>
       </div>
     </div>
   );
