@@ -194,20 +194,7 @@ export function CalendarGrid({
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-body-sm font-body-sm text-on-surface-variant">
-          <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#fea618]"></span>
-            <span>Lúdico / Huerta</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#b70072]"></span>
-            <span>Reunión Familias</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#006971]"></span>
-            <span>Estimulación AMI</span>
-          </div>
-        </div>
+        
       </div>
 
       <div className="w-full border border-surface-container-low rounded-2xl overflow-hidden bg-surface-container-low dark:bg-zinc-800/90">

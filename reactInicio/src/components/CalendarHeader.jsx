@@ -1,4 +1,4 @@
-import AnimatedInteractiveWord from './AnimatedInteractiveWord'; // Ajusta la ruta si está en otra carpeta
+import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 
 export function CalendarHeader({
   activeCategory,
@@ -10,7 +10,6 @@ export function CalendarHeader({
   onPrevMonth,
   onNextMonth
 }) {
-  // Formatear el mes y año actual (ej: "Octubre 2026") usando la fecha real o seleccionada
   const monthNames = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -20,15 +19,14 @@ export function CalendarHeader({
   const currentYear = currentDate.getFullYear();
 
   return (
-    <div className="flex flex-col gap-6 mb-8 font-sans">
-      {/* Título y Acciones Principales */}
+    <div className="flex flex-col gap-6 mb-12 font-sans">
+      {/* Fila Superior: Título y Botón de Sincronización */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold tracking-widest text-primary uppercase mb-1 block">
             Panel de Actividades
           </span>
           <h1 className="text-3xl md:text-4xl font-black text-on-surface tracking-tight flex flex-wrap gap-x-2">
-            {/* Aplicamos el componente interactivo de colores aleatorios */}
             <AnimatedInteractiveWord 
               word="Calendario" 
               baseColorClass="text-on-surface transition-colors duration-300 cursor-default" 
@@ -45,120 +43,127 @@ export function CalendarHeader({
         </div>
 
         {/* Botón de Sincronización */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onSync}
-            className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm hover:opacity-95 transition-all cursor-pointer active:scale-95"
-          >
-            <span className="material-symbols-outlined text-lg">sync</span>
-            Sincronizar Calendario
-          </button>
-        </div>
+        <button
+          onClick={onSync}
+          className="flex items-center gap-2 bg-[#006971] text-white px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm hover:opacity-95 transition-all cursor-pointer active:scale-95 w-fit"
+        >
+          <span className="material-symbols-outlined text-lg">sync</span>
+          Sincronizar con Google Calendar / iCal
+        </button>
       </div>
 
-      {/* Barra de Control: Meses, Navegación y Filtros */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-surface-container-lowest p-4 rounded-3xl border border-surface-container-low shadow-sm">
+      {/* Fila de Controles: Mes, Vistas y Filtros (Con separación adicional respecto al título) */}
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-surface-container-lowest p-3.5 rounded-3xl border border-surface-container-low shadow-sm mt-3">
         
-        {/* Navegador de Meses */}
-        <div className="flex items-center justify-between lg:justify-start gap-4">
-          <div className="flex items-center gap-2">
+        {/* Bloque Izquierdo: Selector de Mes con Icono y Vistas */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Navegador de Meses con el icono de calendario incorporado */}
+          <div className="flex items-center bg-surface-container-low px-2 py-1.5 rounded-2xl border border-surface-container-high/40 gap-1.5">
+            <span className="material-symbols-outlined text-primary text-lg pl-1">calendar_month</span>
             <button
               onClick={onPrevMonth}
-              className="p-2 rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface transition-colors cursor-pointer"
+              className="p-1 rounded-xl hover:bg-surface-container-lowest text-on-surface transition-colors cursor-pointer"
               title="Mes Anterior"
             >
-              <span className="material-symbols-outlined text-xl">chevron_left</span>
+              <span className="material-symbols-outlined text-lg">chevron_left</span>
             </button>
             
-            <h2 className="text-lg font-bold text-on-surface min-w-[160px] text-center">
+            <h2 className="text-sm font-bold text-on-surface px-1 min-w-[120px] text-center">
               {currentMonthName} {currentYear}
             </h2>
 
             <button
               onClick={onNextMonth}
-              className="p-2 rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface transition-colors cursor-pointer"
+              className="p-1 rounded-xl hover:bg-surface-container-lowest text-on-surface transition-colors cursor-pointer"
               title="Mes Siguiente"
             >
-              <span className="material-symbols-outlined text-xl">chevron_right</span>
+              <span className="material-symbols-outlined text-lg">chevron_right</span>
+            </button>
+          </div>
+
+          {/* Selector de Vistas (Texto blanco claro para la opción activa) */}
+          <div className="flex items-center bg-surface-container-low p-1 rounded-2xl border border-surface-container-high/40">
+            <button
+              onClick={() => setActiveView('mes')}
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeView === 'mes'
+                  ? 'bg-primary text-white shadow-xs'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              Mes
+            </button>
+            <button
+              onClick={() => setActiveView('semana')}
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeView === 'semana'
+                  ? 'bg-primary text-white shadow-xs'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              Semana
+            </button>
+            <button
+              onClick={() => setActiveView('agenda')}
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeView === 'agenda'
+                  ? 'bg-primary text-white shadow-xs'
+                  : 'text-on-surface-variant hover:text-on-surface'
+              }`}
+            >
+              Agenda
             </button>
           </div>
         </div>
 
-        {/* Selector de Categorías (Filtros) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
+        {/* Bloque Derecho: Filtros por Tipo de Evento (Píldoras) */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeCategory === 'all'
-                ? 'bg-primary text-on-primary shadow-sm'
+                ? 'bg-on-surface text-surface shadow-sm'
                 : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
             }`}
           >
-            Todas
+            <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
+            Todos los eventos
           </button>
-          <button
-            onClick={() => setActiveCategory('workshops')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-              activeCategory === 'workshops'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
-            }`}
-          >
-            Estimulación AMI
-          </button>
+
           <button
             onClick={() => setActiveCategory('special')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeCategory === 'special'
                 ? 'bg-amber-600 text-white shadow-sm'
-                : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
+                : 'bg-amber-500/10 text-amber-800 dark:text-amber-300 hover:bg-amber-500/20 border border-amber-500/20'
             }`}
           >
-            Lúdico / Huerta
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+            Actividades Especiales (2)
           </button>
+
           <button
             onClick={() => setActiveCategory('meetings')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
               activeCategory === 'meetings'
                 ? 'bg-fuchsia-600 text-white shadow-sm'
-                : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
+                : 'bg-fuchsia-500/10 text-fuchsia-800 dark:text-fuchsia-300 hover:bg-fuchsia-500/20 border border-fuchsia-500/20'
             }`}
           >
-            Reunión Familias
+            <span className="w-2 h-2 rounded-full bg-fuchsia-500"></span>
+            Reuniones de Padres (1)
           </button>
-        </div>
 
-        {/* Selector de Vistas (Mes / Semana / Agenda) */}
-        <div className="flex items-center bg-surface-container-low p-1 rounded-2xl self-center lg:self-auto">
           <button
-            onClick={() => setActiveView('mes')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeView === 'mes'
-                ? 'bg-surface-container-lowest text-on-surface shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
+            onClick={() => setActiveCategory('workshops')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+              activeCategory === 'workshops'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/20'
             }`}
           >
-            Mes
-          </button>
-          <button
-            onClick={() => setActiveView('semana')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeView === 'semana'
-                ? 'bg-surface-container-lowest text-on-surface shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
-            }`}
-          >
-            Semana
-          </button>
-          <button
-            onClick={() => setActiveView('agenda')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeView === 'agenda'
-                ? 'bg-surface-container-lowest text-on-surface shadow-xs'
-                : 'text-on-surface-variant hover:text-on-surface'
-            }`}
-          >
-            Agenda
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Talleres Estimulación (2)
           </button>
         </div>
 
