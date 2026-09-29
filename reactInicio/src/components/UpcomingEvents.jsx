@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function UpcomingEvents({ onOpenOrderModal, showToast }) {
+export function UpcomingEvents({ activeCategory, onOpenOrderModal, showToast }) {
   const [rsvpConfirmed, setRsvpConfirmed] = useState(true);
 
   const toggleRSVP = () => {
@@ -13,15 +13,18 @@ export function UpcomingEvents({ onOpenOrderModal, showToast }) {
     }
   };
 
+  const showSpecial = activeCategory === 'all' || activeCategory === 'special';
+  const showMeetings = activeCategory === 'all' || activeCategory === 'meetings';
+
   return (
-    <div className="flex flex-col gap-space-md font-sans">
+    <div className="flex flex-col gap-6 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="font-['Nunito'] text-2xl font-bold text-on-surface tracking-tight">
             Próximos Eventos y Actividades Destacadas
           </h2>
           <span className="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md font-extrabold">
-            2 Próximos
+            {(showSpecial && showMeetings) ? '2 Próximos' : '1 Próximo'}
           </span>
         </div>
         <span className="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">
@@ -29,147 +32,151 @@ export function UpcomingEvents({ onOpenOrderModal, showToast }) {
         </span>
       </div>
 
-      {/* EVENTO 1: Sombrero Loco & Huerta */}
-      <article
-        id="evento-sombrero"
-        className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-[0_8px_30px_-4px_rgba(254,166,24,0.18)] transition-all duration-300 hover:shadow-[0_12px_36px_-4px_rgba(254,166,24,0.28)] relative overflow-hidden flex flex-col md:flex-row gap-space-md items-start"
-      >
-        <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-secondary-container"></div>
+      {/* EVENTO 1: Sombrero Loco & Huerta (Categoría: Special) */}
+      {showSpecial && (
+        <article
+          id="evento-sombrero"
+          className="bg-surface-container-lowest rounded-3xl p-5 md:p-6 shadow-[0_8px_30px_-4px_rgba(254,166,24,0.18)] transition-all duration-300 hover:shadow-[0_12px_36px_-4px_rgba(254,166,24,0.28)] relative overflow-hidden flex flex-col md:flex-row gap-6 items-start"
+        >
+          <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-secondary-container"></div>
 
-        <div className="flex md:flex-col items-center justify-center shrink-0 w-full md:w-36 bg-secondary-fixed/50 rounded-2xl p-4 text-center">
-          <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-secondary-fixed font-bold">Martes</span>
-          <span className="font-['Nunito'] text-4xl font-black text-secondary leading-none my-1">31</span>
-          <span className="font-label-md text-label-md text-on-secondary-fixed-variant font-bold">Octubre 2024</span>
-          <div className="mt-2 w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-fixed shadow-sm">
-            <span className="material-symbols-outlined text-[20px]">psychiatry</span>
-          </div>
-        </div>
-
-        <div className="flex-1 flex flex-col justify-between h-full gap-3">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px]">nature_people</span>
-                Huerta Pedagógica & Estimulación
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-medium">Presencial</span>
+          <div className="flex md:flex-col items-center justify-center shrink-0 w-full md:w-36 bg-secondary-fixed/50 rounded-2xl p-4 text-center">
+            <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-secondary-fixed font-bold">Martes</span>
+            <span className="font-['Nunito'] text-4xl font-black text-secondary leading-none my-1">31</span>
+            <span className="font-label-md text-label-md text-on-secondary-fixed-variant font-bold">Octubre 2026</span>
+            <div className="mt-2 w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-fixed shadow-sm">
+              <span className="material-symbols-outlined text-[20px]">psychiatry</span>
             </div>
-            <h3 className="font-['Nunito'] text-xl font-extrabold text-on-surface tracking-tight">
-              Día del Sombrero Loco & Huerta Comunitaria
-            </h3>
-            <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md mt-1 mb-2.5">
-              <span className="flex items-center gap-1.5 text-on-surface font-semibold">
-                <span className="material-symbols-outlined text-secondary text-[18px]">schedule</span>
-                09:00 AM - 12:00 PM
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-primary text-[18px]">pin_drop</span>
-                Aula Semillitas & Patio Huerta Montessori
-              </span>
-            </div>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Traer un sombrero decorado con elementos reciclados hechos en casa para la dinámica de estimulación sensorial, motricidad táctil y siembra de plantines en el huerto pedagógico junto a Mateo.
-            </p>
           </div>
 
-          <div className="pt-3 flex flex-wrap items-center justify-between gap-space-sm border-t border-surface-container-high">
-            <div className="flex items-center gap-3">
+          <div className="flex-1 flex flex-col justify-between h-full gap-3">
+            <div>
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">nature_people</span>
+                  Huerta Pedagógica & Estimulación
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-medium">Presencial</span>
+              </div>
+              <h3 className="font-['Nunito'] text-xl font-extrabold text-on-surface tracking-tight">
+                Día del Sombrero Loco & Huerta Comunitaria
+              </h3>
+              <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md mt-1 mb-2.5">
+                <span className="flex items-center gap-1.5 text-on-surface font-semibold">
+                  <span className="material-symbols-outlined text-secondary text-[18px]">schedule</span>
+                  09:00 AM - 12:00 PM
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-primary text-[18px]">pin_drop</span>
+                  Aula Semillitas & Patio Huerta Montessori
+                </span>
+              </div>
+              <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Traer un sombrero decorado con elementos reciclados hechos en casa para la dinámica de estimulación sensorial, motricidad táctil y siembra de plantines en el huerto pedagógico junto a Mateo.
+              </p>
+            </div>
+
+            <div className="pt-3 flex flex-wrap items-center justify-between gap-4 border-t border-surface-container-high">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={toggleRSVP}
+                  className={`px-4 py-2.5 rounded-full font-label-md text-label-md flex items-center gap-2 shadow-sm transition-all cursor-pointer active:scale-95 ${
+                    rsvpConfirmed
+                      ? 'bg-primary text-on-primary'
+                      : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                  <span>{rsvpConfirmed ? '✓ Asistencia Confirmada de Mateo' : 'Confirmar Asistencia'}</span>
+                </button>
+                <span className="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">2 acompañantes registrados</span>
+              </div>
               <button
                 type="button"
-                onClick={toggleRSVP}
-                className={`px-4 py-2.5 rounded-full font-label-md text-label-md flex items-center gap-2 shadow-sm transition-all cursor-pointer active:scale-95 ${
-                  rsvpConfirmed
-                    ? 'bg-primary text-on-primary'
-                    : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
-                }`}
+                onClick={() => showToast('Descargando Guía Pedagógica Sombrero Loco (PDF 1.4MB)', 'download')}
+                className="px-4 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                <span>{rsvpConfirmed ? '✓ Asistencia Confirmada de Mateo' : 'Confirmar Asistencia'}</span>
+                <span className="material-symbols-outlined text-primary text-[18px]">download_for_offline</span>
+                <span>Descargar Guía de Actividad (PDF)</span>
               </button>
-              <span className="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">2 acompañantes registrados</span>
             </div>
-            <button
-              type="button"
-              onClick={() => showToast('Descargando Guía Pedagógica Sombrero Loco (PDF 1.4MB)', 'download')}
-              className="px-4 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-primary text-[18px]">download_for_offline</span>
-              <span>Descargar Guía de Actividad (PDF)</span>
-            </button>
           </div>
-        </div>
-      </article>
+        </article>
+      )}
 
-      {/* EVENTO 2: Reunión Trimestral */}
-      <article
-        id="evento-reunion"
-        className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-[0_8px_30px_-4px_rgba(183,0,114,0.16)] transition-all duration-300 hover:shadow-[0_12px_36px_-4px_rgba(183,0,114,0.26)] relative overflow-hidden flex flex-col md:flex-row gap-space-md items-start"
-      >
-        <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-tertiary"></div>
+      {/* EVENTO 2: Reunión Trimestral (Categoría: Meetings) */}
+      {showMeetings && (
+        <article
+          id="evento-reunion"
+          className="bg-surface-container-lowest rounded-3xl p-5 md:p-6 shadow-[0_8px_30px_-4px_rgba(183,0,114,0.16)] transition-all duration-300 hover:shadow-[0_12px_36px_-4px_rgba(183,0,114,0.26)] relative overflow-hidden flex flex-col md:flex-row gap-6 items-start"
+        >
+          <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-tertiary"></div>
 
-        <div className="flex md:flex-col items-center justify-center shrink-0 w-full md:w-36 bg-tertiary-fixed/40 rounded-2xl p-4 text-center">
-          <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-tertiary-fixed font-bold">Viernes</span>
-          <span className="font-['Nunito'] text-4xl font-black text-tertiary leading-none my-1">27</span>
-          <span className="font-label-md text-label-md text-on-tertiary-fixed-variant font-bold">Octubre 2024</span>
-          <div className="mt-2 w-9 h-9 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shadow-sm">
-            <span className="material-symbols-outlined text-[20px]">groups</span>
-          </div>
-        </div>
-
-        <div className="flex-1 flex flex-col justify-between h-full gap-3">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px]">psychology</span>
-                Evaluación de Neurodesarrollo
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-tertiary-container/60 text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                Virtual vía Google Meet
-              </span>
+          <div className="flex md:flex-col items-center justify-center shrink-0 w-full md:w-36 bg-tertiary-fixed/40 rounded-2xl p-4 text-center">
+            <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-tertiary-fixed font-bold">Viernes</span>
+            <span className="font-['Nunito'] text-4xl font-black text-tertiary leading-none my-1">27</span>
+            <span className="font-label-md text-label-md text-on-tertiary-fixed-variant font-bold">Octubre 2026</span>
+            <div className="mt-2 w-9 h-9 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shadow-sm">
+              <span className="material-symbols-outlined text-[20px]">groups</span>
             </div>
-            <h3 className="font-['Nunito'] text-xl font-extrabold text-on-surface tracking-tight">
-              Reunión Trimestral de Familias • Informe Bimestral
-            </h3>
-            <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md mt-1 mb-2.5">
-              <span className="flex items-center gap-1.5 text-on-surface font-semibold">
-                <span className="material-symbols-outlined text-tertiary text-[18px]">nest_clock_farsight_analog</span>
-                16:00 - 17:00 hrs
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-primary text-[18px]">co_present</span>
-                Docente Karina M. + Psicopedagogía Montekids
-              </span>
-            </div>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Revisión conjunta personalizada del progreso motor fino, lenguaje activo y autorregulación de Mateo según la rúbrica AMI. Se presentará el portafolio fotográfico bimestral.
-            </p>
           </div>
 
-          <div className="pt-3 flex flex-wrap items-center justify-between gap-space-sm border-t border-surface-container-high">
-            <a
-              href="https://meet.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-full bg-tertiary hover:bg-on-tertiary-container text-on-tertiary font-label-md text-label-md flex items-center gap-2 shadow-[0_6px_20px_-2px_rgba(183,0,114,0.35)] transition-transform active:scale-95"
-            >
-              <span className="material-symbols-outlined text-[18px]">video_camera_front</span>
-              <span>Unirse a Sesión Virtual (Google Meet)</span>
-            </a>
-            <button
-              type="button"
-              onClick={onOpenOrderModal}
-              className="px-4 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">format_list_bulleted</span>
-              <span>Ver Orden del Día</span>
-            </button>
+          <div className="flex-1 flex flex-col justify-between h-full gap-3">
+            <div>
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">psychology</span>
+                  Evaluación de Neurodesarrollo
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-tertiary-container/60 text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                  Virtual vía Google Meet
+                </span>
+              </div>
+              <h3 className="font-['Nunito'] text-xl font-extrabold text-on-surface tracking-tight">
+                Reunión Trimestral de Familias • Informe Bimestral
+              </h3>
+              <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md mt-1 mb-2.5">
+                <span className="flex items-center gap-1.5 text-on-surface font-semibold">
+                  <span className="material-symbols-outlined text-tertiary text-[18px]">nest_clock_farsight_analog</span>
+                  16:00 - 17:00 hrs
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-primary text-[18px]">co_present</span>
+                  Docente Karina M. + Psicopedagogía Montekids
+                </span>
+              </div>
+              <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Revisión conjunta personalizada del progreso motor fino, lenguaje activo y autorregulación de Mateo según la rúbrica AMI. Se presentará el portafolio fotográfico bimestral.
+              </p>
+            </div>
+
+            <div className="pt-3 flex flex-wrap items-center justify-between gap-4 border-t border-surface-container-high">
+              <a
+                href="https://meet.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-full bg-tertiary hover:bg-on-tertiary-container text-on-tertiary font-label-md text-label-md flex items-center gap-2 shadow-[0_6px_20px_-2px_rgba(183,0,114,0.35)] transition-transform active:scale-95"
+              >
+                <span className="material-symbols-outlined text-[18px]">video_camera_front</span>
+                <span>Unirse a Sesión Virtual (Google Meet)</span>
+              </a>
+              <button
+                type="button"
+                onClick={onOpenOrderModal}
+                className="px-4 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+                <span>Ver Orden del Día</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      )}
 
       {/* Tarjeta Resumen Pedagógico */}
-      <div className="bg-surface-container-lowest rounded-3xl p-space-md shadow-[0_4px_20px_-2px_rgba(29,17,73,0.04)] flex flex-col md:flex-row items-center justify-between gap-space-md">
+      <div className="bg-surface-container-lowest rounded-3xl p-5 md:p-6 shadow-[0_4px_20px_-2px_rgba(29,17,73,0.04)] flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center text-on-primary-fixed shadow-sm shrink-0">
             <span className="material-symbols-outlined text-[32px]">insights</span>

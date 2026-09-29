@@ -10,6 +10,10 @@ import { CalendarModals } from '../components/CalendarModals';
 export function CalendarPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeView, setActiveView] = useState('mes');
+  
+  // Usamos un objeto Date real en lugar de un índice numérico estático.
+  // Esto inicializa el calendario en el mes y año actual de forma automática.
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Estados de Modales y Toast
   const [showOrderModal, setShowOrderModal] = useState(false);
@@ -23,8 +27,25 @@ export function CalendarPage() {
     }, 3200);
   };
 
+  // Funciones de navegación con objetos Date reales
+  const handlePrevMonth = () => {
+    setCurrentDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() - 1);
+      return newDate;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() + 1);
+      return newDate;
+    });
+  };
+
   const handleSync = () => {
-    showToast('Sincronizando 5 eventos con tu calendario iCal/Google...', 'sync');
+    showToast('Sincronizando eventos con tu calendario iCal/Google...', 'sync');
   };
 
   const handleSelectEvent = (elementId) => {
@@ -40,18 +61,9 @@ export function CalendarPage() {
     <div className="bg-surface font-body-md text-on-surface min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
       <ParentHeader />
 
-      {/* Aplicamos animate-page-bounce de tu index.css */}
       <main className="w-full pt-28 pb-16 bg-surface flex-grow relative z-10 animate-page-bounce">
-        <div className="w-full max-w-7xl mx-auto px-margin-mobile lg:px-margin relative">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 relative">
           
-          {/* Luces decorativas de fondo */}
-          <div
-            className="absolute top-12 left-1/4 w-96 h-96 bg-primary-fixed/20 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse"
-            style={{ animationDuration: '8s' }}
-          ></div>
-          <div className="absolute top-48 right-12 w-80 h-80 bg-tertiary-container/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
-
-          {/* Encabezado y Barra de Filtros */}
           <CalendarHeader
             activeCategory={activeCategory}
             setActiveCategory={(cat) => {
@@ -64,23 +76,27 @@ export function CalendarPage() {
               showToast(`Vista cambiada a modo: ${view.toUpperCase()}`, 'view_module');
             }}
             onSync={handleSync}
+            currentDate={currentDate}
+            onPrevMonth={handlePrevMonth}
+            onNextMonth={handleNextMonth}
           />
 
-          {/* Grid Principal de Trabajo */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start relative z-10">
-            {/* Columna Principal */}
-            <section className="lg:col-span-8 flex flex-col gap-space-lg w-full min-w-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+            <section className="lg:col-span-8 flex flex-col gap-8 w-full min-w-0">
               <CalendarGrid
+                currentDate={currentDate}
+                activeView={activeView}
+                activeCategory={activeCategory}
                 onSelectEvent={handleSelectEvent}
-                onAgendaQuickPeek={() => showToast('Recordatorio agendado para el 5 de Noviembre', 'event')}
+                onAgendaQuickPeek={() => showToast('Recordatorio agendado', 'event')}
               />
               <UpcomingEvents
+                activeCategory={activeCategory}
                 onOpenOrderModal={() => setShowOrderModal(true)}
                 showToast={showToast}
               />
             </section>
 
-            {/* Sidebar Derecho */}
             <CalendarSidebar
               onOpenIAModal={() => setShowIAModal(true)}
               showToast={showToast}
@@ -92,7 +108,6 @@ export function CalendarPage() {
 
       <ParentFooter />
 
-      {/* Modales y Notificaciones */}
       <CalendarModals
         showOrderModal={showOrderModal}
         setShowOrderModal={setShowOrderModal}
