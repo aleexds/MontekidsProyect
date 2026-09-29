@@ -5,6 +5,7 @@ import Login from "../pages/AuthView"
 import ForgotPasswordView from '../pages/ForgotPasswordView';
 import { ParentDashboard } from '../pages/ParentDashboard';
 import { ReportsPage } from '../pages/ReportsPage';
+import { CalendarPage } from '../pages/CalendarPage';
 
 export default function Routing() { 
   return (
@@ -17,6 +18,7 @@ export default function Routing() {
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
         <Route path="/mi-hijo-a" element={<ParentDashboard />} />
         <Route path="/mis-comentarios-reportes" element={<ReportsPage />} />
+        <Route path="/calendario-de-actividades" element={<CalendarPage />} />
       </Routes>
     </BrowserRouter>
   );
