@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import logoMontekids from '../img/logoMontekids.png';
 import logoDark from '../img/logoDarkMontekids.png';
 import ColorblindToggle from './ColorblindToggle';
@@ -9,6 +9,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 export function ParentHeader() {
   const { t } = useLanguage();
+  const location = useLocation();
   const [isDark, setIsDark] = useState(false);
   const [fontSizeIndex, setFontSizeIndex] = useState(0); // 0: Normal, 1: Mediano, 2: Grande
   const [isAiOpen, setIsAiOpen] = useState(false);
@@ -37,6 +38,21 @@ export function ParentHeader() {
     setFontSizeIndex(nextIndex);
   };
 
+  const navItems = [
+    {
+      path: '/mi-hijo-a',
+      label: t('parentDashboard.nav.myChild', 'Mi Hijo/a')
+    },
+    {
+      path: '/mis-comentarios-reportes',
+      label: t('parentDashboard.nav.reports', 'Mis Comentarios/Reportes')
+    },
+    {
+      path: '/calendario-de-actividades',
+      label: t('parentDashboard.nav.calendar', 'Calendario de Actividades')
+    }
+  ];
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container-high transition-colors duration-300">
@@ -56,26 +72,24 @@ export function ParentHeader() {
             />
           </Link>
 
-          {/* NAV MODIFICADO: Rutas corregidas a parentDashboard.nav */}
+          {/* NAV DINÁMICO CON RUTAS ACTIVAS */}
           <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-surface-container-high/40 rounded-full border border-surface-container-high">
-            <a
-              className="px-4 py-2 rounded-full text-xs font-bold bg-tertiary-container text-on-tertiary-container shadow-xs transition-all hover:brightness-95"
-              href="#"
-            >
-              {t('parentDashboard.nav.myChild', 'Mi Hijo/a')}
-            </a>
-            <a
-              className="px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-highest transition-all"
-              href="#"
-            >
-              {t('parentDashboard.nav.reports', 'Mis Comentarios/Reportes')}
-            </a>
-            <a
-              className="px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-highest transition-all"
-              href="#"
-            >
-              {t('parentDashboard.nav.calendar', 'Calendario de Actividades')}
-            </a>
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path || (item.path === '/mi-hijo-a' && location.pathname === '/');
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={`px-4 py-2 rounded-full text-xs transition-all ${
+                    isActive
+                      ? 'font-bold bg-tertiary-container text-on-tertiary-container shadow-xs'
+                      : 'font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-highest'
+                  }`}
+                >
+                  {item.label}
+                </NavLink>
+              );
+            })}
           </nav>
 
           {/* Acciones & Controles de Accesibilidad */}

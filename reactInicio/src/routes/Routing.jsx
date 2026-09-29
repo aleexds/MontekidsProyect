@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Login from "../pages/AuthView"
 import ForgotPasswordView from '../pages/ForgotPasswordView';
 import { ParentDashboard } from '../pages/ParentDashboard';
+import { ReportsPage } from '../pages/ReportsPage';
 
 export default function Routing() { 
   return (
@@ -14,6 +15,8 @@ export default function Routing() {
         <Route path="/LOGIN" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPasswordView />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
+        <Route path="/mi-hijo-a" element={<ParentDashboard />} />
+        <Route path="/mis-comentarios-reportes" element={<ReportsPage />} />
       </Routes>
     </BrowserRouter>
   );
