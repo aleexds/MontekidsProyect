@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import ParentFooter from '../components/ParentFooter';
-import { CalendarHeader } from '../components/calendar/CalendarHeader';
-import { CalendarGrid } from '../components/calendar/CalendarGrid';
-import { UpcomingEvents } from '../components/calendar/UpcomingEvents';
-import { CalendarSidebar } from '../components/calendar/CalendarSidebar';
-import { CalendarModals } from '../components/calendar/CalendarModals';
+import { CalendarHeader } from '../components/CalendarHeader';
+import { CalendarGrid } from '../components/CalendarGrid';
+import { UpcomingEvents } from '../components/UpcomingEvents';
+import { CalendarSidebar } from '../components/CalendarSidebar';
+import { CalendarModals } from '../components/CalendarModals';
 
 export function CalendarPage() {
   const [activeCategory, setActiveCategory] = useState('all');
