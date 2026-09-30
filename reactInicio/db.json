@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "bcbf",
+      "name": "Alex Cubero Duarte",
+      "email": "cuberoduartealex@gmail.com",
+      "role": "tutor",
+      "child": {
+        "firstName": "Adara",
+        "lastName": "Cubero",
+        "age": "8",
+        "classroom": "Aula Creadores (6 a 8 años)"
+      },
+      "password": "Zamora.8",
+      "createdAt": "2026-09-29T22:24:33.794Z"
+    }
+  ]
+}
