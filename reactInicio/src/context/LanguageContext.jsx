@@ -203,7 +203,11 @@ const translations = {
       passNone: 'Sin contraseña',
       passWeak: 'Débil',
       passGood: 'Buena',
-      passStrong: 'Fuerte y Segura'
+      passStrong: 'Fuerte y Segura',
+      invalidCredentials: "Correo o contraseña incorrectos. Por favor, verifica tus datos.",
+      connectionError: "No se pudo conectar con el servidor de autenticación.",
+      loggingIn: "Iniciando sesión...",
+      loginButton: "Iniciar Sesión",
     },
     ai: {
       title: 'Asistente Virtual IA 🤖',
@@ -222,7 +226,11 @@ const translations = {
       emailPlaceholder: "ej. mama.mateo@email.com",
       expirationNotice: "El enlace de verificación expirará en 15 minutos por razones de estricta seguridad escolar y resguardo integral infantil bajo protocolo COPPA.",
       submitBtn: "Enviar Enlace de Recuperación",
-      // Panel lateral derecho
+      // Nuevos elementos y estados
+      viewMode: "Vista:",
+      formView: "Formulario",
+      sentView: "Enviado",
+      errorCode: "El código de verificación es incorrecto.",
       panelBadge: "Montessori Digital AMI",
       panelTitle: "Protegiendo el Acceso a la Información de tu Pequeño 🛡️",
       panelDesc: "En Montekids resguardamos con los más altos estándares pedagógicos la bitácora sensorial, fotografías y evaluaciones del desarrollo de tu hijo.",
@@ -242,6 +250,9 @@ const translations = {
       resendNow: "¡Reenviar correo de verificación!",
       verifyAnotherEmail: "Verificar otra dirección",
       goToLogin: "Ir a Iniciar Sesión",
+      validateAndLogin: "Validar e Iniciar Sesión",
+      attemptsUsed: "Intentos usados",
+      incompleteCodeError: "Por favor, ingresa los 6 dígitos completos del código de verificación.",
     },
     parentDashboard: {
   metrics: {
@@ -531,7 +542,11 @@ const translations = {
       passNone: 'No password',
       passWeak: 'Weak',
       passGood: 'Good',
-      passStrong: 'Strong & Secure'
+      passStrong: 'Strong & Secure',
+      invalidCredentials: "Invalid email or password. Please check your credentials.",
+      connectionError: "Could not connect to authentication server.",
+      loggingIn: "Logging in...",
+      loginButton: "Log In",
     },
     ai: {
       title: 'AI Virtual Assistant 🤖',
@@ -550,7 +565,10 @@ const translations = {
       emailPlaceholder: "e.g. mateo.mom@email.com",
       expirationNotice: "The verification link will expire in 15 minutes due to strict school safety and child protection under COPPA protocol.",
       submitBtn: "Send Recovery Link",
-      // Right side panel
+      viewMode: "View:",
+      formView: "Form",
+      sentView: "Sent",
+      errorCode: "The verification code is incorrect.",
       panelBadge: "Montessori Digital AMI",
       panelTitle: "Protecting Access to Your Child's Information 🛡️",
       panelDesc: "At Montekids, we safeguard your child's sensory logs, photos, and developmental assessments under the highest pedagogical standards.",
@@ -570,6 +588,9 @@ const translations = {
       resendNow: "Resend verification email!",
       verifyAnotherEmail: "Verify another address",
       goToLogin: "Go to Login",
+      validateAndLogin: "Validate and Log In",
+      attemptsUsed: "Attempts used",
+      incompleteCodeError: "Please enter all 6 digits of the verification code.",
     },
     parentDashboard: {
   metrics: {
@@ -859,7 +880,11 @@ const translations = {
       passNone: '无密码',
       passWeak: '较弱',
       passGood: '良好',
-      passStrong: '强且安全'
+      passStrong: '强且安全',
+      invalidCredentials: "邮箱或密码错误，请检查您的信息。",
+      connectionError: "无法连接到身份验证服务器。",
+      loggingIn: "登录中...",
+      loginButton: "登录",
     },
     ai: {
       title: 'AI 智能助手 🤖',
@@ -878,6 +903,10 @@ const translations = {
       emailPlaceholder: "例如: mama.mateo@email.com",
       expirationNotice: "出于严格的校园安全及 COPPA 协议下的儿童保护规定，验证链接将在 15 分钟内失效。",
       submitBtn: "发送重置链接",
+      viewMode: "视图:",
+      formView: "表单",
+      sentView: "已发送",
+      errorCode: "验证码不正确。",
       panelBadge: "蒙台梭利数字化教学体系",
       panelTitle: "守护您孩子的个人信息安全 🛡️",
       panelDesc: "在 Montekids，我们依照最高标准的教育规范，妥善保护您孩子的感官记录、照片及成长评估。",
@@ -896,7 +925,10 @@ const translations = {
       resendAvailableIn: "可在...后重发邮件",
       resendNow: "重新发送验证邮件！",
       verifyAnotherEmail: "验证其他邮箱",
-      goToLogin: "前往登录页面"
+      goToLogin: "前往登录页面",
+      validateAndLogin: "验证并登录",
+      attemptsUsed: "已使用尝试次数",
+      incompleteCodeError: "请输入完整的6位验证码。",
     },
     parentDashboard: {
       metrics: {

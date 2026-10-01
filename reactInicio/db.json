@@ -13,6 +13,57 @@
       },
       "password": "Zamora.8",
       "createdAt": "2026-09-29T22:24:33.794Z"
+    },
+    {
+      "id": "f610",
+      "name": "Moises Urbina",
+      "email": "moisestest@gmail.com",
+      "role": "tutor",
+      "child": {
+        "firstName": "Luna",
+        "lastName": "Urbina",
+        "age": "3",
+        "classroom": "Aula Semillitas (2 a 4 años)"
+      },
+      "password": "moisotest",
+      "createdAt": "2026-09-30T19:59:59.013Z"
+    },
+    {
+      "id": "c780",
+      "name": "Hillary Quesada",
+      "email": "htest@gmail.com",
+      "role": "tutor",
+      "child": {
+        "firstName": "Adrian",
+        "lastName": "Quesada",
+        "age": "4",
+        "classroom": "Aula Semillitas (2 a 4 años)"
+      },
+      "password": "hillatest",
+      "createdAt": "2026-10-01T14:41:43.123Z"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t1",
+      "classroom": "Aula Semillitas (2 a 4 años)",
+      "name": "Docente Karina S.",
+      "email": "karina.semillitas@montekids.edu",
+      "avatar": "👩‍🏫"
+    },
+    {
+      "id": "t2",
+      "classroom": "Aula Exploradores (4 a 6 años)",
+      "name": "Docente Esteban M.",
+      "email": "esteban.exploradores@montekids.edu",
+      "avatar": "👨‍🏫"
+    },
+    {
+      "id": "t3",
+      "classroom": "Aula Creadores (6 a 8 años)",
+      "name": "Docente Marcela R.",
+      "email": "marcela.creadores@montekids.edu",
+      "avatar": "👩‍🏫"
     }
   ]
 }
