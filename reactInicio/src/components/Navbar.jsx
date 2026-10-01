@@ -39,7 +39,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="w-full bg-surface-container-lowest border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3 relative z-30">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo dinámico (Modo Claro / Modo Oscuro) */}

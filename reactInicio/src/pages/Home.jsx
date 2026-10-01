@@ -1,5 +1,6 @@
 import Hero from '../components/Hero';
 import Philosophy from '../components/Philosophy';
+import ProgramsExtra from '../components/ProgramsExtra';
 import Programs from '../components/Programs';
 import Testimonials from '../components/Testimonials';
 import LocationMap from '../components/LocationMap';
@@ -10,7 +11,7 @@ import ScrollReveal from '../components/ScrollReveal';
 
 export default function Home() {
   return (
-    <main>
+    <main className="pt-20">
 
         {/* 0. Navbar: Siempre visible*/}
         <Navbar />
@@ -21,6 +22,11 @@ export default function Home() {
       {/* 2. Filosofía: Oculto hasta hacer scroll -> Desliza hacia arriba suave */}
       <ScrollReveal delay={100}>
         <Philosophy />
+      </ScrollReveal>
+
+      {/* 2.5 Programas Extra (Personalizable) */}
+      <ScrollReveal delay={300}>
+        <ProgramsExtra />
       </ScrollReveal>
 
       {/* 3. Aulas / Programas: Oculto hasta hacer scroll -> Desliza hacia arriba suave */}
