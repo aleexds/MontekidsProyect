@@ -7,6 +7,7 @@ import { ReportSidebar } from '../components/ReportSidebar';
 import AnimatedInteractiveWord from '../components/AnimatedInteractiveWord';
 import { useAuth } from '../context/useAuth';
 import { getTeacherForUser } from '../utils/teacherHelper';
+import { useLanguage } from '../context/LanguageContext';
 
 const INITIAL_THREADS = [
   {
@@ -39,6 +40,7 @@ const INITIAL_THREADS = [
 
 export function ReportsPage() {
   const { activeUser } = useAuth();
+  const { t } = useLanguage();
   const teacher = getTeacherForUser(activeUser);
   const classroom = activeUser?.child?.classroom || 'Aula Semillitas';
 
@@ -131,16 +133,23 @@ ${activeUser?.name || 'Tutor'}`
   };
 
   // Filtrar solo los reportes pertenecientes al usuario activo
-  const userThreads = threads.filter((t) => {
+  const userThreads = threads.filter((thread) => {
     if (!activeUser) return true;
-    if (t.userId) {
-      return String(t.userId) === String(activeUser.id);
+    if (thread.userId) {
+      return String(thread.userId) === String(activeUser.id);
     }
-    if (t.sender && activeUser.name) {
-      return t.sender.toLowerCase().trim() === activeUser.name.toLowerCase().trim();
+    if (thread.sender && activeUser.name) {
+      return thread.sender.toLowerCase().trim() === activeUser.name.toLowerCase().trim();
     }
     return false;
   });
+
+  const filters = [
+    { id: 'all', label: t('reportsPage.filterAll'), count: userThreads.length, dot: null },
+    { id: 'salud', label: t('reportsPage.filterHealth'), count: userThreads.filter((th) => th.category === 'salud').length, dot: 'bg-primary' },
+    { id: 'horario', label: t('reportsPage.filterSchedule'), count: userThreads.filter((th) => th.category === 'horario').length, dot: 'bg-secondary-container' },
+    { id: 'pedagogica', label: t('reportsPage.filterPedagogical'), count: userThreads.filter((th) => th.category === 'pedagogica').length, dot: 'bg-tertiary' }
+  ];
 
   return (
     <div className="bg-surface font-body-md text-on-surface min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
@@ -156,17 +165,17 @@ ${activeUser?.name || 'Tutor'}`
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 font-bold text-xs mb-2">
                     <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping"></span>
-                    Sincronizado con {classroom}
+                    {t('reportsPage.syncedWith')} {classroom}
                   </div>
                   <h1 className="font-['Nunito'] text-3xl md:text-4xl font-extrabold tracking-tight leading-none mb-1 flex flex-wrap gap-x-3">
-                    <AnimatedInteractiveWord word="Bandeja" baseColorClass="text-on-surface cursor-default" />
-                    <AnimatedInteractiveWord word="de" baseColorClass="text-on-surface cursor-default" />
-                    <AnimatedInteractiveWord word="Comunicación" baseColorClass="text-on-surface cursor-default" />
-                    <AnimatedInteractiveWord word="y" baseColorClass="text-on-surface cursor-default" />
-                    <AnimatedInteractiveWord word="Reportes" baseColorClass="text-on-surface cursor-default" />
+                    <AnimatedInteractiveWord word={t('reportsPage.pageTitle1')} baseColorClass="text-on-surface cursor-default" />
+                    <AnimatedInteractiveWord word={t('reportsPage.pageTitle2')} baseColorClass="text-on-surface cursor-default" />
+                    <AnimatedInteractiveWord word={t('reportsPage.pageTitle3')} baseColorClass="text-on-surface cursor-default" />
+                    {t('reportsPage.pageTitle4') && <AnimatedInteractiveWord word={t('reportsPage.pageTitle4')} baseColorClass="text-on-surface cursor-default" />}
+                    {t('reportsPage.pageTitle5') && <AnimatedInteractiveWord word={t('reportsPage.pageTitle5')} baseColorClass="text-on-surface cursor-default" />}
                   </h1>
                   <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-                    Historial de notas enviadas y respuestas de {teacher.name} • {classroom}
+                    {t('reportsPage.pageSubtitle')} {teacher.name} {t('reportsPage.pageSubtitleMid')} {classroom}
                   </p>
                 </div>
                 <button
@@ -175,18 +184,13 @@ ${activeUser?.name || 'Tutor'}`
                   className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-tertiary text-[#ffffff] font-label-lg text-label-lg shadow-lg hover:scale-[1.02] active:translate-y-0.5 transition-all cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[20px] text-[#ffffff]">add_circle</span>
-                  <span className="text-[#ffffff]">Redactar Nuevo Mensaje</span>
+                  <span className="text-[#ffffff]">{t('reportsPage.composeBtn')}</span>
                 </button>
               </div>
 
               {/* Filtros */}
               <div className="flex flex-wrap items-center gap-2">
-                {[
-                  { id: 'all', label: 'Todos', count: userThreads.length, dot: null },
-                  { id: 'salud', label: 'Consultas de Salud', count: userThreads.filter((t) => t.category === 'salud').length, dot: 'bg-primary' },
-                  { id: 'horario', label: 'Avisos de Retiro/Horario', count: userThreads.filter((t) => t.category === 'horario').length, dot: 'bg-secondary-container' },
-                  { id: 'pedagogica', label: 'Observaciones Pedagógicas', count: userThreads.filter((t) => t.category === 'pedagogica').length, dot: 'bg-tertiary' }
-                ].map((chip) => (
+                {filters.map((chip) => (
                   <button
                     key={chip.id}
                     type="button"

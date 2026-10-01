@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
+  const { t } = useLanguage();
   const [sortBy, setSortBy] = useState('recent');
 
   // 1. Filtrar por categoría
   const filteredThreads = activeFilter === 'all' 
     ? threads 
-    : threads.filter(t => t.category === activeFilter);
+    : threads.filter(th => th.category === activeFilter);
 
   // 2. Ordenar según la opción seleccionada
   const sortedThreads = [...filteredThreads].sort((a, b) => {
@@ -27,7 +29,7 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
     <div className="flex flex-col gap-6 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="font-heading font-bold text-xl text-on-surface">Historial de Notas Recientes</h2>
+          <h2 className="font-heading font-bold text-xl text-on-surface">{t('reportsPage.historyTitle')}</h2>
           <span className="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">
             {sortedThreads.length}
           </span>
@@ -39,9 +41,9 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
             onChange={(e) => setSortBy(e.target.value)}
             className="bg-transparent text-xs font-medium text-on-surface focus:outline-none cursor-pointer"
           >
-            <option value="recent">Más recientes primero</option>
-            <option value="pending">Pendientes de respuesta</option>
-            <option value="category">Por categoría</option>
+            <option value="recent">{t('reportsPage.sortRecent')}</option>
+            <option value="pending">{t('reportsPage.sortPending')}</option>
+            <option value="category">{t('reportsPage.sortCategory')}</option>
           </select>
         </div>
       </div>
@@ -49,19 +51,17 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
       {sortedThreads.length === 0 && (
         <div className="bg-surface-container-lowest rounded-2xl p-8 text-center border border-dashed border-outline-variant/60 flex flex-col items-center justify-center gap-2">
           <span className="material-symbols-outlined text-[36px] text-on-surface-variant/60">mark_chat_unread</span>
-          <p className="text-sm font-bold text-on-surface">No tienes reportes o notas registradas aún.</p>
-          <p className="text-xs text-on-surface-variant">Usa el formulario de arriba para enviar tu primera consulta o reporte a la docente.</p>
+          <p className="text-sm font-bold text-on-surface">{t('reportsPage.emptyTitle')}</p>
+          <p className="text-xs text-on-surface-variant">{t('reportsPage.emptyDesc')}</p>
         </div>
       )}
 
       {sortedThreads.map((thread) => {
         // Lógica consistente de estados (mismo orden: Ícono + Texto)
         const isAnswered = Boolean(thread.reply);
-        const statusText = isAnswered ? 'Confirmado' : 'Pendiente';
+        const statusText = isAnswered ? t('reportsPage.statusConfirmed') : t('reportsPage.statusPending');
         const statusIcon = isAnswered ? 'check_circle' : 'schedule';
-        const statusStyle = isAnswered 
-          ? 'bg-purple-100 text-purple-900' 
-          : 'bg-purple-100 text-purple-900';
+        const statusStyle = 'bg-purple-100 text-purple-900';
 
         return (
           <article key={thread.id} className="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_4px_16px_-2px_rgba(30,18,74,0.05)] hover:shadow-[0_12px_32px_-4px_rgba(0,219,235,0.20)] transition-all">
@@ -90,7 +90,7 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
                   <button
                     type="button"
                     onClick={() => onDeleteThread(thread.id)}
-                    title="Eliminar nota antes de ser respondida"
+                    title={t('reportsPage.deleteTitle')}
                     className="p-1.5 rounded-full text-on-surface-variant hover:text-error hover:bg-error/10 transition-colors cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -148,7 +148,7 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
                     <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-3 border-t border-surface-container-high">
                       <div className="flex items-center gap-1.5 text-on-surface-variant text-xs">
                         <span className="material-symbols-outlined text-[16px] text-primary">verified</span>
-                        <span>Firmado digitalmente por Enfermería y Guía</span>
+                        <span>{t('reportsPage.signedLabel')}</span>
                       </div>
                     </div>
                   )}

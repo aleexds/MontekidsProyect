@@ -1,4 +1,5 @@
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
+import { useLanguage } from '../context/LanguageContext';
 
 export function CalendarHeader({
   activeCategory,
@@ -10,10 +11,14 @@ export function CalendarHeader({
   onPrevMonth,
   onNextMonth
 }) {
-  const monthNames = [
+  const { t } = useLanguage();
+
+  const defaultMonths = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
+  const translatedMonths = t('calendarPage.months');
+  const monthNames = Array.isArray(translatedMonths) ? translatedMonths : defaultMonths;
   
   const currentMonthName = monthNames[currentDate.getMonth()];
   const currentYear = currentDate.getFullYear();
@@ -24,19 +29,19 @@ export function CalendarHeader({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold tracking-widest text-primary uppercase mb-1 block">
-            Panel de Actividades
+            {t('calendarPage.activitiesPanel', 'Panel de Actividades')}
           </span>
           <h1 className="text-3xl md:text-4xl font-black text-on-surface tracking-tight flex flex-wrap gap-x-2">
             <AnimatedInteractiveWord 
-              word="Calendario" 
+              word={t('calendarPage.titleWord1', 'Calendario')} 
               baseColorClass="text-on-surface transition-colors duration-300 cursor-default" 
             />
             <AnimatedInteractiveWord 
-              word="y" 
+              word={t('calendarPage.titleWord2', 'y')} 
               baseColorClass="text-on-surface transition-colors duration-300 cursor-default" 
             />
             <AnimatedInteractiveWord 
-              word="Actividades" 
+              word={t('calendarPage.titleWord3', 'Actividades')} 
               baseColorClass="text-on-surface transition-colors duration-300 cursor-default" 
             />
           </h1>
@@ -48,7 +53,7 @@ export function CalendarHeader({
           className="flex items-center gap-2 bg-[#006971] text-white px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm hover:opacity-95 transition-all cursor-pointer active:scale-95 w-fit"
         >
           <span className="material-symbols-outlined text-lg">sync</span>
-          Sincronizar con Google Calendar / iCal
+          {t('calendarPage.syncBtn', 'Sincronizar con Google Calendar / iCal')}
         </button>
       </div>
 
@@ -63,7 +68,7 @@ export function CalendarHeader({
             <button
               onClick={onPrevMonth}
               className="p-1 rounded-xl hover:bg-surface-container-lowest text-on-surface transition-colors cursor-pointer"
-              title="Mes Anterior"
+              title={t('calendarPage.prevMonth', 'Mes Anterior')}
             >
               <span className="material-symbols-outlined text-lg">chevron_left</span>
             </button>
@@ -75,7 +80,7 @@ export function CalendarHeader({
             <button
               onClick={onNextMonth}
               className="p-1 rounded-xl hover:bg-surface-container-lowest text-on-surface transition-colors cursor-pointer"
-              title="Mes Siguiente"
+              title={t('calendarPage.nextMonth', 'Mes Siguiente')}
             >
               <span className="material-symbols-outlined text-lg">chevron_right</span>
             </button>
@@ -91,7 +96,7 @@ export function CalendarHeader({
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              Mes
+              {t('calendarPage.viewMonth', 'Mes')}
             </button>
             <button
               onClick={() => setActiveView('semana')}
@@ -101,7 +106,7 @@ export function CalendarHeader({
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              Semana
+              {t('calendarPage.viewWeek', 'Semana')}
             </button>
             <button
               onClick={() => setActiveView('agenda')}
@@ -111,7 +116,7 @@ export function CalendarHeader({
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              Agenda
+              {t('calendarPage.viewAgenda', 'Agenda')}
             </button>
           </div>
         </div>
@@ -127,7 +132,7 @@ export function CalendarHeader({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
-            Todos los eventos
+            {t('calendarPage.filterAll', 'Todos los eventos')}
           </button>
 
           <button
@@ -139,7 +144,7 @@ export function CalendarHeader({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-            Actividades Especiales (2)
+            {t('calendarPage.filterSpecial', 'Actividades Especiales (2)')}
           </button>
 
           <button
@@ -151,7 +156,7 @@ export function CalendarHeader({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-fuchsia-500"></span>
-            Reuniones de Padres (1)
+            {t('calendarPage.filterMeetings', 'Reuniones de Padres (1)')}
           </button>
 
           <button
@@ -163,7 +168,7 @@ export function CalendarHeader({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Talleres Estimulación (2)
+            {t('calendarPage.filterWorkshops', 'Talleres Estimulación (2)')}
           </button>
         </div>
 

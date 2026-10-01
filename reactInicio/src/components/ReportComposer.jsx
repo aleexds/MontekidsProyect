@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../context/useAuth';
+import { useLanguage } from '../context/LanguageContext';
 
 export function ReportComposer({ onAddThread, initialData }) {
   const { activeUser } = useAuth();
+  const { t } = useLanguage();
   // Inicializamos el estado directo desde 'initialData' (sin useEffect)
   const [category, setCategory] = useState(initialData?.category || 'salud');
   const [title, setTitle] = useState(initialData?.title || '');
@@ -19,17 +21,17 @@ export function ReportComposer({ onAddThread, initialData }) {
       category,
       categoryLabel:
         category === 'salud'
-          ? 'Consulta de Salud'
+          ? t('reportsPage.catHealthFull')
           : category === 'horario'
-          ? 'Aviso de Horario / Retiro'
-          : 'Observación Pedagógica',
+          ? t('reportsPage.catScheduleFull')
+          : t('reportsPage.catPedagogicalFull'),
       categoryIcon:
         category === 'salud'
           ? 'medical_services'
           : category === 'horario'
           ? 'schedule'
           : 'school',
-      time: 'Enviado justo ahora',
+      time: t('reportsPage.sentJustNow'),
       title,
       sender: activeUser?.name || 'Tutor Montekids',
       senderAvatar:
@@ -46,6 +48,12 @@ export function ReportComposer({ onAddThread, initialData }) {
     setFile(null);
   };
 
+  const categories = [
+    { id: 'salud', label: t('reportsPage.catHealth'), icon: 'medical_services' },
+    { id: 'horario', label: t('reportsPage.catSchedule'), icon: 'schedule' },
+    { id: 'pedagogica', label: t('reportsPage.catPedagogical'), icon: 'school' }
+  ];
+
   return (
     <div className="bg-surface-container-lowest rounded-3xl p-6 md:p-8 shadow-sm border border-outline-variant/60">
       <div className="flex items-center gap-3 mb-6">
@@ -54,10 +62,10 @@ export function ReportComposer({ onAddThread, initialData }) {
         </div>
         <div>
           <h2 className="font-['Nunito'] text-xl font-bold text-on-surface">
-            Redactar Nuevo Mensaje / Reporte
+            {t('reportsPage.composerTitle')}
           </h2>
           <p className="text-body-sm text-on-surface-variant">
-            Envía una notificación directa a la guía a cargo del aula.
+            {t('reportsPage.composerSubtitle')}
           </p>
         </div>
       </div>
@@ -66,14 +74,10 @@ export function ReportComposer({ onAddThread, initialData }) {
         {/* Categoría */}
         <div>
           <label className="block text-label-md font-bold text-on-surface mb-2">
-            Categoría del reporte
+            {t('reportsPage.categoryLabel')}
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {[
-              { id: 'salud', label: 'Consulta de Salud', icon: 'medical_services' },
-              { id: 'horario', label: 'Aviso de Horario', icon: 'schedule' },
-              { id: 'pedagogica', label: 'Observación Pedagógica', icon: 'school' }
-            ].map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
@@ -94,13 +98,13 @@ export function ReportComposer({ onAddThread, initialData }) {
         {/* Asunto / Título */}
         <div>
           <label className="block text-label-md font-bold text-on-surface mb-1">
-            Asunto o Título
+            {t('reportsPage.subjectLabel')}
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ej: Administración de medicamento matutino..."
+            placeholder={t('reportsPage.subjectPlaceholder')}
             className="w-full px-4 py-3 rounded-2xl bg-surface border border-outline-variant/60 focus:border-primary focus:ring-2 focus:ring-primary/20 text-on-surface outline-none transition-all"
             required
           />
@@ -109,13 +113,13 @@ export function ReportComposer({ onAddThread, initialData }) {
         {/* Mensaje */}
         <div>
           <label className="block text-label-md font-bold text-on-surface mb-1">
-            Mensaje o Indicaciones
+            {t('reportsPage.messageLabel')}
           </label>
           <textarea
             rows={7}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Escribe los detalles aquí..."
+            placeholder={t('reportsPage.messagePlaceholder')}
             className="w-full px-4 py-3 rounded-2xl bg-surface border border-outline-variant/60 focus:border-primary focus:ring-2 focus:ring-primary/20 text-on-surface outline-none transition-all font-mono text-sm leading-relaxed"
             required
           />
@@ -125,7 +129,7 @@ export function ReportComposer({ onAddThread, initialData }) {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
           <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-label-md cursor-pointer border border-outline-variant/40 transition-all">
             <span className="material-symbols-outlined text-[20px]">attach_file</span>
-            <span>{file ? file.name : 'Adjuntar Receta o Documento'}</span>
+            <span>{file ? file.name : t('reportsPage.attachBtn')}</span>
             <input
               type="file"
               className="hidden"
@@ -138,7 +142,7 @@ export function ReportComposer({ onAddThread, initialData }) {
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-primary text-on-primary font-label-lg font-bold shadow-md hover:bg-primary/90 transition-all cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">send</span>
-            <span>Enviar Reporte</span>
+            <span>{t('reportsPage.sendBtn')}</span>
           </button>
         </div>
       </form>
