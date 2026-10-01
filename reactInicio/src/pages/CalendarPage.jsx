@@ -6,8 +6,10 @@ import { CalendarGrid } from '../components/CalendarGrid';
 import { UpcomingEvents } from '../components/UpcomingEvents';
 import { CalendarSidebar } from '../components/CalendarSidebar';
 import { CalendarModals } from '../components/CalendarModals';
+import { useLanguage } from '../context/LanguageContext';
 
 export function CalendarPage() {
+  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeView, setActiveView] = useState('mes');
   
@@ -45,7 +47,7 @@ export function CalendarPage() {
   };
 
   const handleSync = () => {
-    showToast('Sincronizando eventos con tu calendario iCal/Google...', 'sync');
+    showToast(t('calendarPage.toastSync', 'Sincronizando eventos con tu calendario iCal/Google...'), 'sync');
   };
 
   const handleSelectEvent = (elementId) => {
@@ -68,12 +70,12 @@ export function CalendarPage() {
             activeCategory={activeCategory}
             setActiveCategory={(cat) => {
               setActiveCategory(cat);
-              showToast(`Filtrando actividades`, 'filter_alt');
+              showToast(t('calendarPage.toastFilter', 'Filtrando actividades'), 'filter_alt');
             }}
             activeView={activeView}
             setActiveView={(view) => {
               setActiveView(view);
-              showToast(`Vista cambiada a modo: ${view.toUpperCase()}`, 'view_module');
+              showToast(`${t('calendarPage.toastViewChanged', 'Vista cambiada a modo: ')}${view.toUpperCase()}`, 'view_module');
             }}
             onSync={handleSync}
             currentDate={currentDate}
@@ -88,7 +90,7 @@ export function CalendarPage() {
                 activeView={activeView}
                 activeCategory={activeCategory}
                 onSelectEvent={handleSelectEvent}
-                onAgendaQuickPeek={() => showToast('Recordatorio agendado', 'event')}
+                onAgendaQuickPeek={() => showToast(t('calendarPage.toastReminderScheduled', 'Recordatorio agendado'), 'event')}
               />
               <UpcomingEvents
                 activeCategory={activeCategory}

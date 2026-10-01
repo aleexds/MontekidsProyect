@@ -1,8 +1,10 @@
 import { useAuth } from '../context/useAuth';
 import { getTeacherForUser } from '../utils/teacherHelper';
+import { useLanguage } from '../context/LanguageContext';
 
 export function ReportSidebar({ onUseTemplate }) {
   const { activeUser } = useAuth();
+  const { t } = useLanguage();
   const teacher = getTeacherForUser(activeUser);
 
   return (
@@ -11,7 +13,7 @@ export function ReportSidebar({ onUseTemplate }) {
       <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_20px_rgba(30,18,74,0.05)] relative">
         <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-wider mb-3">
           <span className="material-symbols-outlined text-[18px]">support_agent</span>
-          <span>Contacto Directo de Sala</span>
+          <span>{t('reportsPage.sidebarContactTitle')}</span>
         </div>
         <div className="flex items-center gap-4">
           <div className="relative shrink-0">
@@ -22,7 +24,7 @@ export function ReportSidebar({ onUseTemplate }) {
             />
             <span 
               className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-surface-container-lowest" 
-              title="En línea en el aula"
+              title={t('reportsPage.sidebarOnlineTitle')}
             ></span>
           </div>
           <div>
@@ -30,7 +32,7 @@ export function ReportSidebar({ onUseTemplate }) {
             <p className="text-xs text-secondary font-bold">{teacher.role}</p>
             <div className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-medium">
               <span className="material-symbols-outlined text-[13px] text-primary">schedule</span>
-              Receso familias: 13:00 - 14:00 hrs
+              {t('reportsPage.sidebarBreakHours')}
             </div>
           </div>
         </div>
@@ -38,7 +40,7 @@ export function ReportSidebar({ onUseTemplate }) {
           <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low text-on-surface text-xs font-medium">
             <span className="text-on-surface-variant flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px]">call</span>
-              Anexo de Recepción / Sala:
+              {t('reportsPage.sidebarExtension')}
             </span>
             <strong className="font-heading text-sm text-primary font-bold">Ext. 104</strong>
           </div>
@@ -56,7 +58,7 @@ export function ReportSidebar({ onUseTemplate }) {
           <div className="flex items-center justify-between">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary text-white font-label-md text-[11px] font-bold shadow-md tracking-wider uppercase">
               <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
-              <span>Asistente IA • Guía Familiar</span>
+              <span>{t('reportsPage.sidebarAiBadge')}</span>
             </div>
             <span className="material-symbols-outlined text-[24px] text-white/80">psychology_alt</span>
           </div>
@@ -64,10 +66,10 @@ export function ReportSidebar({ onUseTemplate }) {
           {/* Título y Subtítulo */}
           <div>
             <h3 className="font-heading text-lg font-extrabold text-white leading-snug">
-              ¿Cómo redactar un reporte de salud efectivo?
+              {t('reportsPage.sidebarAiTitle')}
             </h3>
             <p className="text-white/90 text-xs mt-1 font-medium leading-relaxed">
-              Para garantizar la seguridad farmacológica de tu hijo/a en el aula nido:
+              {t('reportsPage.sidebarAiSubtitle')}
             </p>
           </div>
 
@@ -78,7 +80,7 @@ export function ReportSidebar({ onUseTemplate }) {
                 1
               </span>
               <span>
-                Especificar <strong className="font-bold text-white">dosis exacta</strong> (ml/gotas) y horario fijado.
+                {t('reportsPage.sidebarStep1')} <strong className="font-bold text-white">{t('reportsPage.sidebarStep1Bold')}</strong> {t('reportsPage.sidebarStep1End')}
               </span>
             </li>
             <li className="flex items-start gap-2.5">
@@ -86,7 +88,7 @@ export function ReportSidebar({ onUseTemplate }) {
                 2
               </span>
               <span>
-                Indicar si requiere <strong className="font-bold text-white">refrigeración previa</strong> en recepción.
+                {t('reportsPage.sidebarStep2')} <strong className="font-bold text-white">{t('reportsPage.sidebarStep2Bold')}</strong> {t('reportsPage.sidebarStep2End')}
               </span>
             </li>
             <li className="flex items-start gap-2.5">
@@ -94,7 +96,7 @@ export function ReportSidebar({ onUseTemplate }) {
                 3
               </span>
               <span>
-                Adjuntar siempre la <strong className="font-bold text-white">receta o autorización</strong> firmada.
+                {t('reportsPage.sidebarStep3')} <strong className="font-bold text-white">{t('reportsPage.sidebarStep3Bold')}</strong> {t('reportsPage.sidebarStep3End')}
               </span>
             </li>
           </ul>
@@ -108,7 +110,7 @@ export function ReportSidebar({ onUseTemplate }) {
             <span className="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">
               edit_note
             </span>
-            <span>Usar Plantilla Rápida de Salud</span>
+            <span>{t('reportsPage.sidebarTemplateBtn')}</span>
           </button>
         </div>
       </div>
@@ -117,23 +119,23 @@ export function ReportSidebar({ onUseTemplate }) {
       <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_16px_rgba(30,18,74,0.04)]">
         <div className="flex items-center gap-2 text-secondary text-xs font-bold uppercase tracking-wider mb-2">
           <span className="material-symbols-outlined text-[18px]">verified_user</span>
-          <span>Horarios de Retiro y Normativa</span>
+          <span>{t('reportsPage.sidebarNormTitle')}</span>
         </div>
         <p className="text-xs text-on-surface-variant leading-relaxed">
-          Todo adulto autorizado distinto de los tutores titulares (Valeria y Roberto) debe portar documento de identidad y estar previamente registrado en el portal.
+          {t('reportsPage.sidebarNormDesc')}
         </p>
         <div className="mt-4 pt-3 border-t border-surface-container space-y-2 text-xs">
           <div className="flex items-center justify-between text-on-surface">
             <span className="flex items-center gap-1.5 text-on-surface-variant">
               <span className="material-symbols-outlined text-[16px] text-primary">login</span>
-              Entrada habitual:
+              {t('reportsPage.sidebarEntryLabel')}
             </span>
             <strong className="font-bold">08:00 - 08:30 AM</strong>
           </div>
           <div className="flex items-center justify-between text-on-surface">
             <span className="flex items-center gap-1.5 text-on-surface-variant">
               <span className="material-symbols-outlined text-[16px] text-secondary">logout</span>
-              Salida ordinaria:
+              {t('reportsPage.sidebarExitLabel')}
             </span>
             <strong className="font-bold">13:30 - 14:00 PM</strong>
           </div>

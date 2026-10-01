@@ -1,3 +1,6 @@
+import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/useAuth';
+
 export function CalendarModals({
   showOrderModal,
   setShowOrderModal,
@@ -5,6 +8,10 @@ export function CalendarModals({
   setShowIAModal,
   toastState
 }) {
+  const { t } = useLanguage();
+  const { activeUser } = useAuth();
+  const childName = activeUser?.child?.name || 'Mateo';
+
   return (
     <>
       {/* MODAL 1: Orden del Día */}
@@ -17,8 +24,12 @@ export function CalendarModals({
                   <span className="material-symbols-outlined text-[22px]">assignment</span>
                 </div>
                 <div>
-                  <h3 className="font-['Nunito'] text-xl text-on-surface font-extrabold leading-tight">Orden del Día</h3>
-                  <p className="text-xs text-on-surface-variant font-medium">Reunión Trimestral • 27 Octubre</p>
+                  <h3 className="font-['Nunito'] text-xl text-on-surface font-extrabold leading-tight">
+                    {t('calendarPage.orderTitle', 'Orden del Día')}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-medium">
+                    {t('calendarPage.orderSubtitle', 'Reunión Trimestral • 27 Octubre')}
+                  </p>
                 </div>
               </div>
               <button
@@ -34,24 +45,36 @@ export function CalendarModals({
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-label-md text-xs font-bold flex items-center justify-center shrink-0 shadow-sm mt-0.5">1</span>
                 <div>
-                  <strong className="text-on-surface block font-bold text-sm">16:00 - 16:15 hrs: Bienvenida y Enfoque Bimestral</strong>
-                  <p className="text-xs text-on-surface-variant mt-0.5">Introducción al método de observación Montessori del Aula Semillitas.</p>
+                  <strong className="text-on-surface block font-bold text-sm">
+                    {t('calendarPage.orderStep1Title', '16:00 - 16:15 hrs: Bienvenida y Enfoque Bimestral')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant mt-0.5">
+                    {t('calendarPage.orderStep1Desc', 'Introducción al método de observación Montessori del Aula Semillitas.')}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-label-md text-xs font-bold flex items-center justify-center shrink-0 shadow-sm mt-0.5">2</span>
                 <div>
-                  <strong className="text-on-surface block font-bold text-sm">16:15 - 16:40 hrs: Presentación Individual de Informes</strong>
-                  <p className="text-xs text-on-surface-variant mt-0.5">Revisión del neurodesarrollo motor, esquema corporal e interacción de Mateo.</p>
+                  <strong className="text-on-surface block font-bold text-sm">
+                    {t('calendarPage.orderStep2Title', '16:15 - 16:40 hrs: Presentación Individual de Informes')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant mt-0.5">
+                    {t('calendarPage.orderStep2Desc', 'Revisión del neurodesarrollo motor, esquema corporal e interacción de Mateo.').replace('{name}', childName)}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-label-md text-xs font-bold flex items-center justify-center shrink-0 shadow-sm mt-0.5">3</span>
                 <div>
-                  <strong className="text-on-surface block font-bold text-sm">16:40 - 17:00 hrs: Espacio de Consultas con Psicopedagogía</strong>
-                  <p className="text-xs text-on-surface-variant mt-0.5">Pautas para el acompañamiento en casa y estimulación del sueño autónomo.</p>
+                  <strong className="text-on-surface block font-bold text-sm">
+                    {t('calendarPage.orderStep3Title', '16:40 - 17:00 hrs: Espacio de Consultas con Psicopedagogía')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant mt-0.5">
+                    {t('calendarPage.orderStep3Desc', 'Pautas para el acompañamiento en casa y estimulación del sueño autónomo.')}
+                  </p>
                 </div>
               </div>
             </div>
@@ -62,7 +85,7 @@ export function CalendarModals({
                 className="px-6 py-3 rounded-full bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md transition-all cursor-pointer"
                 onClick={() => setShowOrderModal(false)}
               >
-                Entendido
+                {t('calendarPage.orderUnderstoodBtn', 'Entendido')}
               </button>
             </div>
           </div>
@@ -81,8 +104,12 @@ export function CalendarModals({
                   <span className="material-symbols-outlined text-[22px]">lightbulb</span>
                 </div>
                 <div>
-                  <h3 className="font-['Nunito'] text-xl text-on-surface font-extrabold leading-tight">Guía Exprés: Sombrero de Huerta</h3>
-                  <p className="text-xs text-on-surface-variant font-medium">Asistente</p>
+                  <h3 className="font-['Nunito'] text-xl text-on-surface font-extrabold leading-tight">
+                    {t('calendarPage.aiModalTitle', 'Guía Exprés: Sombrero de Huerta')}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant font-medium">
+                    {t('calendarPage.aiModalSubtitle', 'Asistente')}
+                  </p>
                 </div>
               </div>
               <button
@@ -98,8 +125,10 @@ export function CalendarModals({
             <div className="p-4 rounded-2xl bg-secondary-fixed/30 border border-secondary/20 text-on-secondary-fixed flex items-start gap-3">
               <span className="material-symbols-outlined text-secondary text-[20px] shrink-0 mt-0.5">psychology</span>
               <p className="text-xs leading-relaxed font-medium">
-                <strong className="font-bold text-secondary block mb-0.5">Objetivo Montessori:</strong>
-                Dejar que tu hijo/a tome decisiones sobre colores y texturas, evitando corregir la simetría para reforzar su autonomía.
+                <strong className="font-bold text-secondary block mb-0.5">
+                  {t('calendarPage.aiModalObjTitle', 'Objetivo Montessori:')}
+                </strong>
+                {t('calendarPage.aiModalObjDesc', 'Dejar que tu hijo/a tome decisiones sobre colores y texturas, evitando corregir la simetría para reforzar su autonomía.')}
               </p>
             </div>
 
@@ -108,24 +137,36 @@ export function CalendarModals({
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60 border border-surface-container-low">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm mt-0.5">1</span>
                 <div>
-                  <strong className="text-on-surface text-xs font-bold block mb-0.5">Minuto 1 al 5: Base Estructurada</strong>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">Recortar la base utilizando un cono de cartón o plato biodegradable reciclado.</p>
+                  <strong className="text-on-surface text-xs font-bold block mb-0.5">
+                    {t('calendarPage.aiModalStep1Title', 'Minuto 1 al 5: Base Estructurada')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {t('calendarPage.aiModalStep1Desc', 'Recortar la base utilizando un cono de cartón o plato biodegradable reciclado.')}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60 border border-surface-container-low">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm mt-0.5">2</span>
                 <div>
-                  <strong className="text-on-surface text-xs font-bold block mb-0.5">Minuto 5 al 10: Pintura Sensorial</strong>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">Dejar que Mateo pinte libremente con sus deditos tonos verdes y naranjas simulando zanahorias y hojas.</p>
+                  <strong className="text-on-surface text-xs font-bold block mb-0.5">
+                    {t('calendarPage.aiModalStep2Title', 'Minuto 5 al 10: Pintura Sensorial')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {t('calendarPage.aiModalStep2Desc', 'Dejar que Mateo pinte libremente con sus deditos tonos verdes y naranjas simulando zanahorias y hojas.').replace('{name}', childName)}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-surface-container-low/60 border border-surface-container-low">
                 <span className="w-7 h-7 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm mt-0.5">3</span>
                 <div>
-                  <strong className="text-on-surface text-xs font-bold block mb-0.5">Minuto 10 al 15: Textura Táctil</strong>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">Adherir ramitas secas y hojas caídas del parque utilizando pegamento al agua no tóxico.</p>
+                  <strong className="text-on-surface text-xs font-bold block mb-0.5">
+                    {t('calendarPage.aiModalStep3Title', 'Minuto 10 al 15: Textura Táctil')}
+                  </strong>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {t('calendarPage.aiModalStep3Desc', 'Adherir ramitas secas y hojas caídas del parque utilizando pegamento al agua no tóxico.')}
+                  </p>
                 </div>
               </div>
             </div>
@@ -138,7 +179,7 @@ export function CalendarModals({
                 onClick={() => setShowIAModal(false)}
               >
                 <span className="material-symbols-outlined text-[18px]">brush</span>
-                <span>¡Listo para crear!</span>
+                <span>{t('calendarPage.aiModalReadyBtn', '¡Listo para crear!')}</span>
               </button>
             </div>
 

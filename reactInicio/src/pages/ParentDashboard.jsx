@@ -12,8 +12,8 @@ export function ParentDashboard() {
       {/* Navbar fija */}
       <ParentHeader />
 
-      {/* Contenido principal con transición suave */}
-      <main className="w-full pt-20 bg-surface transition-colors duration-300">
+      {/* Contenido principal con transición suave y animación de entrada */}
+      <main className="w-full pt-20 bg-surface transition-colors duration-300 animate-page-bounce">
         <div className="flex flex-col w-full">
           <div className="max-w-[1440px] w-full mx-auto px-margin-mobile md:px-margin py-space-lg flex flex-col gap-6">
             
