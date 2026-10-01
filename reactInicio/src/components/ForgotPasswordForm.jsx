@@ -1,19 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function ForgotPasswordForm() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [viewState, setViewState] = useState('form'); // 'form' | 'success'
   const [email, setEmail] = useState('valeria.quiros@gmail.com');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(59);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Derivamos canResend directamente del valor del timer
-  const canResend = timer === 0;
+  // Estados de control para el límite de envíos y errores
+  const [requestCount, setRequestCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
+  const canResend = timer === 0;
   const inputRefs = useRef([]);
 
   // Temporizador para el código de verificación
@@ -27,19 +30,106 @@ export default function ForgotPasswordForm() {
     return () => clearInterval(interval);
   }, [viewState, timer]);
 
-  const handleSubmitEmail = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
+  // Función para solicitar el envío del código OTP a n8n
+  const handleRequestPasswordReset = async (inputEmail) => {
+    if (requestCount >= 3) {
+      setErrorMessage(t('forgotPassword.limitReachedError') || 'Has alcanzado el límite máximo de 3 solicitudes de código por seguridad. Inténtalo más tarde.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setErrorMessage('');
+
+      const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+      const n8nWebhookUrl = 'http://localhost:5678/webhook-test/forgot-password'; 
+
+      const response = await fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'request',
+          email: inputEmail,
+          code: generatedOtp,
+          expiresAt: expiresAt,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo conectar con el servicio de automatización de n8n.');
+      }
+
       setIsLoading(false);
+      setRequestCount((prev) => prev + 1);
       setViewState('success');
       setTimer(59);
-    }, 600);
+
+    } catch (error) {
+      console.warn('Error de conexión con n8n:', error);
+      setIsLoading(false);
+      setErrorMessage(t('forgotPassword.connectionError') || 'Error al enviar el correo. Asegúrate de que n8n esté activo y accesible.');
+    }
+  };
+
+  // Función estricta para validar el OTP contra n8n
+  const handleVerifyOtp = async () => {
+    const codeString = otp.join('');
+    if (codeString.length < 6) {
+      setErrorMessage(t('forgotPassword.incompleteCodeError'));
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setErrorMessage('');
+
+      const n8nWebhookUrl = 'http://localhost:5678/webhook-test/forgot-password';
+
+      const response = await fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'verify',
+          email: email,
+          code: codeString,
+        }),
+      });
+
+      const data = await response.json();
+      setIsLoading(false);
+
+      if (response.ok && data.success === true) {
+        navigate('/mi-hijo-a');
+      } else {
+        setErrorMessage(data.message || t('forgotPassword.errorCode'));
+      }
+
+    } catch (error) {
+      console.warn('Error al verificar código con n8n:', error);
+      setIsLoading(false);
+      setErrorMessage(t('forgotPassword.validationError') || 'Error al validar el código con el servidor. Inténtalo de nuevo.');
+    }
+  };
+
+  const handleSubmitEmail = (e) => {
+    e.preventDefault();
+    handleRequestPasswordReset(email);
   };
 
   const handleResendCode = () => {
     if (!canResend) return;
-    setTimer(59);
+
+    if (requestCount >= 3) {
+      setErrorMessage(t('forgotPassword.limitReachedError') || 'Has alcanzado el límite máximo de reenvíos de código.');
+      return;
+    }
+
+    handleRequestPasswordReset(email);
     setOtp(['', '', '', '', '', '']);
     inputRefs.current[0]?.focus();
   };
@@ -63,7 +153,6 @@ export default function ForgotPasswordForm() {
   return (
     <div className="lg:col-span-7 p-6 sm:p-10 md:p-12 flex flex-col justify-between bg-surface-container-lowest relative z-10">
       <div>
-        {/* Navegación y Control Simulador */}
         <div className="flex items-center justify-between mb-8">
           <Link
             to="/login"
@@ -75,9 +164,8 @@ export default function ForgotPasswordForm() {
             <span>{t('forgotPassword.backToLogin')}</span>
           </Link>
 
-          {/* Toggle manual de prueba visual */}
           <div className="flex items-center gap-1.5 bg-surface-container px-2 py-1 rounded-full text-[11px] font-bold text-on-surface-variant">
-            <span>Vista:</span>
+            <span>{t('forgotPassword.viewMode')}</span>
             <button
               type="button"
               onClick={() => setViewState('form')}
@@ -85,7 +173,7 @@ export default function ForgotPasswordForm() {
                 viewState === 'form' ? 'bg-surface-container-lowest text-on-surface shadow-xs font-bold' : ''
               }`}
             >
-              Formulario
+              {t('forgotPassword.formView')}
             </button>
             <button
               type="button"
@@ -94,14 +182,13 @@ export default function ForgotPasswordForm() {
                 viewState === 'success' ? 'bg-surface-container-lowest text-on-surface shadow-xs font-bold' : ''
               }`}
             >
-              Enviado ✓
+              {t('forgotPassword.sentView')} ✓
             </button>
           </div>
         </div>
 
         <div className="w-full max-w-xl mx-auto flex flex-col justify-center animate-fadeIn">
-          {/* CABECERA */}
-          <div className="mb-8">
+          <div className="mb-6">
             <h1 className="text-[32px] sm:text-[30px] leading-[1.15] tracking-tight mb-3 font-headline-xl font-extrabold flex flex-wrap gap-x-2 items-center">
               <AnimatedInteractiveWord word={t('forgotPassword.title1')} baseColorClass="text-[#1e1035]" />
               <AnimatedInteractiveWord word={t('forgotPassword.title2')} baseColorClass="text-[#1e1035]" />
@@ -112,9 +199,15 @@ export default function ForgotPasswordForm() {
               {t('forgotPassword.desc')}
             </p>
           </div>
+
+          {errorMessage && (
+            <div className="mb-6 p-4 rounded-2xl bg-red-50 text-red-700 text-xs sm:text-sm font-bold border border-red-200 flex items-start gap-2 shadow-xs">
+              <span className="material-symbols-outlined text-[18px] shrink-0 mt-0.5">error</span>
+              <span>{errorMessage}</span>
+            </div>
+          )}
         </div>
 
-        {/* ESTADO 1: FORMULARIO */}
         {viewState === 'form' ? (
           <form onSubmit={handleSubmitEmail} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
@@ -146,20 +239,20 @@ export default function ForgotPasswordForm() {
                 <span className="material-symbols-outlined text-[19px] text-[#005c63]">info</span>
               </div>
               <div className="text-xs sm:text-[13px] leading-relaxed font-body-sm font-semibold text-[#005c63]">
-                {t('forgotPassword.expirationNotice')}
+                {t('forgotPassword.expirationNotice')} ({t('forgotPassword.attemptsUsed')}: {requestCount}/3)
               </div>
             </div>
 
             <button
               type="submit"
-              disabled={isLoading}
-              className="relative w-full h-14 rounded-2xl bg-[#F5009B] text-on-primary font-label-lg text-label-lg font-extrabold flex items-center justify-center gap-2 overflow-hidden shadow-[0_10px_28px_rgba(245,0,155,0.32)] transition-all duration-200 active:scale-[0.98] hover:bg-[#e0008d] cursor-pointer"
+              disabled={isLoading || requestCount >= 3}
+              className="relative w-full h-14 rounded-2xl bg-[#F5009B] text-on-primary font-label-lg text-label-lg font-extrabold flex items-center justify-center gap-2 overflow-hidden shadow-[0_10px_28px_rgba(245,0,155,0.32)] transition-all duration-200 active:scale-[0.98] hover:bg-[#e0008d] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-[shimmer_2.5s_infinite] pointer-events-none" />
               {isLoading ? (
                 <span className="flex items-center gap-2">
                   <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
-                  <span>Enviando...</span>
+                  <span>{t('forgotPassword.sendingBtn') || 'Enviando...'}</span>
                 </span>
               ) : (
                 <span className="relative z-10 flex items-center gap-2">
@@ -170,7 +263,6 @@ export default function ForgotPasswordForm() {
             </button>
           </form>
         ) : (
-          /* ESTADO 2: CÓDIGO/CONFIRMACIÓN (TRADUCIDO) */
           <div className="flex flex-col gap-5">
             <div className="p-6 sm:p-7 rounded-3xl bg-[#ecfdf5] shadow-xs flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-[#10b981] text-white flex items-center justify-center mb-4 shadow-[0_8px_20px_rgba(16,185,129,0.35)] animate-bounce">
@@ -202,7 +294,6 @@ export default function ForgotPasswordForm() {
               </div>
             </div>
 
-            {/* OTP Inputs para simulación de validación */}
             <div className="flex justify-between gap-2 my-2">
               {otp.map((digit, idx) => (
                 <input
@@ -228,26 +319,38 @@ export default function ForgotPasswordForm() {
                 <span className="material-symbols-outlined text-[18px]">edit</span>
                 <span>{t('forgotPassword.verifyAnotherEmail')}</span>
               </button>
-              <Link
-                to="/login"
-                className="w-full sm:w-auto px-6 h-12 rounded-full bg-[#F5009B] text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 hover:bg-[#e0008d] transition-all shadow-md"
+              
+              <button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={isLoading}
+                className="w-full sm:w-auto px-6 h-12 rounded-full bg-[#F5009B] text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 hover:bg-[#e0008d] transition-all shadow-md cursor-pointer disabled:opacity-50"
               >
-                <span className="material-symbols-outlined text-[18px]">login</span>
-                <span>{t('forgotPassword.goToLogin')}</span>
-              </Link>
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+                    <span>{t('forgotPassword.validatingBtn') || 'Validando...'}</span>
+                  </span>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-[18px]">login</span>
+                    <span>{t('forgotPassword.validateAndLogin')}</span>
+                  </>
+                )}
+              </button>
             </div>
+
             <div className="p-4 rounded-2xl bg-[#effbfd] text-[#005c63] flex items-start gap-3 shadow-xs">
               <div className="w-8 h-8 rounded-full bg-[#00dbeb]/30 flex items-center justify-center shrink-0 mt-0.5">
                 <span className="material-symbols-outlined text-[19px] text-[#005c63]">info</span>
               </div>
               <div className="text-xs sm:text-[13px] leading-relaxed font-body-sm font-semibold text-[#005c63]">
-                {t('forgotPassword.expirationNotice')}
+                {t('forgotPassword.expirationNotice')} ({t('forgotPassword.attemptsUsed')}: {requestCount}/3)
               </div>
             </div>
           </div>
         )}
 
-        {/* FOOTER CON TRADUCCIONES TRADUCIBLES Y TEXTOS TÉCNICOS ESTÁTICOS */}
         <div className="mt-4 pt-4 flex flex-wrap items-center justify-between gap-3 text-on-surface-variant font-body-sm text-body-sm">
           <span className="flex items-center gap-1.5">
             <span className="material-symbols-outlined text-[16px] text-secondary">contact_support</span>
