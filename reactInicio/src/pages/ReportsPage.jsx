@@ -1,33 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import ParentFooter from '../components/ParentFooter';
 import { ReportComposer } from '../components/ReportComposer';
 import { ReportHistory } from '../components/ReportHistory';
 import { ReportSidebar } from '../components/ReportSidebar';
 import AnimatedInteractiveWord from '../components/AnimatedInteractiveWord';
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 const INITIAL_THREADS = [
   {
-    id: 1,
+    id: '1',
     category: 'salud',
     categoryLabel: 'Consulta de Salud',
     categoryIcon: 'medical_services',
     time: 'Enviado ayer, 08:10 AM',
     title: 'Medicamento Matutino - Jarabe Antialérgico',
-    sender: 'Valeria Quirós',
+    sender: 'Tutor Montekids',
     senderAvatar:
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120',
     message:
-      'Hola Docente Karina, Mateo tiene una ligera congestión nasal. Dejamos el jarabe pediátrico antialérgico en recepción con la enfermera Andrea, con indicación médica de administrar 5ml tras la merienda de las 10:00 AM. Adjunto la receta extendida por su pediatra.',
+      'Hola Docente, nuestro hijo/a tiene una ligera congestión nasal. Dejamos el jarabe pediátrico en recepción con indicación médica de administrar 5ml tras la merienda. Adjunto la receta.',
     attachment: 'Receta_Medica_Octubre.pdf',
     attachmentSize: '240 KB',
     reply: {
-      author: 'Docente Karina S.',
+      author: 'Docente de Aula',
       role: 'Guía AMI',
       time: 'Ayer, 10:15 AM',
       statusTag: 'Dosis completada',
       text:
-        'Recibido Valeria. Se le administró exactamente los 5ml a las 10:00 AM después de la fruta. Mateo estuvo muy alegre y colaborativo durante todo el circuito sensorial matutino. No presentó somnolencia.',
+        'Recibido. Se le administró la dosis en el horario indicado. Estuvo muy alegre y colaborativo durante la jornada.',
       avatar:
         'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
       signed: true
@@ -36,16 +38,63 @@ const INITIAL_THREADS = [
 ];
 
 export function ReportsPage() {
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
+  const classroom = activeUser?.child?.classroom || 'Aula Semillitas';
+
   const [activeFilter, setActiveFilter] = useState('all');
   const [threads, setThreads] = useState(INITIAL_THREADS);
   const [templateData, setTemplateData] = useState(null);
 
-  const handleAddThread = (newThread) => {
+  // Cargar reportes almacenados en db.json a través de json-server
+  useEffect(() => {
+    fetch('http://localhost:3000/reports')
+      .then((res) => {
+        if (!res.ok) throw new Error('Error al obtener reportes');
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setThreads(data);
+        }
+      })
+      .catch((err) => {
+        console.warn('Servidor json-server no disponible o vacío, usando datos locales:', err);
+      });
+  }, []);
+
+  const handleAddThread = async (newThread) => {
+    // Actualización optimista del estado local
     setThreads((prevThreads) => [newThread, ...prevThreads]);
+
+    try {
+      const response = await fetch('http://localhost:3000/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newThread)
+      });
+      if (response.ok) {
+        const savedReport = await response.json();
+        setThreads((prevThreads) =>
+          prevThreads.map((t) => (t.id === newThread.id ? savedReport : t))
+        );
+      }
+    } catch (err) {
+      console.warn('Error al guardar reporte en db.json:', err);
+    }
   };
 
-  const handleDeleteThread = (id) => {
-    setThreads((prevThreads) => prevThreads.filter((t) => t.id !== id));
+  const handleDeleteThread = async (id) => {
+    // Actualización optimista del estado local
+    setThreads((prevThreads) => prevThreads.filter((t) => String(t.id) !== String(id)));
+
+    try {
+      await fetch(`http://localhost:3000/reports/${id}`, {
+        method: 'DELETE'
+      });
+    } catch (err) {
+      console.warn('Error al eliminar reporte de db.json:', err);
+    }
   };
 
   const scrollToComposer = () => {
@@ -56,11 +105,11 @@ export function ReportsPage() {
   // Carga de la plantilla rápida de salud
   const handleUseHealthTemplate = () => {
     const healthTemplate = {
-      id: Date.now(), // ID único para forzar el cambio de 'key' en ReportComposer
+      id: Date.now(),
       category: 'salud',
       title: 'Autorización de Medicamento y Dosis en Aula',
       message: 
-`Estimada docente Karina,
+`Estimada/o ${teacher.name},
 
 Por medio de la presente solicito su colaboración para la administración del siguiente medicamento durante la jornada escolar:
 
@@ -74,12 +123,24 @@ Adjunto la receta médica correspondiente.
 
 Muchas gracias por el cuidado y atención.
 Atentamente,
-Valeria Quirós`
+${activeUser?.name || 'Tutor'}`
     };
 
     setTemplateData(healthTemplate);
     scrollToComposer();
   };
+
+  // Filtrar solo los reportes pertenecientes al usuario activo
+  const userThreads = threads.filter((t) => {
+    if (!activeUser) return true;
+    if (t.userId) {
+      return String(t.userId) === String(activeUser.id);
+    }
+    if (t.sender && activeUser.name) {
+      return t.sender.toLowerCase().trim() === activeUser.name.toLowerCase().trim();
+    }
+    return false;
+  });
 
   return (
     <div className="bg-surface font-body-md text-on-surface min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
@@ -93,9 +154,9 @@ Valeria Quirós`
               {/* Header de la sección */}
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/30 text-on-primary-fixed-variant font-label-md text-label-md mb-2">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-                    Sincronizado con Aula Semillitas
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 font-bold text-xs mb-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-500 animate-ping"></span>
+                    Sincronizado con {classroom}
                   </div>
                   <h1 className="font-['Nunito'] text-3xl md:text-4xl font-extrabold tracking-tight leading-none mb-1 flex flex-wrap gap-x-3">
                     <AnimatedInteractiveWord word="Bandeja" baseColorClass="text-on-surface cursor-default" />
@@ -105,7 +166,7 @@ Valeria Quirós`
                     <AnimatedInteractiveWord word="Reportes" baseColorClass="text-on-surface cursor-default" />
                   </h1>
                   <p className="font-body-md text-body-md text-on-surface-variant mt-1">
-                    Historial de notas enviadas y respuestas de la docente Karina S. • Aula Semillitas
+                    Historial de notas enviadas y respuestas de {teacher.name} • {classroom}
                   </p>
                 </div>
                 <button
@@ -121,10 +182,10 @@ Valeria Quirós`
               {/* Filtros */}
               <div className="flex flex-wrap items-center gap-2">
                 {[
-                  { id: 'all', label: 'Todos', count: threads.length, dot: null },
-                  { id: 'salud', label: 'Consultas de Salud', count: threads.filter((t) => t.category === 'salud').length, dot: 'bg-primary' },
-                  { id: 'horario', label: 'Avisos de Retiro/Horario', count: threads.filter((t) => t.category === 'horario').length, dot: 'bg-secondary-container' },
-                  { id: 'pedagogica', label: 'Observaciones Pedagógicas', count: threads.filter((t) => t.category === 'pedagogica').length, dot: 'bg-tertiary' }
+                  { id: 'all', label: 'Todos', count: userThreads.length, dot: null },
+                  { id: 'salud', label: 'Consultas de Salud', count: userThreads.filter((t) => t.category === 'salud').length, dot: 'bg-primary' },
+                  { id: 'horario', label: 'Avisos de Retiro/Horario', count: userThreads.filter((t) => t.category === 'horario').length, dot: 'bg-secondary-container' },
+                  { id: 'pedagogica', label: 'Observaciones Pedagógicas', count: userThreads.filter((t) => t.category === 'pedagogica').length, dot: 'bg-tertiary' }
                 ].map((chip) => (
                   <button
                     key={chip.id}
@@ -154,7 +215,7 @@ Valeria Quirós`
               {/* Historial de Hilos */}
               <ReportHistory
                 activeFilter={activeFilter}
-                threads={threads}
+                threads={userThreads}
                 onDeleteThread={handleDeleteThread}
               />
             </div>

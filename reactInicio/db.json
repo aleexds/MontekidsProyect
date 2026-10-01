@@ -65,5 +65,45 @@
       "email": "marcela.creadores@montekids.edu",
       "avatar": "👩‍🏫"
     }
+  ],
+  "reports": [
+    {
+      "id": "1",
+      "userId": "f610",
+      "category": "salud",
+      "categoryLabel": "Consulta de Salud",
+      "categoryIcon": "medical_services",
+      "time": "Enviado ayer, 08:10 AM",
+      "title": "Medicamento Matutino - Jarabe Antialérgico",
+      "sender": "Moises Urbina",
+      "senderAvatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120",
+      "message": "Hola Docente, Luna tiene una ligera congestión nasal. Dejamos el jarabe pediátrico en recepción con indicación médica de administrar 5ml tras la merienda. Adjunto la receta.",
+      "attachment": "Receta_Medica_Octubre.pdf",
+      "attachmentSize": "240 KB",
+      "reply": {
+        "author": "Docente Karina S.",
+        "role": "Guía AMI",
+        "time": "Ayer, 10:15 AM",
+        "statusTag": "Dosis completada",
+        "text": "Recibido Moises. Se le administró la dosis en el horario indicado. Estuvo muy alegre y colaborativa durante la jornada.",
+        "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120",
+        "signed": true
+      }
+    },
+    {
+      "id": "1790889137132",
+      "userId": "bcbf",
+      "category": "salud",
+      "categoryLabel": "Consulta de Salud",
+      "categoryIcon": "medical_services",
+      "time": "Enviado justo ahora",
+      "title": "test",
+      "sender": "Alex Cubero Duarte",
+      "senderAvatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120",
+      "message": "test",
+      "attachment": null,
+      "attachmentSize": null,
+      "reply": null
+    }
   ]
 }

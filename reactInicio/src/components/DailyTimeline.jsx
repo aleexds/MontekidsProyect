@@ -1,27 +1,36 @@
-import { useState } from 'react';
+
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 export function DailyTimeline() {
-  const { t } = useLanguage();
-  const [category, setCategory] = useState('cat1');
-  const [message, setMessage] = useState('');
-  const [showBanner, setShowBanner] = useState(false);
+  const { language, t } = useLanguage();
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
 
-  const categories = [
-    { id: 'cat1', label: t('parentDashboard.timeline.cat1') },
-    { id: 'cat2', label: t('parentDashboard.timeline.cat2') },
-    { id: 'cat3', label: t('parentDashboard.timeline.cat3') }
-  ];
+  // Generar fecha actual formateada dinámicamente según el idioma
+  const getTodayFormatted = () => {
+    const today = new Date();
+    const localeMap = {
+      es: 'es-ES',
+      en: 'en-US',
+      zh: 'zh-CN'
+    };
+    const currentLocale = localeMap[language] || 'es-ES';
 
-  const handleSend = () => {
-    if (!message.trim()) {
-      setMessage(t('parentDashboard.timeline.defaultMsg'));
+    if (language === 'en') {
+      const formattedDate = today.toLocaleDateString(currentLocale, { month: 'long', day: 'numeric', year: 'numeric' });
+      return `Today, ${formattedDate}`;
+    } else if (language === 'zh') {
+      const formattedDate = today.toLocaleDateString(currentLocale, { year: 'numeric', month: 'long', day: 'numeric' });
+      return `今天, ${formattedDate}`;
+    } else {
+      const day = today.getDate();
+      const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      const month = monthNames[today.getMonth()];
+      const year = today.getFullYear();
+      return `Hoy, ${day} de ${month}, ${year}`;
     }
-    setShowBanner(true);
-    setTimeout(() => {
-      setShowBanner(false);
-      setMessage('');
-    }, 4000);
   };
 
   return (
@@ -36,7 +45,7 @@ export function DailyTimeline() {
             </h2>
           </div>
           <p className="text-xs text-gray-500 dark:text-slate-300">
-            {t('parentDashboard.timeline.today')}
+            {getTodayFormatted()}
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 text-xs font-bold uppercase tracking-wider self-start sm:self-center">
@@ -76,12 +85,12 @@ export function DailyTimeline() {
 
           <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-slate-700/50 border border-gray-100 dark:border-slate-600/40 flex items-start gap-3">
             <div className="w-9 h-9 rounded-full bg-purple-600 dark:bg-purple-500 text-white font-bold flex items-center justify-center text-xs shrink-0">
-              KS
+              {teacher.initials}
             </div>
             <div className="flex flex-col gap-0.5">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-gray-900 dark:text-white">
-                  {t('parentDashboard.timeline.teacherName')}
+                  {teacher.name}
                 </span>
                 <span className="text-gray-400 dark:text-slate-300 text-[11px]">• hace 2 hrs</span>
               </div>
@@ -121,12 +130,12 @@ export function DailyTimeline() {
 
           <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-slate-700/50 border border-gray-100 dark:border-slate-600/40 flex items-start gap-3">
             <div className="w-9 h-9 rounded-full bg-purple-600 dark:bg-purple-500 text-white font-bold flex items-center justify-center text-xs shrink-0">
-              KS
+              {teacher.initials}
             </div>
             <div className="flex flex-col gap-0.5">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-gray-900 dark:text-white">
-                  {t('parentDashboard.timeline.teacherName')}
+                  {teacher.name}
                 </span>
                 <span className="text-gray-400 dark:text-slate-300 text-[11px]">• hace 35 min</span>
               </div>
@@ -159,71 +168,7 @@ export function DailyTimeline() {
         </article>
       </div>
 
-      {/* Formulario a la docente */}
-      <div className="mt-2 rounded-2xl bg-gray-50 dark:bg-slate-800 p-5 sm:p-6 border border-gray-200 dark:border-slate-700/60 shadow-sm" id="parent-interaction-box">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-sky-300 flex items-center justify-center">
-            <span className="material-symbols-outlined text-[20px]">forward_to_inbox</span>
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-900 dark:text-white text-sm">
-              {t('parentDashboard.timeline.formTitle')}
-            </h3>
-            <p className="text-xs text-gray-500 dark:text-slate-300">
-              {t('parentDashboard.timeline.formDesc')}
-            </p>
-          </div>
-        </div>
-
-        {/* Botones de Categorías */}
-        <div className="flex flex-wrap gap-2 my-3">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setCategory(cat.id)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                category === cat.id
-                  ? 'bg-slate-900 dark:bg-sky-400 text-white dark:text-slate-950 shadow-sm'
-                  : 'bg-white dark:bg-slate-700/60 text-gray-600 dark:text-slate-200 border border-gray-200 dark:border-slate-600/50 hover:bg-gray-100 dark:hover:bg-slate-700'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Input Textarea */}
-        <div className="bg-white dark:bg-slate-700/50 rounded-xl p-3 border border-gray-200 dark:border-slate-600/50 shadow-sm">
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="w-full bg-transparent resize-none outline-none text-xs text-gray-800 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400"
-            placeholder={t('parentDashboard.timeline.placeholder')}
-            rows={3}
-          />
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-600/40 mt-2">
-            <button className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 dark:text-slate-300 transition-colors" title="Adjuntar comprobante" type="button">
-              <span className="material-symbols-outlined text-[18px]">attach_file</span>
-            </button>
-            <button
-              onClick={handleSend}
-              className="px-4 py-2 rounded-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
-              type="button"
-            >
-              <span>{t('parentDashboard.timeline.sendBtn')}</span>
-              <span className="material-symbols-outlined text-[16px]">send</span>
-            </button>
-          </div>
-        </div>
-
-        {showBanner && (
-          <div className="mt-3 p-3 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px]">check_circle</span>
-            <span>{t('parentDashboard.timeline.successMsg')}</span>
-          </div>
-        )}
-      </div>
+      
     </div>
   );
 }

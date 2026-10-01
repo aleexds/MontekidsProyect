@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import logoMontekids from '../img/logoMontekids.png';
 import logoDark from '../img/logoDarkMontekids.png';
 import ColorblindToggle from './ColorblindToggle';
@@ -12,6 +12,7 @@ export function ParentHeader() {
   const { t } = useLanguage();
   const { activeUser, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
   const [fontSizeIndex, setFontSizeIndex] = useState(0);
   const [isAiOpen, setIsAiOpen] = useState(false);
@@ -154,13 +155,14 @@ export function ParentHeader() {
               </div>
               <div className="hidden sm:flex flex-col text-left">
                 <span className="text-xs font-bold text-on-surface leading-tight">{userProfile.name}</span>
-                <span className="text-[11px] text-primary font-medium leading-tight">
-                  {userProfile.role}
-                </span>
+
               </div>
               {userProfile.isLoggedIn && (
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    navigate('/LOGIN');
+                  }}
                   title={t('auth.logout', 'Cerrar sesión')}
                   type="button"
                   className="ml-1 text-on-surface-variant hover:text-red-500 transition-colors p-1 flex items-center justify-center rounded-full hover:bg-surface-container-highest cursor-pointer"

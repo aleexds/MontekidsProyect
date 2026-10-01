@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 export const DailyLog = () => {
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
   const [selectedCategory, setSelectedCategory] = useState('Consulta de Salud');
   const [message, setMessage] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -57,10 +61,10 @@ export const DailyLog = () => {
             </div>
           </div>
           <div className="mt-space-sm p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-sm">
-            <img alt="Docente Karina" className="w-10 h-10 rounded-full object-cover shrink-0 shadow-sm" src="https://lh3.googleusercontent.com/aida/AEtjO1VtC5s3KzQmDzSEOgUEoBq9f6Bf6pLl-kDIpqTGgxvP9BIoe-Qt1zofmkX4MXZC7Llcfhu3QeYkPfTQGjphM1quespU79rUks6zszdXoBPbivvR4pgYaLs_zjfVUQVWISHqNs5xsLH-njChuAWu2uzDTJKJ_TZQhYuxz3Od9Fu24dFEN58BRJOkf9wrKBwLbmcp5pNBh_FG_IYGrX2WCpebd0C8wYDmLyg9upvEdIpKsOfzDinKAhWRSB1_" />
+            <img alt={teacher.name} className="w-10 h-10 rounded-full object-cover shrink-0 shadow-sm" src={teacher.avatarUrl} />
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="font-label-md text-label-md text-on-surface font-bold">Docente Karina S.</span>
+                <span className="font-label-md text-label-md text-on-surface font-bold">{teacher.name}</span>
                 <span className="text-outline-variant font-label-sm text-label-sm">• hace 2 hrs</span>
               </div>
               <p className="font-body-md text-body-md text-on-surface italic">

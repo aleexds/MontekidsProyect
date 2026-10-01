@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useAuth } from '../context/useAuth';
 
 export function ReportComposer({ onAddThread, initialData }) {
+  const { activeUser } = useAuth();
   // Inicializamos el estado directo desde 'initialData' (sin useEffect)
   const [category, setCategory] = useState(initialData?.category || 'salud');
   const [title, setTitle] = useState(initialData?.title || '');
@@ -12,7 +14,8 @@ export function ReportComposer({ onAddThread, initialData }) {
     if (!title.trim() || !message.trim()) return;
 
     const newThread = {
-      id: Date.now(),
+      id: String(Date.now()),
+      userId: activeUser?.id || null,
       category,
       categoryLabel:
         category === 'salud'
@@ -28,7 +31,7 @@ export function ReportComposer({ onAddThread, initialData }) {
           : 'school',
       time: 'Enviado justo ahora',
       title,
-      sender: 'Valeria Quirós',
+      sender: activeUser?.name || 'Tutor Montekids',
       senderAvatar:
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120',
       message,
@@ -46,7 +49,7 @@ export function ReportComposer({ onAddThread, initialData }) {
   return (
     <div className="bg-surface-container-lowest rounded-3xl p-6 md:p-8 shadow-sm border border-outline-variant/60">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-2xl bg-primary-container/40 flex items-center justify-center text-primary">
+        <div className="w-10 h-10 rounded-2xl bg-cyan-100 dark:bg-cyan-950/60 flex items-center justify-center text-cyan-700 dark:text-cyan-300">
           <span className="material-symbols-outlined text-[24px]">edit_square</span>
         </div>
         <div>
@@ -77,7 +80,7 @@ export function ReportComposer({ onAddThread, initialData }) {
                 onClick={() => setCategory(cat.id)}
                 className={`flex items-center gap-2 px-4 py-3 rounded-2xl border text-label-md transition-all cursor-pointer ${
                   category === cat.id
-                    ? 'border-primary bg-primary-container/30 text-on-primary-container font-bold shadow-sm'
+                    ? 'border-cyan-600 bg-cyan-600 dark:bg-cyan-400 dark:border-cyan-400 text-white dark:text-slate-950 font-bold shadow-sm'
                     : 'border-outline-variant/50 bg-surface hover:bg-surface-container-high text-on-surface'
                 }`}
               >

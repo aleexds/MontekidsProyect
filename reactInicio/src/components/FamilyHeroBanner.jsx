@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 export function FamilyHeroBanner() {
   const { t } = useLanguage();
@@ -32,14 +34,8 @@ export function FamilyHeroBanner() {
       });
   }, [activeUser, userData]);
 
-  const scrollToInteractionBox = () => {
-    const element = document.getElementById('parent-interaction-box');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const currentUser = activeUser || userData;
+  const teacher = getTeacherForUser(currentUser);
 
   // Extraer datos de la estructura de db.json de manera segura
   const lastName = currentUser?.child?.lastName || (currentUser?.name ? currentUser.name.split(' ')[1] : 'Familia');
@@ -65,7 +61,7 @@ export function FamilyHeroBanner() {
           {/* Textos Informativos Dinámicos */}
           <div className="flex flex-col gap-1.5">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              ¡Hola, Familia {lastName}! 👋
+              {t('parentDashboard.hero.greeting', '¡Hola, Familia')} {lastName}! 👋
             </h1>
             <p className="text-sm sm:text-base text-purple-100">
               {t('parentDashboard.hero.summaryStart', 'Este es el resumen de')}{' '}
@@ -78,7 +74,7 @@ export function FamilyHeroBanner() {
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
               <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-white border border-white/10">
-                🧒 {childAge} Años cumplidos • {classroom}
+                🧒 {childAge} {t('parentDashboard.hero.yearsOld', 'Años cumplidos')} • {classroom}
               </span>
               <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-cyan-200 border border-white/10 flex items-center gap-1">
                 <span className="material-symbols-outlined text-[14px]">schedule</span>
@@ -86,7 +82,7 @@ export function FamilyHeroBanner() {
               </span>
               <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-pink-200 border border-white/10 flex items-center gap-1">
                 <span className="material-symbols-outlined text-[14px]">school</span>
-                {t('parentDashboard.hero.teacherBadge', 'Guía: Docente Karina S.')}
+                {t('parentDashboard.hero.guide', 'Guía:')} {teacher.name}
               </span>
             </div>
           </div>
@@ -94,14 +90,13 @@ export function FamilyHeroBanner() {
 
         {/* Botón de Acción */}
         <div className="shrink-0">
-          <button
-            onClick={scrollToInteractionBox}
+          <Link
+            to="/mis-comentarios-reportes"
             className="w-full sm:w-auto px-5 py-3 rounded-full bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-pink-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            type="button"
           >
             <span className="material-symbols-outlined text-[18px]">edit_note</span>
             <span>{t('parentDashboard.hero.sendNoteBtn', '+ Enviar Nota a la Docente')}</span>
-          </button>
+          </Link>
         </div>
       </div>
     </section>
