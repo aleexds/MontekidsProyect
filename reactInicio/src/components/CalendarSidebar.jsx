@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 export function CalendarSidebar({ onOpenIAModal, showToast }) {
   const navigate = useNavigate();
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
+  const classroom = activeUser?.child?.classroom || 'Aula Semillitas';
   const [items, setItems] = useState([
     { id: 1, text: 'Muda de ropa adicional para estimulación con agua y tierra', sub: 'Entregado en casillero #14', checked: true, icon: 'done_all' },
     { id: 2, text: 'Materiales reciclados para el Sombrero Loco', sub: 'Pendiente para el Mar 31 Oct', checked: false, icon: 'alarm', isPending: true },
@@ -39,7 +44,7 @@ export function CalendarSidebar({ onOpenIAModal, showToast }) {
           </span>
         </div>
         <p className="font-body-sm text-body-sm text-on-surface-variant">
-          Elementos necesarios para el Aula Semillitas y actividades sensoriales de la semana:
+          Elementos necesarios para el {classroom} y actividades sensoriales de la semana:
         </p>
 
         {/* Barra de progreso */}
@@ -132,7 +137,7 @@ export function CalendarSidebar({ onOpenIAModal, showToast }) {
           </div>
           <div>
             <h3 className="font-['Nunito'] text-base text-on-surface font-extrabold">Horario Habitual</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant">Aula Semillitas • Rutina Diaria</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">{classroom} • Rutina Diaria</p>
           </div>
         </div>
 
@@ -168,15 +173,15 @@ export function CalendarSidebar({ onOpenIAModal, showToast }) {
           <div className="relative shrink-0">
             <img
               className="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-primary-container"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6_lg8l6AUB3QCTET-1vQNJJZHjxT-dzrlk1LjM1SU4y6INMEW2UpVBK0PTHqxw_bw7PcTsFWhDNqD1QhT7f-1j7dw4vrVSOGSdfXadK7QyQ-SQYbsfdy43wtgjs6ZZ1pkTbzKiDNWDdVF7yFDj04kVTCj39exW8mFos2yqZOKPxtR1RqNmVdPCwUfOT2Gj07jm40Wbj4qp2wlMX5naRUya3nOq0FxkaP_jEA6AAZjTLoFVqz1nXuppw"
-              alt="Docente Karina Morales"
+              src={teacher.avatarUrl}
+              alt={teacher.name}
             />
             <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-surface-container-lowest" title="En línea"></span>
           </div>
           <div className="flex-1 min-w-0">
             
-            <h4 className="font-['Nunito'] text-sm font-extrabold text-on-surface truncate">Docente Karina Salas</h4>
-            <p className="font-body-sm text-xs text-on-surface-variant truncate">Guía Aula Semillitas</p>
+            <h4 className="font-['Nunito'] text-sm font-extrabold text-on-surface truncate">{teacher.name}</h4>
+            <p className="font-body-sm text-xs text-on-surface-variant truncate">Guía {classroom}</p>
           </div>
         </div>
 

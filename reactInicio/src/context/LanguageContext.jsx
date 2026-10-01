@@ -357,7 +357,7 @@ const translations = {
     whatsappBtn: "WhatsApp Institucional"
   },
   hero: {
-    greeting: "¡Hola, Familia Quirós!",
+    greeting: "¡Hola, Familia",
     summaryStart: "Este es el resumen de",
     summaryMiddle: "hoy en el",
     presentBadge: "PRESENTE HOY",
@@ -365,7 +365,9 @@ const translations = {
     classroomBadge: "Aula Semillitas",
     attendanceBadge: "Asistencia: 08:15 AM (Biométrico)",
     teacherBadge: "Guía: Docente Karina S.",
-    sendNoteBtn: "+ ENVIAR NOTA A LA DOCENTE"
+    sendNoteBtn: "+ ENVIAR NOTA A LA DOCENTE",
+    yearsOld: "Años cumplidos",
+    guide: "Guía: "
   },
   nav: {
     myChild: "Mi Hijo/a",
@@ -678,7 +680,7 @@ const translations = {
     sensoryDesc: "Recognizes color sequences and enjoys the natural texture box with great attention."
   },
   timeline: {
-    headerTitle: "Mateo's Daily Log",
+    headerTitle: "Daily Log",
     today: "Today, October 28, 2026",
     inSession: "In Morning Session",
     completedSuccess: "Successfully Completed",
@@ -730,7 +732,7 @@ const translations = {
     whatsappBtn: "Institutional WhatsApp"
   },
   hero: {
-    greeting: "Hello, Quirós Family!",
+    greeting: "Hello, Family",
     summaryStart: "Here is the daily summary for",
     summaryMiddle: "today at",
     presentBadge: "PRESENT TODAY",
@@ -738,7 +740,9 @@ const translations = {
     classroomBadge: "Little Seeds Room",
     attendanceBadge: "Attendance: 08:15 AM (Biometric)",
     teacherBadge: "Guide: Teacher Karina S.",
-    sendNoteBtn: "+ SEND NOTE TO TEACHER"
+    sendNoteBtn: "+ SEND NOTE TO TEACHER",
+    yearsOld: "Years old",
+    guide: "Guide: "
   },
   nav: {
     myChild: "My Child",
@@ -1103,7 +1107,7 @@ const translations = {
         whatsappBtn: "官方 WhatsApp 联系"
       },
       hero: {
-        greeting: "您好，Quirós 家长！",
+        greeting: "您好， 家长",
         summaryStart: "这是",
         summaryMiddle: "今天在",
         summaryEnd: "的成长日报。",
@@ -1112,7 +1116,9 @@ const translations = {
         classroomBadge: "萌芽班 (Semillitas)",
         attendanceBadge: "签到时间: 08:15 AM (人脸识别)",
         teacherBadge: "带班导师: Karina S.",
-        sendNoteBtn: "+ 给老师发送留言"
+        sendNoteBtn: "+ 给老师发送留言",
+        yearsOld: "岁",
+        guide: "带班导师: "
       },
       nav: {
         myChild: "我的孩子",

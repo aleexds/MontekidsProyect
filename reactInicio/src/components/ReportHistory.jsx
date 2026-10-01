@@ -46,6 +46,14 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
         </div>
       </div>
 
+      {sortedThreads.length === 0 && (
+        <div className="bg-surface-container-lowest rounded-2xl p-8 text-center border border-dashed border-outline-variant/60 flex flex-col items-center justify-center gap-2">
+          <span className="material-symbols-outlined text-[36px] text-on-surface-variant/60">mark_chat_unread</span>
+          <p className="text-sm font-bold text-on-surface">No tienes reportes o notas registradas aún.</p>
+          <p className="text-xs text-on-surface-variant">Usa el formulario de arriba para enviar tu primera consulta o reporte a la docente.</p>
+        </div>
+      )}
+
       {sortedThreads.map((thread) => {
         // Lógica consistente de estados (mismo orden: Ícono + Texto)
         const isAnswered = Boolean(thread.reply);

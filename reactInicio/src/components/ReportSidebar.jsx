@@ -1,4 +1,10 @@
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
+
 export function ReportSidebar({ onUseTemplate }) {
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
+
   return (
     <aside className="lg:col-span-4 flex flex-col gap-6 font-sans">
       {/* Contacto Directo */}
@@ -11,8 +17,8 @@ export function ReportSidebar({ onUseTemplate }) {
           <div className="relative shrink-0">
             <img 
               className="w-16 h-16 rounded-2xl object-cover shadow-md ring-2 ring-primary-container" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyd0Rz-BQi70CfH7chrpPK_zMWnk4VwmWUiqguBJqRfju-QARjzHZ8dlrkRBlTmljgtHgwjcxj48py0UhA2ngwPWS0lxlc-Rbgzix9_l9-kbNURRRyd7Mv5Zx6GzjgOePrqzx20LCUME7JNnj4-ysKzI4MHeukPHNg5UPJEzjub_50rHjDZ_BnN9-ohq47XKx2r0EypyFm_veULijLBSv9waf3XgqW3VKhCmMD2icUJvkNcWGQPzoguQ" 
-              alt="Docente Karina S." 
+              src={teacher.avatarUrl} 
+              alt={teacher.name} 
             />
             <span 
               className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-surface-container-lowest" 
@@ -20,8 +26,8 @@ export function ReportSidebar({ onUseTemplate }) {
             ></span>
           </div>
           <div>
-            <h3 className="font-heading font-bold text-base text-on-surface leading-snug">Docente Karina S.</h3>
-            <p className="text-xs text-secondary font-bold">Guía AMI Titular • Aula Semillitas</p>
+            <h3 className="font-heading font-bold text-base text-on-surface leading-snug">{teacher.name}</h3>
+            <p className="text-xs text-secondary font-bold">{teacher.role}</p>
             <div className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-medium">
               <span className="material-symbols-outlined text-[13px] text-primary">schedule</span>
               Receso familias: 13:00 - 14:00 hrs

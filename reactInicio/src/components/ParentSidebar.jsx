@@ -1,7 +1,11 @@
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/useAuth';
+import { getTeacherForUser } from '../utils/teacherHelper';
 
 export function ParentSidebar() {
   const { t } = useLanguage();
+  const { activeUser } = useAuth();
+  const teacher = getTeacherForUser(activeUser);
 
   return (
     <aside className="lg:col-span-4 flex flex-col gap-5">
@@ -134,12 +138,12 @@ export function ParentSidebar() {
         </h3>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-purple-600 dark:bg-purple-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
-            KS
+            {teacher.initials}
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-gray-900 dark:text-white">Docente Karina S.</span>
+            <span className="text-xs font-bold text-gray-900 dark:text-white">{teacher.name}</span>
             <span className="text-[11px] text-gray-500 dark:text-slate-300">
-              {t('parentDashboard.sidebar.teacherRole')}
+              {teacher.role}
             </span>
             <span className="text-[10px] text-cyan-600 dark:text-cyan-300 font-bold">
               {t('parentDashboard.sidebar.teacherAvailability')}
