@@ -62,7 +62,7 @@ export default function Hero() {
 
           {/* Descripción */}
           <p className="animate-pop-bounce delay-200 mt-4 text-base sm:text-lg text-on-surface-variant max-w-2xl leading-relaxed transition-colors">
-            {t('hero.desc', 'Estimulación temprana, desarrollo psicomotor y aprendizaje activo para niños de 2 a 5 años en un entorno seguro, afectivo y guiado por la curiosidad natural.')}
+            {t('hero.desc', 'Estimulación temprana, desarrollo psicomotor y aprendizaje activo para bebés y niños en un entorno seguro, afectivo y guiado por la curiosidad natural.')}
           </p>
 
           {/* Botones */}
