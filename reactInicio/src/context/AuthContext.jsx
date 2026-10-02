@@ -28,7 +28,10 @@ export function AuthProvider({ children }) {
           return res.json();
         })
         .then(data => {
-          setActiveUser(data);
+          setActiveUser(prev => {
+            if (prev && JSON.stringify(prev) === JSON.stringify(data)) return prev;
+            return data;
+          });
           localStorage.setItem('activeUser', JSON.stringify(data));
           localStorage.setItem('currentUserId', data.id);
           setLoading(false);

@@ -228,3 +228,34 @@ html.filter-tritanopia {
   font-weight: 700 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
+
+/* --- ANIMACIÓN DROPDOWN FADE IN / FADE OUT --- */
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dropdownFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+}
+
+.animate-dropdown-fade-in {
+  animation: dropdownFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-dropdown-fade-out {
+  animation: dropdownFadeOut 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
