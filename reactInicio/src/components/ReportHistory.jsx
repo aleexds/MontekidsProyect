@@ -68,9 +68,15 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container-low">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${thread.badgeBg}`}>
-                    <span className="material-symbols-outlined text-[14px]">{thread.categoryIcon}</span>
-                    {thread.categoryLabel}
+                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                    thread.badgeBg || (
+                      thread.category === 'salud' ? 'bg-primary-container text-on-primary-container' :
+                      thread.category === 'horario' ? 'bg-secondary-container text-on-secondary-container' :
+                      'bg-tertiary-container text-on-tertiary-container'
+                    )
+                  }`}>
+                    <span className="material-symbols-outlined text-[14px]">{thread.categoryIcon || 'description'}</span>
+                    {thread.categoryLabel || thread.category}
                   </span>
                   <span className="text-xs text-on-surface-variant">{thread.time}</span>
                 </div>

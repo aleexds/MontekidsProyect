@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/useAuth';
 import { getTeacherForUser } from '../utils/teacherHelper';
 
-export function UpcomingEvents({ activeCategory, onOpenOrderModal, showToast }) {
+export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
   const { t } = useLanguage();
   const { activeUser } = useAuth();
   const teacher = getTeacherForUser(activeUser);
@@ -12,16 +12,7 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal, showToast }) 
   const [rsvpConfirmed, setRsvpConfirmed] = useState(true);
 
   const toggleRSVP = () => {
-    if (rsvpConfirmed) {
-      setRsvpConfirmed(false);
-      showToast(t('calendarPage.toastRsvpUnchecked', 'Asistencia desmarcada temporalmente'), 'info');
-    } else {
-      setRsvpConfirmed(true);
-      showToast(
-        t('calendarPage.toastRsvpChecked', '¡Asistencia confirmada para {name}!').replace('{name}', childName),
-        'check_circle'
-      );
-    }
+    setRsvpConfirmed((prev) => !prev);
   };
 
   const showSpecial = activeCategory === 'all' || activeCategory === 'special';
@@ -111,13 +102,9 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal, showToast }) 
                       : t('calendarPage.rsvpConfirm', 'Confirmar Asistencia')}
                   </span>
                 </button>
-                <span className="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">
-                  {t('calendarPage.companionsCount', '2 acompañantes registrados')}
-                </span>
               </div>
               <button
                 type="button"
-                onClick={() => showToast(t('calendarPage.toastDownloadingGuide', 'Descargando Guía Pedagógica Sombrero Loco (PDF 1.4MB)'), 'download')}
                 className="px-4 py-2.5 rounded-full bg-surface-container-low hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-primary text-[18px]">download_for_offline</span>

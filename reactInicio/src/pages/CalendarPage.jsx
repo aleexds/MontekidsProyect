@@ -6,10 +6,8 @@ import { CalendarGrid } from '../components/CalendarGrid';
 import { UpcomingEvents } from '../components/UpcomingEvents';
 import { CalendarSidebar } from '../components/CalendarSidebar';
 import { CalendarModals } from '../components/CalendarModals';
-import { useLanguage } from '../context/LanguageContext';
 
 export function CalendarPage() {
-  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeView, setActiveView] = useState('mes');
   
@@ -17,17 +15,9 @@ export function CalendarPage() {
   // Esto inicializa el calendario en el mes y año actual de forma automática.
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Estados de Modales y Toast
+  // Estados de Modales
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [showIAModal, setShowIAModal] = useState(false);
-  const [toastState, setToastState] = useState({ visible: false, message: '', icon: '' });
-
-  const showToast = (message, icon = 'check_circle') => {
-    setToastState({ visible: true, message, icon });
-    setTimeout(() => {
-      setToastState({ visible: false, message: '', icon: '' });
-    }, 3200);
-  };
 
   // Funciones de navegación con objetos Date reales
   const handlePrevMonth = () => {
@@ -47,7 +37,7 @@ export function CalendarPage() {
   };
 
   const handleSync = () => {
-    showToast(t('calendarPage.toastSync', 'Sincronizando eventos con tu calendario iCal/Google...'), 'sync');
+    // sync action
   };
 
   const handleSelectEvent = (elementId) => {
@@ -68,15 +58,9 @@ export function CalendarPage() {
           
           <CalendarHeader
             activeCategory={activeCategory}
-            setActiveCategory={(cat) => {
-              setActiveCategory(cat);
-              showToast(t('calendarPage.toastFilter', 'Filtrando actividades'), 'filter_alt');
-            }}
+            setActiveCategory={setActiveCategory}
             activeView={activeView}
-            setActiveView={(view) => {
-              setActiveView(view);
-              showToast(`${t('calendarPage.toastViewChanged', 'Vista cambiada a modo: ')}${view.toUpperCase()}`, 'view_module');
-            }}
+            setActiveView={setActiveView}
             onSync={handleSync}
             currentDate={currentDate}
             onPrevMonth={handlePrevMonth}
@@ -90,18 +74,15 @@ export function CalendarPage() {
                 activeView={activeView}
                 activeCategory={activeCategory}
                 onSelectEvent={handleSelectEvent}
-                onAgendaQuickPeek={() => showToast(t('calendarPage.toastReminderScheduled', 'Recordatorio agendado'), 'event')}
               />
               <UpcomingEvents
                 activeCategory={activeCategory}
                 onOpenOrderModal={() => setShowOrderModal(true)}
-                showToast={showToast}
               />
             </section>
 
             <CalendarSidebar
               onOpenIAModal={() => setShowIAModal(true)}
-              showToast={showToast}
             />
           </div>
 
@@ -115,7 +96,6 @@ export function CalendarPage() {
         setShowOrderModal={setShowOrderModal}
         showIAModal={showIAModal}
         setShowIAModal={setShowIAModal}
-        toastState={toastState}
       />
     </div>
   );

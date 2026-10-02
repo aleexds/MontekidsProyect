@@ -4,7 +4,7 @@ import { useAuth } from '../context/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { getTeacherForUser } from '../utils/teacherHelper';
 
-export function CalendarSidebar({ onOpenIAModal, showToast }) {
+export function CalendarSidebar({ onOpenIAModal }) {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { activeUser } = useAuth();
@@ -19,13 +19,7 @@ export function CalendarSidebar({ onOpenIAModal, showToast }) {
   ]);
 
   const toggleCheck = (id) => {
-    const updated = items.map(item => item.id === id ? { ...item, checked: !item.checked } : item);
-    setItems(updated);
-
-    const checkedCount = updated.filter(i => i.checked).length;
-    if (checkedCount === updated.length) {
-      showToast(t('calendarPage.toastAllMaterialsReady', '¡Todos los materiales de la semana listos!'), 'celebration');
-    }
+    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
   };
 
   const checkedCount = items.filter(i => i.checked).length;

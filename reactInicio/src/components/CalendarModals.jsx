@@ -5,8 +5,7 @@ export function CalendarModals({
   showOrderModal,
   setShowOrderModal,
   showIAModal,
-  setShowIAModal,
-  toastState
+  setShowIAModal
 }) {
   const { t } = useLanguage();
   const { activeUser } = useAuth();
@@ -187,19 +186,6 @@ export function CalendarModals({
         </div>
       )}
 
-      {/* Toast Feedback */}
-      <div
-        className={`fixed bottom-6 right-6 z-50 transition-all duration-300 pointer-events-none bg-inverse-surface text-inverse-on-surface px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 font-label-md text-label-md font-sans ${
-          toastState.visible
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-20 opacity-0'
-        }`}
-      >
-        <span className="material-symbols-outlined text-primary-container text-[20px]">
-          {toastState.icon || 'check_circle'}
-        </span>
-        <span>{toastState.message}</span>
-      </div>
     </>
   );
 }
