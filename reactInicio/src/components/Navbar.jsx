@@ -95,15 +95,6 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* Botón Asistente IA */}
-            <button 
-              onClick={() => setIsAiOpen(true)}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-bold text-xs hover:brightness-105 active:scale-95 transition-all shadow-sm cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">smart_toy</span>
-              <span>{t('nav.aiAssistant', 'Asistente IA')}</span>
-            </button>
-
             {/* Botón Iniciar Sesión */}
             <Link 
               to="/LOGIN" 
@@ -116,6 +107,26 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* BOTÓN FLOTANTE ASISTENTE IA (Fijo en esquina inferior derecha) */}
+      <button
+        onClick={() => setIsAiOpen(true)}
+        type="button"
+        aria-label={t('nav.aiAssistant', 'Asistente IA')}
+        title={t('nav.aiAssistant', 'Asistente IA')}
+        className="fixed bottom-6 right-6 z-40 group flex items-center gap-2.5 px-4 py-3 bg-primary-container text-slate-900 rounded-full shadow-[0_8px_25px_rgba(0,219,235,0.45)] dark:shadow-[0_8px_25px_rgba(0,0,0,0.6)] hover:shadow-2xl hover:scale-105 hover:brightness-95 active:scale-95 transition-all duration-300 border border-white/40 dark:border-cyan-300/30 cursor-pointer"
+      >
+        <span className="material-symbols-outlined text-[22px] text-slate-900 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300">
+          smart_toy
+        </span>
+        <span className="text-xs font-black tracking-wide pr-0.5 text-slate-900">
+          {t('nav.aiAssistant', 'Asistente IA')}
+        </span>
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-600 opacity-80"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-700"></span>
+        </span>
+      </button>
 
       {/* ASISTENTE IA — componente con soporte de idiomas */}
       <AiDrawer isOpen={isAiOpen} onClose={() => setIsAiOpen(false)} />

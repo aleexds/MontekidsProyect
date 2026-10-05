@@ -6,6 +6,13 @@ import ForgotPasswordView from '../pages/ForgotPasswordView';
 import { ParentDashboard } from '../pages/ParentDashboard';
 import { ReportsPage } from '../pages/ReportsPage';
 import { CalendarPage } from '../pages/CalendarPage';
+import { MundoJuegosPage } from '../pages/MundoJuegosPage';
+import { TrencitoSonoroPge } from '../pages/TrencitoSonoroPge';
+import { MonstruoGlotonPage } from '../pages/MonstruoGlotonPage';
+import { GranjaPatitosPage } from '../pages/GranjaPatitosPage';
+import { SecuenciaMaestraPage } from '../pages/SecuenciaMaestraPage';
+import { SopaEstelarPage } from '../pages/SopaEstelarPage';
+import { MercadoNumericoPage } from '../pages/MercadoNumericoPage';
 
 export default function Routing() { 
   return (
@@ -20,6 +27,13 @@ export default function Routing() {
           <Route path="/mi-hijo-a" element={<ParentDashboard />} />
           <Route path="/mis-comentarios-reportes" element={<ReportsPage />} />
           <Route path="/calendario-de-actividades" element={<CalendarPage />} />
+          <Route path="/juegos" element={<MundoJuegosPage />} />
+          <Route path="/juegos/trencito-sonoro" element={<TrencitoSonoroPge />} />
+          <Route path="/juegos/monstruo-gloton" element={<MonstruoGlotonPage />} />
+          <Route path="/juegos/granja-patitos" element={<GranjaPatitosPage />} />
+          <Route path="/juegos/secuencia-maestra" element={<SecuenciaMaestraPage />} />
+          <Route path="/juegos/sopa-estelar" element={<SopaEstelarPage />} />
+          <Route path="/juegos/mercado-numerico" element={<MercadoNumericoPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
