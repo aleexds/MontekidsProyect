@@ -164,7 +164,7 @@ const COLOR_CONFIG = {
     text: 'text-red-600 dark:text-red-400',
     badge: 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300',
     hex: '#ef4444',
-    emoji: '🍓',
+    emoji: '♥',
   },
   azul: {
     nombre: 'Azul',
@@ -174,7 +174,7 @@ const COLOR_CONFIG = {
     text: 'text-blue-600 dark:text-blue-400',
     badge: 'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300',
     hex: '#3b82f6',
-    emoji: '🌊',
+    emoji: '≈',
   },
   amarillo: {
     nombre: 'Amarillo',
@@ -184,7 +184,7 @@ const COLOR_CONFIG = {
     text: 'text-amber-600 dark:text-amber-300',
     badge: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300',
     hex: '#f59e0b',
-    emoji: '☀️',
+    emoji: '◉',
   },
   verde: {
     nombre: 'Verde',
@@ -194,7 +194,7 @@ const COLOR_CONFIG = {
     text: 'text-emerald-600 dark:text-emerald-400',
     badge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300',
     hex: '#10b981',
-    emoji: '🍏',
+    emoji: '◎',
   },
 };
 
@@ -203,19 +203,19 @@ const SHAPE_CONFIG = {
     nombre: 'Círculo',
     plural: 'CÍRCULOS',
     articulo: 'CÍRCULOS redonditos',
-    emoji: '⚪',
+    emoji: '○',
   },
   cuadrado: {
     nombre: 'Cuadrado',
     plural: 'CUADRADOS',
     articulo: 'CUADRADOS de cuatro lados',
-    emoji: '🔲',
+    emoji: '□',
   },
   triangulo: {
     nombre: 'Triángulo',
     plural: 'TRIÁNGULOS',
     articulo: 'TRIÁNGULOS de tres puntas',
-    emoji: '🔺',
+    emoji: '△',
   },
   estrella: {
     nombre: 'Estrella',
@@ -238,8 +238,8 @@ const GAME_ROUNDS = [
     colorReq: 'rojo',
     formaReq: null,
     tituloPeticion: '¡Quiero comida de color ROJO!',
-    descVoz: '¡Hola! Soy el Monstruo Glotón. ¡Tengo mucha hambre de figuras rojas! Dame figuras de color rojo.',
-    pistas: 'Busca todo lo que sea rojo como una fresa 🍓',
+    descVoz: 'Soy el Monstruo Glotón. ¡Tengo mucha hambre de figuras rojas! Dame figuras de color rojo.',
+    pistas: 'Busca todo lo que sea rojo como una fresa ♥',
     targetCount: 3,
     items: [
       { id: 'item-1-1', forma: 'circulo', color: 'rojo' },
@@ -259,7 +259,7 @@ const GAME_ROUNDS = [
     formaReq: null,
     tituloPeticion: '¡Ahora se me antoja el color AZUL!',
     descVoz: '¡Mmm, qué rico! Ahora mi pancita quiere solo figuras de color azul.',
-    pistas: 'Busca las figuras azules como el mar 🌊',
+    pistas: 'Busca las figuras azules como el mar ≈',
     targetCount: 3,
     items: [
       { id: 'item-2-1', forma: 'estrella', color: 'azul' },
@@ -281,7 +281,7 @@ const GAME_ROUNDS = [
     formaReq: 'circulo',
     tituloPeticion: '¡Hoy mi estómago solo quiere CÍRCULOS!',
     descVoz: '¡Delicioso! Ahora tengo antojo de círculos bien redonditos de cualquier color.',
-    pistas: 'Busca cualquier círculo, sin esquinas ni puntitas ⚪',
+    pistas: 'Busca cualquier círculo, sin esquinas ni puntitas ○',
     targetCount: 3,
     items: [
       { id: 'item-3-1', forma: 'circulo', color: 'amarillo' },
@@ -301,7 +301,7 @@ const GAME_ROUNDS = [
     formaReq: 'triangulo',
     tituloPeticion: '¡Quiero TRIÁNGULOS con tres piquitos!',
     descVoz: '¡Genial! Ahora quiero comer triángulos crujientes de tres puntas.',
-    pistas: 'Busca las figuras que tienen tres piquitos 🔺',
+    pistas: 'Busca las figuras que tienen tres piquitos △',
     targetCount: 3,
     items: [
       { id: 'item-4-1', forma: 'triangulo', color: 'verde' },
@@ -323,7 +323,7 @@ const GAME_ROUNDS = [
     formaReq: 'cuadrado',
     tituloPeticion: '¡Quiero CUADRADOS AMARILLOS!',
     descVoz: '¡Atención, este es un gran reto! Solo quiero comer CUADRADOS que sean de color AMARILLO.',
-    pistas: 'Debe ser cuadrado Y también amarillo como queso 🧀',
+    pistas: 'Debe ser cuadrado Y también amarillo como queso ◈',
     targetCount: 2,
     items: [
       { id: 'item-5-1', forma: 'cuadrado', color: 'amarillo' }, // Correcto
@@ -343,7 +343,7 @@ const GAME_ROUNDS = [
     formaReq: 'circulo',
     tituloPeticion: '¡Último bocado: CÍRCULOS VERDES!',
     descVoz: '¡Para el postre final quiero CÍRCULOS VERDES como ricas manzanitas!',
-    pistas: 'Debe ser redondito Y de color verde como manzana 🍏',
+    pistas: 'Debe ser redondito Y de color verde como manzana ◎',
     targetCount: 2,
     items: [
       { id: 'item-6-1', forma: 'circulo', color: 'verde' },   // Correcto
@@ -892,7 +892,7 @@ export function MonstruoGlotonPage() {
           <div className="relative w-40 h-40 mx-auto mb-6 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-secondary-container/40 animate-ping" />
             <div className="relative w-36 h-36 rounded-full bg-gradient-to-br from-secondary-container to-amber-500 flex items-center justify-center shadow-2xl text-7xl">
-              👾
+              ¤
             </div>
           </div>
 
@@ -960,7 +960,7 @@ export function MonstruoGlotonPage() {
             </span>
           ))}
           <div className="bg-white dark:bg-zinc-900 px-8 py-5 rounded-3xl shadow-2xl border-4 border-secondary-container text-center animate-pop-bounce">
-            <h2 className="text-3xl font-black text-on-surface">¡Ñam Ñam! 🎉</h2>
+            <h2 className="text-3xl font-black text-on-surface">¡Ñam Ñam! ★</h2>
             <p className="text-sm font-bold text-on-surface-variant mt-1">
               ¡Pancita llena! Pasando al siguiente reto...
             </p>
@@ -982,7 +982,7 @@ export function MonstruoGlotonPage() {
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md text-3xl">
-                👾
+                ¤
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">
@@ -1141,7 +1141,7 @@ export function MonstruoGlotonPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
               <div>
                 <h3 className="text-lg font-black text-on-surface flex items-center gap-2">
-                  <span>🍽️ Bandeja de Figuras</span>
+                  <span>╬ Bandeja de Figuras</span>
                 </h3>
                 <p className="text-xs font-bold text-on-surface-variant">
                   Arrastra la figura correcta hacia la boca del monstruo, o tócala y presiona "Dar a Glotón".
@@ -1169,7 +1169,7 @@ export function MonstruoGlotonPage() {
                       key={item.id}
                       className="h-32 rounded-2xl border-2 border-dashed border-slate-200 dark:border-zinc-700 flex flex-col items-center justify-center opacity-30 select-none"
                     >
-                      <span className="text-2xl">✨</span>
+                      <span className="text-2xl">✦</span>
                       <span className="text-[10px] font-bold text-slate-400 mt-1">¡Comido!</span>
                     </div>
                   );

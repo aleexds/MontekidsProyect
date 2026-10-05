@@ -186,7 +186,7 @@ function Locomotive({ isMoving, onWhistle }) {
       onClick={onWhistle}
       role="button"
       tabIndex={0}
-      title="¡Toca la locomotora para hacer sonar el silbato! 🚂"
+      title="¡Toca la locomotora para hacer sonar el silbato! ■"
       className="relative flex flex-col items-center shrink-0 w-44 sm:w-52 select-none cursor-pointer group"
     >
       {/* Chimenea con humo animado — ubicada sobre la caldera a la izquierda */}
@@ -234,7 +234,7 @@ function Locomotive({ isMoving, onWhistle }) {
               <div className="absolute -top-4 -left-4 w-8 h-20 bg-white/40 -rotate-45 transform pointer-events-none" />
               {/* Maquinista sonriente */}
               <span className="text-2xl animate-bounce" role="img" aria-label="Maquinista">
-                🐻
+                ♠
               </span>
             </div>
             {/* Placa decorativa */}
@@ -268,7 +268,7 @@ function Locomotive({ isMoving, onWhistle }) {
 
       {/* Indicador interactivo */}
       <span className="mt-1 text-[10px] font-extrabold text-primary dark:text-primary-container bg-primary/10 px-2 py-0.5 rounded-full opacity-70 group-hover:opacity-100 transition-opacity">
-        🔔 Toca para pitar
+        ♪ Toca para pitar
       </span>
     </div>
   );
@@ -649,7 +649,7 @@ export function TrencitoSonoroPge() {
           <div className="relative w-36 h-36 mx-auto mb-6 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-secondary-container/40 animate-ping" />
             <div className="relative w-32 h-32 rounded-full bg-secondary-container flex items-center justify-center shadow-2xl text-6xl">
-              🚂
+              ■
             </div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-on-surface mb-3">
@@ -717,7 +717,7 @@ export function TrencitoSonoroPge() {
             </span>
           ))}
           <div className="bg-white dark:bg-zinc-900 px-8 py-5 rounded-3xl shadow-2xl border-4 border-secondary-container text-center animate-pop-bounce">
-            <h2 className="text-3xl font-black text-on-surface">¡Chu Chu! 🎉</h2>
+            <h2 className="text-3xl font-black text-on-surface">¡Chu Chu! ★</h2>
             <p className="text-sm font-bold text-on-surface-variant mt-1">¡Tren completo! Viajando a la siguiente estación...</p>
           </div>
         </div>
@@ -737,7 +737,7 @@ export function TrencitoSonoroPge() {
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-container to-secondary-container flex items-center justify-center shadow-md text-3xl">
-                🚂
+                ■
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">
@@ -822,9 +822,9 @@ export function TrencitoSonoroPge() {
             <div className="relative w-full rounded-3xl bg-gradient-to-b from-sky-50 via-sky-100/60 to-surface-container-low dark:from-sky-950/20 dark:via-surface-container dark:to-surface-container-lowest border-2 border-surface-container-high shadow-lg pt-6 pb-2 px-2 sm:px-6 overflow-hidden">
 
               {/* Decoración de fondo: cielo y nubes */}
-              <div className="absolute top-2 left-6 text-2xl opacity-40 select-none pointer-events-none">☁️</div>
-              <div className="absolute top-4 right-12 text-3xl opacity-30 select-none pointer-events-none">☁️</div>
-              <div className="absolute top-1 left-1/3 text-lg opacity-30 select-none pointer-events-none">🕊️</div>
+              <div className="absolute top-2 left-6 text-2xl opacity-40 select-none pointer-events-none">∞</div>
+              <div className="absolute top-4 right-12 text-3xl opacity-30 select-none pointer-events-none">∞</div>
+              <div className="absolute top-1 left-1/3 text-lg opacity-30 select-none pointer-events-none">~</div>
 
               {/* Título de la sección del tren */}
               <div className="flex items-center justify-between mb-3 px-2">
