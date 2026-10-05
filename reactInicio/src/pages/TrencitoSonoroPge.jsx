@@ -521,6 +521,7 @@ export function TrencitoSonoroPge() {
 
   const { awardStars } = useAwardStars();
   const trainTrackRef = useRef(null);
+  const awardedRef   = useRef(false); // guard: evita doble llamada a awardStars
   const round = ROUNDS[roundIndex];
 
   // Entrada animada del tren al cambiar de ronda o al montar
@@ -573,7 +574,11 @@ export function TrencitoSonoroPge() {
             setHoverTarget(null);
             setDragging(null);
           } else {
-            awardStars('trencito-sonoro', 'El Trencito Sonoro', 10);
+            // Guard: solo llamar una vez aunque StrictMode re-ejecute el updater
+            if (!awardedRef.current) {
+              awardedRef.current = true;
+              awardStars('trencito-sonoro', 'El Trencito Sonoro', 10, '🚂');
+            }
             setCompleted(true);
           }
         }, 3200);

@@ -34,8 +34,7 @@ export function ReportComposer({ onAddThread, initialData }) {
       time: t('reportsPage.sentJustNow'),
       title,
       sender: activeUser?.name || 'Tutor Montekids',
-      senderAvatar:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120',
+      senderAvatar: activeUser?.avatar || activeUser?.avatarUrl || '',
       message,
       attachment: file ? file.name : null,
       attachmentSize: file ? `${(file.size / 1024).toFixed(0)} KB` : null,

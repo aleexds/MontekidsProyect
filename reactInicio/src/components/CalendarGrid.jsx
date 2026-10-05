@@ -1,5 +1,8 @@
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/useAuth';
+
+const API = 'http://localhost:3000';
 
 export function CalendarGrid({
   activeView = 'mes',
@@ -8,6 +11,23 @@ export function CalendarGrid({
   currentDate = new Date()
 }) {
   const { t } = useLanguage();
+  const { activeUser } = useAuth();
+  const [apiEvents, setApiEvents] = useState([]);
+
+  const userClassroom = activeUser?.role === 'teacher' 
+    ? activeUser?.classroom 
+    : (activeUser?.child?.classroom || null);
+
+  useEffect(() => {
+    fetch(`${API}/curriculumEvents`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setApiEvents(data);
+        }
+      })
+      .catch(e => console.error(e));
+  }, []);
 
   const defaultMonths = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -19,68 +39,105 @@ export function CalendarGrid({
   const translatedDays = t('calendarPage.daysOfWeek');
   const daysOfWeek = Array.isArray(translatedDays) ? translatedDays : ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-  const allEvents = useMemo(() => [
-    {
-      id: 'evt-1',
-      title: t('calendarPage.events.evt1Title', 'Taller Fonemático y Estimulación'),
-      date: new Date(2026, 9, 9), // Octubre 9, 2026
-      dateText: `09 ${monthNames[9]} 2026`,
-      time: '09:00 AM - 10:30 AM',
-      category: 'workshops',
-      categoryLabel: t('calendarPage.events.evt1Cat', 'Estimulación AMI'),
-      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
-      dotColor: 'bg-emerald-500',
-      description: t('calendarPage.events.evt1Desc', 'Sesión práctica de desarrollo de lenguaje y habilidades fonológicas.')
-    },
-    {
-      id: 'evt-2',
-      title: t('calendarPage.events.evt2Title', 'Circuito Sensorial de Primavera'),
-      date: new Date(2026, 9, 17), // Octubre 17, 2026
-      dateText: `17 ${monthNames[9]} 2026`,
-      time: '10:00 AM - 12:00 PM',
-      category: 'special',
-      categoryLabel: t('calendarPage.events.evt2Cat', 'Lúdico / Huerta'),
-      badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
-      dotColor: 'bg-amber-500',
-      description: t('calendarPage.events.evt2Desc', 'Actividades al aire libre para exploración táctil y motricidad gruesa.')
-    },
-    {
-      id: 'evt-3',
-      title: t('calendarPage.events.evt3Title', 'Taller Fonemático Avanzado'),
-      date: new Date(2026, 9, 23), // Octubre 23, 2026
-      dateText: `23 ${monthNames[9]} 2026`,
-      time: '09:00 AM - 10:30 AM',
-      category: 'workshops',
-      categoryLabel: t('calendarPage.events.evt3Cat', 'Estimulación AMI'),
-      badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
-      dotColor: 'bg-emerald-500',
-      description: t('calendarPage.events.evt3Desc', 'Continuación del taller de fonemas enfocado en articulación y vocabulario.')
-    },
-    {
-      id: 'evt-4',
-      title: t('calendarPage.events.evt4Title', 'Reunión Trimestral de Familias'),
-      date: new Date(2026, 9, 27), // Octubre 27, 2026
-      dateText: `27 ${monthNames[9]} 2026`,
-      time: '04:00 PM - 05:30 PM',
-      category: 'meetings',
-      categoryLabel: t('calendarPage.events.evt4Cat', 'Reunión Familias'),
-      badgeColor: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 dark:bg-fuchsia-950/40 dark:text-fuchsia-300',
-      dotColor: 'bg-fuchsia-500',
-      description: t('calendarPage.events.evt4Desc', 'Presentación de informes de avance académico y emocional del periodo.')
-    },
-    {
-      id: 'evt-5',
-      title: t('calendarPage.events.evt5Title', 'Día del Sombrero Loco'),
-      date: new Date(2026, 9, 31), // Octubre 31, 2026
-      dateText: `31 ${monthNames[9]} 2026`,
-      time: t('calendarPage.events.evt5Time', 'Durante la jornada'),
-      category: 'special',
-      categoryLabel: t('calendarPage.events.evt5Cat', 'Lúdico / Huerta'),
-      badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
-      dotColor: 'bg-amber-500',
-      description: t('calendarPage.events.evt5Desc', 'Celebración temática interactiva. Recuerda traer el material reciclado.')
+  const allEvents = useMemo(() => {
+    const categoryColors = {
+      workshops: { badge: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300', dot: 'bg-emerald-500' },
+      special: { badge: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300', dot: 'bg-amber-500' },
+      meetings: { badge: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 dark:bg-fuchsia-950/40 dark:text-fuchsia-300', dot: 'bg-fuchsia-500' },
+      academic: { badge: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300', dot: 'bg-blue-500' }
+    };
+
+    if (Array.isArray(apiEvents) && apiEvents.length > 0) {
+      const filteredEvents = userClassroom
+        ? apiEvents.filter(evt => !evt.classroom || evt.classroom === userClassroom)
+        : apiEvents;
+
+      return filteredEvents.map(evt => {
+        const parts = evt.date ? evt.date.split('-') : [];
+        let evtDate = new Date();
+        if (parts.length === 3) {
+          evtDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        }
+        const colors = categoryColors[evt.category] || categoryColors.academic;
+
+        return {
+          id: evt.id,
+          title: evt.title,
+          date: evtDate,
+          dateText: evt.date && parts.length === 3 ? `${parts[2]} ${monthNames[parseInt(parts[1], 10) - 1] || ''} ${parts[0]}` : '',
+          time: evt.time || 'Durante la jornada',
+          category: evt.category || 'academic',
+          categoryLabel: evt.categoryLabel || 'Actividad',
+          badgeColor: colors.badge,
+          dotColor: colors.dot,
+          description: evt.description || ''
+        };
+      });
     }
-  ], [t, monthNames]);
+
+    return [
+      {
+        id: 'evt-1',
+        title: t('calendarPage.events.evt1Title', 'Taller Fonemático y Estimulación'),
+        date: new Date(2026, 9, 9),
+        dateText: `09 ${monthNames[9]} 2026`,
+        time: '09:00 AM - 10:30 AM',
+        category: 'workshops',
+        categoryLabel: t('calendarPage.events.evt1Cat', 'Estimulación AMI'),
+        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
+        dotColor: 'bg-emerald-500',
+        description: t('calendarPage.events.evt1Desc', 'Sesión práctica de desarrollo de lenguaje y habilidades fonológicas.')
+      },
+      {
+        id: 'evt-2',
+        title: t('calendarPage.events.evt2Title', 'Circuito Sensorial de Primavera'),
+        date: new Date(2026, 9, 17),
+        dateText: `17 ${monthNames[9]} 2026`,
+        time: '10:00 AM - 12:00 PM',
+        category: 'special',
+        categoryLabel: t('calendarPage.events.evt2Cat', 'Lúdico / Huerta'),
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
+        dotColor: 'bg-amber-500',
+        description: t('calendarPage.events.evt2Desc', 'Actividades al aire libre para exploración táctil y motricidad gruesa.')
+      },
+      {
+        id: 'evt-3',
+        title: t('calendarPage.events.evt3Title', 'Taller Fonemático Avanzado'),
+        date: new Date(2026, 9, 23),
+        dateText: `23 ${monthNames[9]} 2026`,
+        time: '09:00 AM - 10:30 AM',
+        category: 'workshops',
+        categoryLabel: t('calendarPage.events.evt3Cat', 'Estimulación AMI'),
+        badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300',
+        dotColor: 'bg-emerald-500',
+        description: t('calendarPage.events.evt3Desc', 'Continuación del taller de fonemas enfocado en articulación y vocabulario.')
+      },
+      {
+        id: 'evt-4',
+        title: t('calendarPage.events.evt4Title', 'Reunión Trimestral de Familias'),
+        date: new Date(2026, 9, 27),
+        dateText: `27 ${monthNames[9]} 2026`,
+        time: '04:00 PM - 05:30 PM',
+        category: 'meetings',
+        categoryLabel: t('calendarPage.events.evt4Cat', 'Reunión Familias'),
+        badgeColor: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200 dark:bg-fuchsia-950/40 dark:text-fuchsia-300',
+        dotColor: 'bg-fuchsia-500',
+        description: t('calendarPage.events.evt4Desc', 'Presentación de informes de avance académico y emocional del periodo.')
+      },
+      {
+        id: 'evt-5',
+        title: t('calendarPage.events.evt5Title', 'Día del Sombrero Loco'),
+        date: new Date(2026, 9, 31),
+        dateText: `31 ${monthNames[9]} 2026`,
+        time: t('calendarPage.events.evt5Time', 'Durante la jornada'),
+        category: 'special',
+        categoryLabel: t('calendarPage.events.evt5Cat', 'Lúdico / Huerta'),
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300',
+        dotColor: 'bg-amber-500',
+        description: t('calendarPage.events.evt5Desc', 'Celebración temática interactiva. Recuerda traer el material reciclado.')
+      }
+    ];
+  }, [apiEvents, t, monthNames]);
 
   const filteredEvents = useMemo(() => {
     return allEvents.filter((evt) => {

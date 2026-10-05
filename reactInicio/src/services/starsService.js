@@ -3,14 +3,15 @@ const API = 'http://localhost:3000';
 /**
  * Suma estrellas al usuario en db.json y registra la partida en gameHistory.
  *
- * @param {string} userId   - ID del usuario autenticado
- * @param {number} currentStars - Estrellas actuales del usuario (para calcular el nuevo total)
- * @param {string} gameId   - Identificador del juego (ej: "granja-patitos")
- * @param {string} gameName - Nombre legible del juego (ej: "La Granja de Patitos")
- * @param {number} amount   - Cantidad de estrellas a sumar
+ * @param {string} userId       - ID del usuario autenticado
+ * @param {number} currentStars - Estrellas actuales del usuario
+ * @param {string} gameId       - Identificador del juego (ej: "granja-patitos")
+ * @param {string} gameName     - Nombre legible del juego (ej: "La Granja de Patitos")
+ * @param {number} amount       - Cantidad de estrellas a sumar
+ * @param {string} [gameIcon]   - Emoji/ícono del juego (ej: "🐥") — opcional
  * @returns {Promise<{newTotal: number}>}
  */
-export async function addStarsToUser(userId, currentStars, gameId, gameName, amount) {
+export async function addStarsToUser(userId, currentStars, gameId, gameName, amount, gameIcon = '') {
   const newTotal = (currentStars ?? 0) + amount;
 
   // 1. PATCH al usuario para actualizar el total de estrellas
@@ -28,6 +29,7 @@ export async function addStarsToUser(userId, currentStars, gameId, gameName, amo
       userId,
       gameId,
       gameName,
+      gameIcon,
       starsEarned: amount,
       totalAfter: newTotal,
       playedAt: new Date().toISOString(),

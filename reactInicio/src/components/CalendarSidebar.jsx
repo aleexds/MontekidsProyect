@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import { useLanguage } from '../context/LanguageContext';
@@ -11,19 +11,47 @@ export function CalendarSidebar({ onOpenIAModal }) {
   const teacher = getTeacherForUser(activeUser);
   const classroom = activeUser?.child?.classroom || 'Aula Semillitas';
 
-  const [items, setItems] = useState([
-    { id: 1, textKey: 'item1Text', subKey: 'item1Sub', defaultText: 'Muda de ropa adicional para estimulación con agua y tierra', defaultSub: 'Entregado en casillero #14', checked: true, icon: 'done_all' },
-    { id: 2, textKey: 'item2Text', subKey: 'item2Sub', defaultText: 'Materiales reciclados para el Sombrero Loco', defaultSub: 'Pendiente para el Mar 31 Oct', checked: false, icon: 'alarm', isPending: true },
-    { id: 3, textKey: 'item3Text', subKey: 'item3Sub', defaultText: '1 fruta picada para la merienda compartida', defaultSub: 'Uvas sin semillas asignadas', checked: true, icon: 'eco' },
-    { id: 4, textKey: 'item4Text', subKey: 'item4Sub', defaultText: 'Botella de agua identificada con nombre térmico', defaultSub: 'Revisar antes del lunes', checked: false, isPending: true }
-  ]);
+  const API = 'http://localhost:3000';
+
+  const defaultItems = [
+    { id: 'act1', text: 'Muda de ropa adicional para estimulación con agua y tierra', subtitle: 'Entregado en casillero #14', checked: true, icon: 'done_all' },
+    { id: 'act2', text: 'Materiales reciclados para el Sombrero Loco', subtitle: 'Pendiente para el Mar 31 Oct', checked: false, icon: 'alarm', isPending: true },
+    { id: 'act3', text: '1 fruta picada para la merienda compartida', subtitle: 'Uvas sin semillas asignadas', checked: true, icon: 'eco' },
+    { id: 'act4', text: 'Botella de agua identificada con nombre térmico', subtitle: 'Revisar antes del lunes', checked: false, icon: 'alarm', isPending: true }
+  ];
+
+  const [items, setItems] = useState(defaultItems);
+
+  useEffect(() => {
+    fetch(`${API}/assignedActivities`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const userActivities = data.filter(a => !activeUser?.id || a.studentId === activeUser.id || activeUser.role === 'teacher');
+          if (userActivities.length > 0) {
+            setItems(userActivities);
+          }
+        }
+      })
+      .catch(e => console.error(e));
+  }, [activeUser]);
 
   const toggleCheck = (id) => {
-    setItems(items.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
+    const updated = items.map(item => item.id === id ? { ...item, checked: !item.checked } : item);
+    setItems(updated);
+
+    const targetItem = updated.find(i => i.id === id);
+    if (targetItem) {
+      fetch(`${API}/assignedActivities/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ checked: targetItem.checked })
+      }).catch(e => console.error(e));
+    }
   };
 
   const checkedCount = items.filter(i => i.checked).length;
-  const progressPercent = Math.round((checkedCount / items.length) * 100);
+  const progressPercent = items.length > 0 ? Math.round((checkedCount / items.length) * 100) : 0;
 
   return (
     <aside className="lg:col-span-4 flex flex-col gap-6 font-sans">
@@ -65,23 +93,20 @@ export function CalendarSidebar({ onOpenIAModal }) {
                 type="checkbox"
                 checked={item.checked}
                 onChange={() => toggleCheck(item.id)}
-                className={`mt-0.5 w-5 h-5 rounded-lg cursor-pointer ${
-                  item.isPending ? 'accent-secondary' : 'accent-primary'
-                }`}
+                className={`mt-0.5 w-5 h-5 rounded-lg cursor-pointer ${item.isPending ? 'accent-secondary' : 'accent-primary'
+                  }`}
               />
               <div className="flex-1">
-                <span className={`font-label-md text-label-md ${
-                  item.checked 
-                    ? 'line-through text-on-surface-variant group-hover:text-on-surface' 
+                <span className={`font-label-md text-label-md ${item.checked
+                    ? 'line-through text-on-surface-variant group-hover:text-on-surface'
                     : 'text-on-surface group-hover:text-secondary font-bold'
-                }`}>
-                  {t(`calendarPage.${item.textKey}`, item.defaultText)}
+                  }`}>
+                  {item.text || (item.textKey ? t(`calendarPage.${item.textKey}`, item.defaultText) : '')}
                 </span>
-                <div className={`flex items-center gap-1 text-[11px] font-label-sm mt-0.5 ${
-                  item.checked ? 'text-primary font-bold' : item.isPending ? 'text-secondary font-semibold' : 'text-on-surface-variant font-medium'
-                }`}>
+                <div className={`flex items-center gap-1 text-[11px] font-label-sm mt-0.5 ${item.checked ? 'text-primary font-bold' : item.isPending ? 'text-secondary font-semibold' : 'text-on-surface-variant font-medium'
+                  }`}>
                   {item.icon && <span className="material-symbols-outlined text-[14px]">{item.icon}</span>}
-                  <span>{t(`calendarPage.${item.subKey}`, item.defaultSub)}</span>
+                  <span>{item.subtitle || (item.subKey ? t(`calendarPage.${item.subKey}`, item.defaultSub) : '')}</span>
                 </div>
               </div>
             </label>

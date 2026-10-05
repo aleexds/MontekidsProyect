@@ -15,7 +15,7 @@ const DEFAULT_AVATARS = [
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150'
 ];
 
-export function ParentHeader({ customNavItems }) {
+export function ParentHeader({ customNavItems, hideLanguage = false }) {
   const { t } = useLanguage();
   const { activeUser, setActiveUser, logout } = useAuth();
   const location = useLocation();
@@ -232,6 +232,7 @@ export function ParentHeader({ customNavItems }) {
     { path: '/calendario-de-actividades', label: t('parentDashboard.nav.calendar', 'Calendario de Actividades') }
   ];
 
+  const isAdminView = location.pathname.startsWith('/admin') || location.pathname.startsWith('/owner') || location.pathname.startsWith('/dueno');
   const isGameView = Boolean(customNavItems) || location.pathname.startsWith('/juegos');
   const navItems = customNavItems || defaultNavItems;
 
@@ -247,7 +248,15 @@ export function ParentHeader({ customNavItems }) {
 
           <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-surface-container-high/40 rounded-full border border-surface-container-high">
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path || (item.path === '/mi-hijo-a' && (location.pathname === '/' || location.pathname === '/parent-dashboard'));
+              const currentFullPath = location.pathname + location.hash;
+              const isActive =
+                location.pathname === item.path ||
+                currentFullPath === item.path ||
+                (item.path === '/admin#dashboard' && location.pathname === '/admin' && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                (item.path === '/admin' && location.pathname === '/admin' && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                (item.path === '/owner-dashboard#dashboard' && (location.pathname === '/owner-dashboard' || location.pathname === '/owner' || location.pathname === '/dueno-dashboard') && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                (item.path === '/mi-hijo-a' && (location.pathname === '/' || location.pathname === '/parent-dashboard'));
+
               return (
                 <NavLink
                   key={item.path}
@@ -264,24 +273,26 @@ export function ParentHeader({ customNavItems }) {
             })}
 
             {/* Botón contextual en la barra de navegación */}
-            {isGameView ? (
-              <NavLink
-                to="/mi-hijo-a"
-                className="ml-1 px-3.5 py-2 rounded-full text-xs font-bold text-primary dark:text-primary-container hover:bg-surface-container-highest flex items-center gap-1.5 transition-all"
-                title={t('parentDashboard.nav.backToDashboard', 'Volver al Panel de Padres')}
-              >
-                <span className="material-symbols-outlined text-[16px]">dashboard</span>
-                <span>{t('parentDashboard.nav.backToDashboard', 'Panel de Padres')}</span>
-              </NavLink>
-            ) : (
-              <NavLink
-                to="/juegos"
-                className="ml-1 px-3.5 py-2 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 flex items-center gap-1.5 transition-all"
-                title={t('parentDashboard.nav.goToGames', 'Ir a Juegos')}
-              >
-                <span className="material-symbols-outlined text-[16px]">sports_esports</span>
-                <span>{t('parentDashboard.nav.games', 'Juegos')}</span>
-              </NavLink>
+            {!isAdminView && (
+              isGameView ? (
+                <NavLink
+                  to="/mi-hijo-a"
+                  className="ml-1 px-3.5 py-2 rounded-full text-xs font-bold text-primary dark:text-primary-container hover:bg-surface-container-highest flex items-center gap-1.5 transition-all"
+                  title={t('parentDashboard.nav.backToDashboard', 'Volver al Panel de Padres')}
+                >
+                  <span className="material-symbols-outlined text-[16px]">dashboard</span>
+                  <span>{t('parentDashboard.nav.backToDashboard', 'Panel de Padres')}</span>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/juegos"
+                  className="ml-1 px-3.5 py-2 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 flex items-center gap-1.5 transition-all"
+                  title={t('parentDashboard.nav.goToGames', 'Ir a Juegos')}
+                >
+                  <span className="material-symbols-outlined text-[16px]">sports_esports</span>
+                  <span>{t('parentDashboard.nav.games', 'Juegos')}</span>
+                </NavLink>
+              )
             )}
           </nav>
 
@@ -297,7 +308,7 @@ export function ParentHeader({ customNavItems }) {
             </button>
 
             <ColorblindToggle />
-            <LanguageToggle />
+            {!hideLanguage && <LanguageToggle />}
 
             <button
               onClick={() => setIsDark(!isDark)}

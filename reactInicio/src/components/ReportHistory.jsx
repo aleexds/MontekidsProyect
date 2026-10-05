@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/useAuth';
+import { UserAvatar } from './UserAvatar';
 
-export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
+export function ReportHistory({ activeFilter, threads, onDeleteThread, usersList = [] }) {
   const { t } = useLanguage();
+  const { activeUser } = useAuth();
   const [sortBy, setSortBy] = useState('recent');
 
   // 1. Filtrar por categoría
@@ -63,6 +66,14 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
         const statusIcon = isAnswered ? 'check_circle' : 'schedule';
         const statusStyle = 'bg-purple-100 text-purple-900';
 
+        // Resolver foto de perfil actualizada del emisor
+        const senderUser = usersList.find(u => String(u.id) === String(thread.userId) || u.name === thread.sender) || (String(activeUser?.id) === String(thread.userId) ? activeUser : null);
+        const displaySenderAvatar = senderUser?.avatar || senderUser?.avatarUrl || (String(activeUser?.id) === String(thread.userId) ? activeUser?.avatar : null) || thread.senderAvatar;
+
+        // Resolver foto de perfil del docente para la respuesta
+        const teacherUser = thread.reply ? (usersList.find(u => u.name === thread.reply.author) || (activeUser?.role === 'teacher' ? activeUser : null)) : null;
+        const displayTeacherAvatar = teacherUser?.avatar || teacherUser?.avatarUrl || thread.reply?.avatar;
+
         return (
           <article key={thread.id} className="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_4px_16px_-2px_rgba(30,18,74,0.05)] hover:shadow-[0_12px_32px_-4px_rgba(0,219,235,0.20)] transition-all">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-container-low">
@@ -107,10 +118,10 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
 
             <div className="mt-4 bg-surface-container-low/40 rounded-2xl p-4">
               <div className="flex items-center gap-2.5 mb-3">
-                <img 
-                  src={thread.senderAvatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120'} 
-                  alt={thread.sender || 'Usuario'} 
-                  className="w-7 h-7 rounded-full object-cover shrink-0 ring-2 ring-primary/20"
+                <UserAvatar 
+                  avatar={displaySenderAvatar} 
+                  name={thread.sender} 
+                  className="w-7 h-7 rounded-full ring-2 ring-primary/20 shrink-0 object-cover" 
                 />
                 <span className="text-xs font-bold text-on-surface">{thread.sender || 'Valeria Quirós'}</span>
               </div>
@@ -133,7 +144,11 @@ export function ReportHistory({ activeFilter, threads, onDeleteThread }) {
                 <div className="rounded-2xl p-5 bg-surface-container-high/60 shadow-sm relative">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <img src={thread.reply.avatar} alt={thread.reply.author} className="w-9 h-9 rounded-full object-cover shrink-0 shadow-sm" />
+                      <UserAvatar 
+                        avatar={displayTeacherAvatar} 
+                        name={thread.reply.author} 
+                        className="w-9 h-9 rounded-full shadow-sm shrink-0 object-cover" 
+                      />
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-bold text-on-surface">{thread.reply.author}</span>
