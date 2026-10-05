@@ -3,6 +3,23 @@ import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
 
 /* ─────────────────────────────────────────────
+   HELPER DE SÍNTESIS DE VOZ INFANTIL
+───────────────────────────────────────────── */
+function speak(text, rate = 0.88, pitch = 1.3) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'es-ES';
+    utt.rate = rate;
+    utt.pitch = pitch;
+    window.speechSynthesis.speak(utt);
+  } catch {
+    // Si no está disponible no interrumpir
+  }
+}
+
+/* ─────────────────────────────────────────────
    AUDIO
 ───────────────────────────────────────────── */
 function getCtx() {
@@ -23,15 +40,15 @@ function playTone(freq, dur = 0.15, type = 'sine') {
     osc.start(now); osc.stop(now + dur + 0.02);
   } catch { /* noop */ }
 }
-function playKey() { playTone(660, 0.08, 'sine'); }
+function playKey() { playTone(700, 0.08, 'sine'); }
 function playCorrect() {
-  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.28, 'sine'), i * 85));
+  [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => setTimeout(() => playTone(f, 0.28, 'sine'), i * 85));
 }
 function playWrong() {
   playTone(200, 0.3, 'sawtooth');
-  setTimeout(() => playTone(160, 0.25, 'sawtooth'), 140);
+  setTimeout(() => playTone(150, 0.25, 'sawtooth'), 140);
 }
-function playDelete() { playTone(380, 0.08, 'sawtooth'); }
+function playDelete() { playTone(400, 0.08, 'sawtooth'); }
 
 /* ─────────────────────────────────────────────
    CLIENTES / RONDAS
@@ -84,7 +101,7 @@ const CLIENTS = [
   {
     id: 5,
     name: 'Sofía',
-    emoji: '👩‍🦱',
+    emoji: '👩🦱',
     items: [{ name: 'libro', qty: 2, price: 15 }, { name: 'lapiz', qty: 6, price: 2 }],
     get total() { return this.items.reduce((s, i) => s + i.qty * i.price, 0); },
     hint: '(2×15) + (6×2) = ?',
@@ -111,7 +128,7 @@ const CLIENTS = [
   {
     id: 8,
     name: 'Roberto',
-    emoji: '👨‍🦳',
+    emoji: '👨🦳',
     items: [{ name: 'manzana', qty: 6, price: 5 }, { name: 'pera', qty: 4, price: 6 }, { name: 'uva', qty: 3, price: 8 }],
     get total() { return this.items.reduce((s, i) => s + i.qty * i.price, 0); },
     hint: '(6×5) + (4×6) + (3×8) = ?',
@@ -192,6 +209,13 @@ export function MercadoNumericoPage() {
   const [gameFinished, setGameFinished] = useState(false);
   const [wrongCount, setWrongCount] = useState(0);
 
+  // Instrucción inicial
+  useEffect(() => {
+    if (mounted && clientIdx === 0 && !gameFinished) {
+      speak('¡Bienvenidos al Mercado Numérico! Resuelve la operación para cobrarle al cliente.', 0.88, 1.25);
+    }
+  }, [mounted, clientIdx, gameFinished]);
+
   const client = clients[clientIdx];
 
   const addDigit = useCallback((d) => {
@@ -208,6 +232,7 @@ export function MercadoNumericoPage() {
     if (!inputVal || feedback) return;
     const answer = parseInt(inputVal, 10);
     if (answer === client.total) {
+      speak('¡Excelente! Cambio exacto.', 0.9, 1.3);
       playCorrect();
       setFeedback('correct');
       setTimeout(() => {
@@ -216,10 +241,14 @@ export function MercadoNumericoPage() {
         setInputVal('');
         setShowHint(false);
         setWrongCount(0);
-        if (next >= clients.length) { setGameFinished(true); }
+        if (next >= clients.length) { 
+          speak('¡Gran trabajo! Has atendido a todos los clientes del mercado.', 0.9, 1.3);
+          setGameFinished(true); 
+        }
         else { setClientIdx(next); }
       }, 1800);
     } else {
+      speak('Ese no es el total correcto. ¡Vuelve a intentarlo!', 0.88, 1.2);
       playWrong();
       setFeedback('wrong');
       setWrongCount(w => w + 1);
@@ -229,7 +258,7 @@ export function MercadoNumericoPage() {
         if (wrongCount + 1 >= 2) setShowHint(true);
       }, 1200);
     }
-  }, [inputVal, feedback, client.total, clientIdx, clients.length, showHint, wrongCount]);
+  }, [inputVal, feedback, client.total, clientIdx, clients.length, wrongCount]);
 
   const resetGame = () => {
     setClientIdx(0);
@@ -248,7 +277,7 @@ export function MercadoNumericoPage() {
         <main className="flex-1 flex flex-col items-center justify-center pt-24 pb-12 px-4 text-center">
           <div className="relative w-40 h-40 mx-auto mb-6">
             <div className="absolute inset-0 rounded-full bg-emerald-400/30 animate-ping" />
-            <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-2xl text-7xl">🏪</div>
+            <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-2xl text-7xl">⌂</div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-on-surface mb-3">¡Mercado Cerrado!</h1>
           <p className="text-lg text-on-surface-variant font-bold mb-2 max-w-md">¡Atendiste a todos los clientes y calculaste todos los totales correctamente!</p>
@@ -287,7 +316,7 @@ export function MercadoNumericoPage() {
           {/* Header */}
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md text-3xl">🏪</div>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md text-3xl">⌂</div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">El Mercado Numérico</h1>
                 <p className="text-xs sm:text-sm font-bold text-on-surface-variant flex items-center gap-2">
@@ -347,7 +376,7 @@ export function MercadoNumericoPage() {
                   {client.items.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between bg-white dark:bg-zinc-800 rounded-xl px-4 py-2.5 shadow-sm border border-surface-container-high">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">{EMOJI_ITEMS[item.name] || '📦'}</span>
+                        <span className="text-2xl">{EMOJI_ITEMS[item.name] || '□'}</span>
                         <div>
                           <p className="font-extrabold text-on-surface text-sm capitalize">{item.name}</p>
                           <p className="text-xs text-on-surface-variant font-medium">${item.price} c/u</p>
@@ -395,9 +424,9 @@ export function MercadoNumericoPage() {
                     : 'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
                 }`}>
                   {feedback === 'correct' ? (
-                    <span className="flex items-center justify-center gap-2">✅ ¡Correcto! Total: ${client.total}</span>
+                    <span className="flex items-center justify-center gap-2">✓ ¡Correcto! Total: ${client.total}</span>
                   ) : (
-                    <span className="flex items-center justify-center gap-2">❌ Incorrecto, intenta de nuevo</span>
+                    <span className="flex items-center justify-center gap-2">✗ Incorrecto, intenta de nuevo</span>
                   )}
                 </div>
               )}

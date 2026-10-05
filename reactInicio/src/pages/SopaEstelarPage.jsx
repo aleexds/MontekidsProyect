@@ -1,6 +1,23 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
+
+/* ─────────────────────────────────────────────
+   HELPER DE SÍNTESIS DE VOZ INFANTIL
+───────────────────────────────────────────── */
+function speak(text, rate = 0.88, pitch = 1.3) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'es-ES';
+    utt.rate = rate;
+    utt.pitch = pitch;
+    window.speechSynthesis.speak(utt);
+  } catch {
+    // Si no está disponible no interrumpir
+  }
+}
 
 /* ─────────────────────────────────────────────
    AUDIO
@@ -24,12 +41,12 @@ function playTone(freq, dur = 0.18, type = 'sine') {
   } catch { /* noop */ }
 }
 function playWordFound() {
-  [523, 659, 784].forEach((f, i) => setTimeout(() => playTone(f, 0.25, 'sine'), i * 80));
+  [587.33, 739.99, 880.00].forEach((f, i) => setTimeout(() => playTone(f, 0.2, 'triangle'), i * 80));
 }
 function playLevelComplete() {
-  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.35, 'sine'), i * 90));
+  [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => setTimeout(() => playTone(f, 0.3, 'sine'), i * 90));
 }
-function playSelect() { playTone(660, 0.07, 'sine'); }
+function playSelect() { playTone(660, 0.08, 'sine'); }
 
 /* ─────────────────────────────────────────────
    BANCO DE TEMAS — palabras de ≤6 letras para
@@ -37,62 +54,62 @@ function playSelect() { playTone(660, 0.07, 'sine'); }
 ───────────────────────────────────────────── */
 const THEME_BANK = [
   {
-    theme: '🪐 Planetas',
-    emoji: '🪐',
+    theme: '✧ Planetas',
+    emoji: '✧',
     color: { from: '#6d28d9', to: '#4338ca', border: '#7c3aed', bg: '#ede9fe' },
     words: ['SOL', 'LUNA', 'MARTE', 'VENUS', 'TIERRA', 'JUPIT', 'ORION', 'COMETA', 'ASTRO'],
   },
   {
-    theme: '🦁 Animales',
-    emoji: '🦁',
+    theme: '♌ Animales',
+    emoji: '♌',
     color: { from: '#d97706', to: '#b45309', border: '#f59e0b', bg: '#fef3c7' },
     words: ['LEON', 'TIGRE', 'OSO', 'LOBO', 'ZORRO', 'PUMA', 'LINCE', 'JAGUAR', 'COYOTE'],
   },
   {
-    theme: '🌊 El Mar',
-    emoji: '🌊',
+    theme: '≈ El Mar',
+    emoji: '≈',
     color: { from: '#0891b2', to: '#0e7490', border: '#06b6d4', bg: '#cffafe' },
     words: ['OLA', 'TIBURON', 'CORAL', 'FOCA', 'BALLENA', 'PULPO', 'ATUN', 'MEDUSA', 'DELFIN'],
   },
   {
-    theme: '🌿 Naturaleza',
-    emoji: '🌿',
+    theme: '† Naturaleza',
+    emoji: '†',
     color: { from: '#16a34a', to: '#15803d', border: '#22c55e', bg: '#dcfce7' },
     words: ['ARBOL', 'FLOR', 'HOJA', 'RIO', 'MONTE', 'SELVA', 'PRADO', 'RAIZ', 'BOSQUE'],
   },
   {
-    theme: '🍎 Frutas',
-    emoji: '🍎',
+    theme: '● Frutas',
+    emoji: '●',
     color: { from: '#dc2626', to: '#b91c1c', border: '#ef4444', bg: '#fee2e2' },
     words: ['MANGO', 'PERA', 'UVA', 'KIWI', 'MELON', 'LIMON', 'CEREZA', 'DURAZNO', 'FRESA'],
   },
   {
-    theme: '⚽ Deportes',
-    emoji: '⚽',
+    theme: '◉ Deportes',
+    emoji: '◉',
     color: { from: '#2563eb', to: '#1d4ed8', border: '#3b82f6', bg: '#dbeafe' },
     words: ['FUTBOL', 'TENIS', 'GOLF', 'BOXEO', 'NATACION', 'CICLISMO', 'ARCO', 'POLO', 'REMO'],
   },
   {
-    theme: '🎨 Colores',
-    emoji: '🎨',
+    theme: '✦ Colores',
+    emoji: '✦',
     color: { from: '#9333ea', to: '#7e22ce', border: '#a855f7', bg: '#f3e8ff' },
     words: ['ROJO', 'AZUL', 'VERDE', 'NEGRO', 'BLANCO', 'GRIS', 'ROSA', 'MORADO', 'MARRON'],
   },
   {
-    theme: '🏠 La Casa',
-    emoji: '🏠',
+    theme: '⌂ La Casa',
+    emoji: '⌂',
     color: { from: '#b45309', to: '#92400e', border: '#d97706', bg: '#fef3c7' },
     words: ['MESA', 'SILLA', 'CAMA', 'SOFA', 'PUERTA', 'TECHO', 'PARED', 'COCINA', 'JARDIN'],
   },
   {
-    theme: '🚗 Vehículos',
-    emoji: '🚗',
+    theme: '► Vehículos',
+    emoji: '►',
     color: { from: '#0f766e', to: '#115e59', border: '#14b8a6', bg: '#ccfbf1' },
     words: ['AUTO', 'TREN', 'BARCO', 'AVION', 'MOTO', 'BUS', 'COHETE', 'BICI', 'CAMION'],
   },
   {
-    theme: '📚 La Escuela',
-    emoji: '📚',
+    theme: '≡ La Escuela',
+    emoji: '≡',
     color: { from: '#7c3aed', to: '#6d28d9', border: '#8b5cf6', bg: '#ede9fe' },
     words: ['LIBRO', 'LAPIZ', 'BORRAR', 'REGLA', 'MAPA', 'AULA', 'RECREO', 'EXAMEN', 'NOTA'],
   },
@@ -203,17 +220,25 @@ export function SopaEstelarPage() {
 
   const level = levels[levelIdx];
 
-  // Construir el grid sólo cuando cambia el nivel (memoizado con ref)
-  const puzzleRef = useRef(null);
-  if (!puzzleRef.current || puzzleRef.current.levelId !== level.id) {
-    const { grid, placements } = buildGrid(level.gridSize, level.words);
-    puzzleRef.current = { levelId: level.id, grid, placements };
-  }
-  const { grid, placements } = puzzleRef.current;
+  // Instrucción de voz inicial
+  useEffect(() => {
+    if (!mounted) return;
+    const themeName = level.theme.slice(level.theme.indexOf(' ') + 1);
+    const timer = setTimeout(() => {
+      speak(`Tema: ${themeName}. Encuentra todas las palabras.`, 0.88, 1.25);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [levelIdx, level.theme, mounted]);
+
+  // Construir el grid sólo cuando cambia el nivel (memoizado con useMemo)
+  const { grid, placements } = useMemo(() => {
+    return buildGrid(level.gridSize, level.words);
+  }, [level.gridSize, level.words]);
 
   /* Registrar palabra encontrada */
   const registerFound = useCallback((word, cells) => {
     playWordFound();
+    speak(word, 0.9, 1.3);
     const keys = new Set(cells.map(c => cellKey(c.r, c.c)));
     setFoundCells(prev => new Set([...prev, ...keys]));
     setFlashCells(keys);
@@ -226,13 +251,13 @@ export function SopaEstelarPage() {
           playLevelComplete();
           const nextLvl = levelIdx + 1;
           if (nextLvl >= levels.length) {
+            speak('¡Completaste toda la Sopa Estelar! ¡Eres brillante!', 0.9, 1.25);
             setGameFinished(true);
           } else {
             setLevelIdx(nextLvl);
             setFoundWords(new Set());
             setFoundCells(new Set());
             setSelCells([]);
-            puzzleRef.current = null; // forzar rebuild del siguiente nivel
           }
         }, 600);
       }
@@ -341,7 +366,7 @@ export function SopaEstelarPage() {
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-slide-down">
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md text-3xl"
-                style={{ background: `linear-gradient(135deg, ${level.color.from}, ${level.color.to})` }}>🔤</div>
+                style={{ background: `linear-gradient(135deg, ${level.color.from}, ${level.color.to})` }}>A</div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">Sopa Estelar</h1>
                 <p className="text-xs sm:text-sm font-bold text-on-surface-variant flex items-center gap-2">
@@ -477,7 +502,7 @@ export function SopaEstelarPage() {
 
               {/* Instrucción */}
               <p className="text-[11px] font-bold text-on-surface-variant text-center mt-1">
-                💡 Desliza el mouse o el dedo en cualquier dirección sobre las letras.
+                ◈ Desliza el mouse o el dedo en cualquier dirección sobre las letras.
               </p>
             </div>
           </div>

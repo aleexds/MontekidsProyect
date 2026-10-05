@@ -157,81 +157,68 @@ function playPopSound() {
   }
 }
 
-/* ─────────────────────────────────────────────
-   NOMBRES ORALES DE NÚMEROS PARA EL CONTEO
+/* ───────�/* ─────────────────────────────────────────────
+   GENERADOR DE RONDAS ALEATORIAS (límite 8)
 ───────────────────────────────────────────── */
-const NUMBER_WORDS = {
-  1: '¡Uno!',
-  2: '¡Dos!',
-  3: '¡Tres!',
-  4: '¡Cuatro!',
-  5: '¡Cinco!',
-};
-
-/* ─────────────────────────────────────────────
-   RONDAS EDUCATIVAS (ADAPTADAS DE 2 A 4 AÑOS)
-───────────────────────────────────────────── */
-const DUCK_ROUNDS = [
-  // ── ETAPA 1: Conteo inicial concreto (1 a 3 patitos - 2 años) ──
+const ROUND_TEMPLATES = [
   {
     id: 1,
     nivel: 1,
-    nivelNombre: 'Nivel 1: Primeros Pasos (1 a 3)',
-    target: 2,
-    totalDucks: 4,
-    instruccionVoz: '¡Hola! Soy Mamá Pato. ¿Me ayudas? ¡Necesito 2 patitos en el agua para su clase de natación!',
-    pistas: 'Lleva 2 patitos al estanque',
+    nivelNombre: 'Nivel 1: Primeros Pasos',
+    buildVoz: (n) => `Soy Mamá Pato. ¿Me ayudas? ¡Necesito ${n} ${n === 1 ? 'patito' : 'patitos'} en el agua!`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
   {
     id: 2,
     nivel: 1,
-    nivelNombre: 'Nivel 1: Primeros Pasos (1 a 3)',
-    target: 3,
-    totalDucks: 5,
-    instruccionVoz: '¡Muy bien! Ahora quiero ver a 3 patitos nadando juntos.',
-    pistas: 'Lleva 3 patitos al estanque',
+    nivelNombre: 'Nivel 1: Primeros Pasos',
+    buildVoz: (n) => `¡Muy bien! Ahora quiero ver a ${n} ${n === 1 ? 'patito' : 'patitos'} nadando juntos.`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
   {
     id: 3,
-    nivel: 1,
-    nivelNombre: 'Nivel 1: Primeros Pasos (1 a 3)',
-    target: 1,
-    totalDucks: 4,
-    instruccionVoz: '¡Ahora solo 1 patito! ¿Quién saltará primero al agua?',
-    pistas: 'Lleva 1 patito al estanque',
+    nivel: 2,
+    nivelNombre: 'Nivel 2: Explorando el Estanque',
+    buildVoz: (n) => `¡El agua está fresquita! Llevemos a ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque.`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
-
-  // ── ETAPA 2: Nociones ampliadas (hasta 4 patitos - 3 años) ──
   {
     id: 4,
     nivel: 2,
-    nivelNombre: 'Nivel 2: Explorando el Estanque (hasta 4)',
-    target: 4,
-    totalDucks: 6,
-    instruccionVoz: '¡El agua está fresquita! Llevemos a 4 patitos al estanque.',
-    pistas: 'Lleva 4 patitos al estanque',
+    nivelNombre: 'Nivel 2: Explorando el Estanque',
+    buildVoz: (n) => `¡A nadar! Busquemos a ${n} ${n === 1 ? 'patito' : 'patitos'} juguetones.`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
   {
     id: 5,
-    nivel: 2,
-    nivelNombre: 'Nivel 2: Explorando el Estanque (hasta 4)',
-    target: 3,
-    totalDucks: 5,
-    instruccionVoz: '¡A nadar! Busquemos a 3 patitos juguetones.',
-    pistas: 'Lleva 3 patitos al estanque',
+    nivel: 3,
+    nivelNombre: 'Nivel 3: El Gran Reto de la Granja',
+    buildVoz: (n) => `¡El gran chap uzón final! ¡Llevemos a ${n} ${n === 1 ? 'patito' : 'patitos'} a nadar con Mamá Pato!`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
-
-  // ── ETAPA 3: El Gran Reto (hasta 5 patitos - 4 años) ──
   {
     id: 6,
     nivel: 3,
-    nivelNombre: 'Nivel 3: El Gran Reto de la Granja (hasta 5)',
-    target: 5,
-    totalDucks: 7,
-    instruccionVoz: '¡El gran chapuzón final! ¡Llevemos a 5 patitos a nadar con Mamá Pato!',
-    pistas: 'Lleva 5 patitos al estanque',
+    nivelNombre: 'Nivel 3: El Gran Reto de la Granja',
+    buildVoz: (n) => `¡Solo queda una ronda! ¡Pon ${n} ${n === 1 ? 'patito' : 'patitos'} en el estanque!`,
+    buildPista: (n) => `Lleva ${n} ${n === 1 ? 'patito' : 'patitos'} al estanque`,
   },
 ];
+
+function generateDuckRounds() {
+  return ROUND_TEMPLATES.map((tpl) => {
+    const target = Math.floor(Math.random() * 8) + 1; // 1 a 8
+    return {
+      id: tpl.id,
+      nivel: tpl.nivel,
+      nivelNombre: tpl.nivelNombre,
+      target,
+      totalDucks: target + 2, // siempre hay distractores de sobra
+      instruccionVoz: tpl.buildVoz(target),
+      pistas: tpl.buildPista(target),
+    };
+  });
+}
 
 /* Estrellas decorativas para el overlay de celebración */
 const CELEBRATION_STARS = [
@@ -462,9 +449,18 @@ function MamaDuck({ isHappy = false }) {
 }
 
 /* ─────────────────────────────────────────────
+   CONSTANTES
+───────────────────────────────────────────── */
+const NUMBER_WORDS = {
+  1: '¡Uno!', 2: '¡Dos!', 3: '¡Tres!', 4: '¡Cuatro!', 5: '¡Cinco!',
+  6: '¡Seis!', 7: '¡Siete!', 8: '¡Ocho!', 9: '¡Nueve!', 10: '¡Diez!'
+};
+
+/* ─────────────────────────────────────────────
    PÁGINA PRINCIPAL: LA GRANJA DE PATITOS
 ───────────────────────────────────────────── */
 export function GranjaPatitosPage() {
+  const [duckRounds]                    = useState(() => generateDuckRounds());
   const [roundIndex, setRoundIndex]     = useState(0);
   const [inWaterDucks, setInWaterDucks] = useState([]); // IDs de patitos que están en el agua
   const [isHoveringPond, setIsHoveringPond] = useState(false);
@@ -475,7 +471,7 @@ export function GranjaPatitosPage() {
 
   const [feedbackMessage, setFeedbackMessage] = useState(null);
 
-  const round = DUCK_ROUNDS[roundIndex];
+  const round = duckRounds[roundIndex];
   const waterCount = inWaterDucks.length;
 
   // Generar lista fija de patitos para la ronda
@@ -531,7 +527,7 @@ export function GranjaPatitosPage() {
         setInWaterDucks([]);
         setIsWaterSplashing(false);
         setFeedbackMessage(null);
-        if (nextIndex < DUCK_ROUNDS.length) {
+        if (nextIndex < duckRounds.length) {
           setRoundIndex(nextIndex);
         } else {
           awardStars('granja-patitos', 'La Granja de Patitos', 10);
@@ -612,7 +608,7 @@ export function GranjaPatitosPage() {
           <div className="relative w-40 h-40 mx-auto mb-6 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-secondary-container/40 animate-ping" />
             <div className="relative w-36 h-36 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-yellow-500 flex items-center justify-center shadow-2xl text-7xl">
-              🦆
+              ♦
             </div>
           </div>
 
@@ -680,7 +676,7 @@ export function GranjaPatitosPage() {
             </span>
           ))}
           <div className="bg-white dark:bg-zinc-900 px-8 py-5 rounded-3xl shadow-2xl border-4 border-secondary-container text-center animate-pop-bounce">
-            <h2 className="text-3xl font-black text-on-surface">¡Cuac Cuac! 🎉</h2>
+            <h2 className="text-3xl font-black text-on-surface">¡Cuac Cuac! ★</h2>
             <p className="text-sm font-bold text-on-surface-variant mt-1">
               ¡Excelente trabajo!
             </p>
@@ -702,7 +698,7 @@ export function GranjaPatitosPage() {
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center shadow-md text-3xl">
-                🦆
+                ♦
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">
@@ -732,7 +728,7 @@ export function GranjaPatitosPage() {
           <div className="w-full bg-white dark:bg-zinc-800/80 rounded-2xl p-4 shadow-sm border border-surface-container-high mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-xl bg-tertiary text-white font-extrabold text-xs">
-                Ronda {roundIndex + 1} de {DUCK_ROUNDS.length}
+                Ronda {roundIndex + 1} de {duckRounds.length}
               </span>
               <span className="text-sm font-extrabold text-on-surface">
                 {round.nivelNombre}
@@ -741,7 +737,7 @@ export function GranjaPatitosPage() {
 
             {/* Pasos de progreso */}
             <div className="flex items-center gap-2">
-              {DUCK_ROUNDS.map((r, i) => (
+              {duckRounds.map((r, i) => (
                 <div
                   key={r.id}
                   className={`h-3 rounded-full transition-all duration-300 ${
@@ -779,7 +775,7 @@ export function GranjaPatitosPage() {
                 </div>
 
                 <h2 className="text-2xl sm:text-3xl font-black text-on-surface">
-                  ¡A nadar con {round.target} {round.target === 1 ? 'patito' : 'patitos'}! 🦆
+                  ¡A nadar con {round.target} {round.target === 1 ? 'patito' : 'patitos'}! ♦
                 </h2>
                 <p className="text-xs sm:text-sm font-bold text-on-surface-variant mt-1">
                   Toca o arrastra los patitos de la orilla hacia el agua uno por uno.
@@ -828,19 +824,19 @@ export function GranjaPatitosPage() {
           >
             {/* Elementos decorativos del estanque (Nenúfares, juncos y ondas) */}
             <div className="absolute top-4 left-6 pointer-events-none opacity-80 select-none">
-              <span className="text-3xl">🪷</span>
+              <span className="text-3xl">✿</span>
             </div>
             <div className="absolute bottom-4 right-8 pointer-events-none opacity-80 select-none">
-              <span className="text-3xl">🌾</span>
+              <span className="text-3xl">¥</span>
             </div>
             <div className="absolute top-8 right-16 pointer-events-none opacity-60 select-none">
-              <span className="text-2xl">🫧</span>
+              <span className="text-2xl">○</span>
             </div>
 
             {/* Efecto de salpicadura visual */}
             {isWaterSplashing && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-6xl animate-ping">💦</span>
+                <span className="text-6xl animate-ping">∴</span>
               </div>
             )}
 
@@ -862,7 +858,7 @@ export function GranjaPatitosPage() {
             <div className="relative z-10 flex-1 flex flex-wrap items-center justify-center gap-6 sm:gap-10 py-6">
               {waterCount === 0 ? (
                 <div className="flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-sky-400/50 rounded-2xl bg-white/30 dark:bg-zinc-900/30">
-                  <span className="text-4xl mb-2 animate-bounce">🌊</span>
+                  <span className="text-4xl mb-2 animate-bounce">≈</span>
                   <p className="text-sm font-black text-sky-900 dark:text-sky-100">
                     ¡El estanque está tranquilo y esperando a los patitos!
                   </p>
@@ -938,7 +934,7 @@ export function GranjaPatitosPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
               <div>
                 <h3 className="text-lg font-black text-on-surface flex items-center gap-2">
-                  <span>🌾 La Orilla Verde</span>
+                  <span>¥ La Orilla Verde</span>
                 </h3>
                 <p className="text-xs font-bold text-on-surface-variant">
                   ¡Toca cualquier patito o arrástralo hacia el estanque para que comience a nadar!
@@ -961,7 +957,7 @@ export function GranjaPatitosPage() {
                       key={duckId}
                       className="h-28 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-zinc-700 flex flex-col items-center justify-center opacity-40 select-none"
                     >
-                      <span className="text-xl">🌊</span>
+                      <span className="text-xl">≈</span>
                       <span className="text-[10px] font-bold text-slate-400 mt-1">¡Nadando!</span>
                     </div>
                   );
@@ -979,7 +975,7 @@ export function GranjaPatitosPage() {
                   >
                     <LittleDuck isSwimming={false} size={68} />
                     <span className="text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 mt-1 group-hover:underline">
-                      ¡Al agua! 💦
+                      ¡Al agua! ∴
                     </span>
                   </button>
                 );

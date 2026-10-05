@@ -3,6 +3,23 @@ import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
 
 /* ──────────────────────────────────────────────
+   HELPER DE SÍNTESIS DE VOZ INFANTIL
+────────────────────────────────────────────── */
+function speak(text, rate = 0.88, pitch = 1.3) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'es-ES';
+    utt.rate = rate;
+    utt.pitch = pitch;
+    window.speechSynthesis.speak(utt);
+  } catch {
+    // Si no está disponible no interrumpir
+  }
+}
+
+/* ──────────────────────────────────────────────
    HELPERS DE AUDIO (WEB AUDIO API)
 ────────────────────────────────────────────── */
 function getCtx() {
@@ -25,16 +42,16 @@ function playTone(freq, duration = 0.18, type = 'sine') {
   } catch { /* noop */ }
 }
 function playSuccess() {
-  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+  [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => {
     setTimeout(() => playTone(f, 0.3, 'sine'), i * 90);
   });
 }
 function playError() {
-  playTone(180, 0.35, 'sawtooth');
-  setTimeout(() => playTone(140, 0.3, 'sawtooth'), 150);
+  playTone(200, 0.35, 'sawtooth');
+  setTimeout(() => playTone(150, 0.3, 'sawtooth'), 150);
 }
-function playPop() { playTone(620, 0.1, 'sine'); }
-function playReveal() { playTone(880, 0.08, 'sine'); }
+function playPop() { playTone(700, 0.1, 'sine'); }
+function playReveal() { playTone(880, 0.08, 'triangle'); }
 
 /* ──────────────────────────────────────────────
    CONSTANTES DE DISEÑO
@@ -117,6 +134,13 @@ export function SecuenciaMaestraPage() {
   useEffect(() => () => clearTimeout(timerRef.current), []);
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
 
+  // Instrucción inicial
+  useEffect(() => {
+    if (mounted && roundIdx === 0 && phase === PHASE.IDLE) {
+      speak('Memoriza el patrón de colores y formas, y repítelo en orden exacto.', 0.88, 1.25);
+    }
+  }, [mounted, roundIdx, phase]);
+
   const startRound = useCallback(() => {
     const seq = Array.from({ length: round.seqLen }, randomBlock);
     setSequence(seq);
@@ -140,10 +164,12 @@ export function SecuenciaMaestraPage() {
       const idx = next.length - 1;
       const correct = sequence[idx];
       if (!correct || block.shapeId !== correct.shapeId || block.colorId !== correct.colorId) {
+        speak('¡Casi! Memoriza mejor para la próxima.', 0.88, 1.2);
         setTimeout(() => { playError(); setResult('wrong'); setPhase(PHASE.RESULT); }, 50);
         return next;
       }
       if (next.length === sequence.length) {
+        speak('¡Fantástico! Recordaste todo.', 0.9, 1.3);
         setTimeout(() => { playSuccess(); setResult('correct'); setPhase(PHASE.RESULT); }, 50);
       }
       return next;
@@ -152,7 +178,11 @@ export function SecuenciaMaestraPage() {
 
   const nextRound = () => {
     const next = roundIdx + 1;
-    if (next >= ROUNDS.length) { setPhase(PHASE.FINISHED); return; }
+    if (next >= ROUNDS.length) { 
+      speak('¡Genial! Has completado todas las secuencias.', 0.9, 1.3);
+      setPhase(PHASE.FINISHED); 
+      return; 
+    }
     setRoundIdx(next);
     setPhase(PHASE.IDLE);
   };
@@ -174,7 +204,7 @@ export function SecuenciaMaestraPage() {
         <main className="flex-1 flex flex-col items-center justify-center pt-24 pb-12 px-4 text-center">
           <div className="relative w-40 h-40 mx-auto mb-6">
             <div className="absolute inset-0 rounded-full bg-violet-400/30 animate-ping" />
-            <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center shadow-2xl text-7xl">🏆</div>
+            <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center shadow-2xl text-7xl">♛</div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-on-surface mb-3">¡Maestro de Secuencias!</h1>
           <p className="text-lg text-on-surface-variant font-bold mb-2 max-w-md">Completaste las {ROUNDS.length} rondas. ¡Memoria de campeón!</p>
@@ -211,7 +241,7 @@ export function SecuenciaMaestraPage() {
           {/* Header */}
           <section className="mt-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-md text-3xl">🧩</div>
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-md text-3xl">⊞</div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-on-surface leading-tight">Secuencia Maestra</h1>
                 <p className="text-xs sm:text-sm font-bold text-on-surface-variant flex items-center gap-2">
@@ -245,7 +275,7 @@ export function SecuenciaMaestraPage() {
             {/* ── FASE IDLE ── */}
             {phase === PHASE.IDLE && (
               <div className="flex flex-col items-center text-center gap-6 py-10">
-                <span className="text-7xl select-none" style={{ animation: 'bounce 1s infinite' }}>🧩</span>
+                <span className="text-7xl select-none" style={{ animation: 'bounce 1s infinite' }}>⊞</span>
                 <div>
                   <h2 className="text-2xl font-black text-on-surface mb-2">¡Memoriza el patrón!</h2>
                   <p className="text-sm text-on-surface-variant font-medium max-w-md">
@@ -264,7 +294,7 @@ export function SecuenciaMaestraPage() {
             {phase === PHASE.SHOWING && (
               <div className="flex flex-col items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl animate-pulse">👀</span>
+                  <span className="text-2xl animate-pulse">◔</span>
                   <h2 className="text-xl font-black text-violet-700 dark:text-violet-300">¡Memoriza bien el orden!</h2>
                 </div>
                 <div className="w-full overflow-x-auto pb-2">
@@ -286,7 +316,7 @@ export function SecuenciaMaestraPage() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <h2 className="text-xl font-black text-on-surface flex items-center gap-2">
-                    <span className="text-2xl">🔢</span> Reconstruye la secuencia en orden
+                    <span className="text-2xl">#</span> Reconstruye la secuencia en orden
                   </h2>
                   <span className="text-xs font-bold bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 px-3 py-1 rounded-full">
                     {answer.length} / {sequence.length}
@@ -348,7 +378,7 @@ export function SecuenciaMaestraPage() {
               <div className="flex flex-col items-center text-center gap-6 py-8">
                 {result === 'correct' ? (
                   <>
-                    <span className="text-7xl select-none" style={{ animation: 'bounce 0.8s infinite' }}>🎉</span>
+                    <span className="text-7xl select-none" style={{ animation: 'bounce 0.8s infinite' }}>★</span>
                     <h2 className="text-3xl font-black text-emerald-600">¡Perfecto!</h2>
                     <p className="text-sm text-on-surface-variant font-medium max-w-sm">Repetiste la secuencia exacta. ¡Tu memoria es increíble!</p>
                     <div className="flex flex-wrap gap-2 justify-center py-2">
@@ -366,7 +396,7 @@ export function SecuenciaMaestraPage() {
                   </>
                 ) : (
                   <>
-                    <span className="text-7xl select-none">😅</span>
+                    <span className="text-7xl select-none">~</span>
                     <h2 className="text-3xl font-black text-rose-500">¡Casi lo tienes!</h2>
                     <p className="text-sm text-on-surface-variant font-medium">La secuencia correcta era:</p>
                     <div className="flex flex-wrap gap-2 justify-center py-2">
