@@ -290,7 +290,16 @@ const translations = {
       incompleteCodeError: "Por favor, ingresa los 6 dígitos completos del código de verificación.",
     },
     parentDashboard: {
-  metrics: {
+      header: {
+        badge: "Panel de Seguimiento Integral",
+        title1: "Bitácora",
+        title2: "y",
+        title3: "Progreso",
+        title4: "Familiar",
+        subtitle: "Supervisión en tiempo real del desarrollo sensorial, cognitivo y actividades de",
+        reportsBtn: "Mis Reportes & Notas"
+      },
+      metrics: {
     fineMotor: "Motricidad Fina",
     physicalArea: "Área Física",
     fineMotorBadge: "🌟 ¡Excelente en uso de pinza!",
@@ -373,6 +382,10 @@ const translations = {
       myChild: "Mi Hijo/a",
       reports: "Mis Comentarios/Reportes",
       calendar: "Calendario de Actividades",
+      games: "Mundo Juegos",
+      backToDashboard: "Panel de Padres",
+      backToDashboardShort: "Panel Padres",
+      goToGames: "Ir a Juegos",
       aiAssistant: "AI Asistente",
       userRole: "Mamá de Mateo"
     },
@@ -876,7 +889,16 @@ const translations = {
       incompleteCodeError: "Please enter all 6 digits of the verification code.",
     },
     parentDashboard: {
-  metrics: {
+      header: {
+        badge: "Comprehensive Monitoring Dashboard",
+        title1: "Daily",
+        title2: "Log",
+        title3: "& Family",
+        title4: "Progress",
+        subtitle: "Real-time supervision of sensory, cognitive development and activities for",
+        reportsBtn: "My Reports & Notes"
+      },
+      metrics: {
     fineMotor: "Fine Motor Skills",
     physicalArea: "Physical Area",
     fineMotorBadge: "🌟 Excellent pincer grasp!",
@@ -959,6 +981,10 @@ const translations = {
       myChild: "My Child",
       reports: "My Comments/Reports",
       calendar: "Activities Calendar",
+      games: "Games World",
+      backToDashboard: "Parents Dashboard",
+      backToDashboardShort: "Parents Panel",
+      goToGames: "Go to Games",
       aiAssistant: "AI Assistant",
       userRole: "Mateo's Mom"
     },
@@ -1462,6 +1488,15 @@ const translations = {
       incompleteCodeError: "请输入完整的6位验证码。",
     },
     parentDashboard: {
+      header: {
+        badge: "综合成长监测面板",
+        title1: "日常",
+        title2: "记录",
+        title3: "与家庭",
+        title4: "成长",
+        subtitle: "实时监测感官、认知发展及日常活动：",
+        reportsBtn: "我的反馈与便签"
+      },
       metrics: {
         fineMotor: "精细动作技能",
         physicalArea: "身体发展",
@@ -1546,6 +1581,10 @@ const translations = {
         myChild: "我的孩子",
         reports: "我的反馈/报告",
         calendar: "活动日程表",
+        games: "游戏世界",
+        backToDashboard: "家长中心",
+        backToDashboardShort: "家长中心",
+        goToGames: "前往游戏",
         aiAssistant: "AI 助手",
         userRole: "Mateo 的妈妈"
       },

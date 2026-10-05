@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 // Paleta de colores vivos para la selección aleatoria
 const RANDOM_COLORS = [
@@ -14,9 +14,17 @@ const getRandomColor = () => {
   return RANDOM_COLORS[index];
 };
 
-export default function AnimatedInteractiveWord({ word, baseColorClass, extraClasses = '' }) {
+export default function AnimatedInteractiveWord({ 
+  word, 
+  baseColorClass, 
+  extraClasses = '',
+  autoAnimateOnMount = false,
+  autoAnimateDelay = 350,
+  autoFadeTime = 700
+}) {
   // Guardamos las referencias de los temporizadores para limpiar si se vuelve a pasar el mouse rápidamente
   const timeoutsRef = useRef({});
+  const lettersRef = useRef([]);
 
   const handleMouseEnter = (e, index) => {
     // Cancelamos el temporizador de retorno si estaba activo
@@ -38,11 +46,40 @@ export default function AnimatedInteractiveWord({ word, baseColorClass, extraCla
     }, 1500);
   };
 
+  // Efecto de barrido de color simulando hover en la entrada
+  useEffect(() => {
+    if (!autoAnimateOnMount) return;
+
+    const timers = [];
+    const validLetters = lettersRef.current.filter(Boolean);
+
+    validLetters.forEach((el, index) => {
+      const sweepTimer = setTimeout(() => {
+        if (!el) return;
+        el.style.color = getRandomColor();
+
+        // Desaparece más rápido al entrar (autoFadeTime)
+        const fadeTimer = setTimeout(() => {
+          if (el) el.style.color = '';
+        }, autoFadeTime);
+
+        timers.push(fadeTimer);
+      }, autoAnimateDelay + index * 90);
+
+      timers.push(sweepTimer);
+    });
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, [autoAnimateOnMount, autoAnimateDelay, autoFadeTime]);
+
   return (
     <span className={`inline-block ${extraClasses}`}>
       {word.split('').map((letter, index) => (
         <span
           key={index}
+          ref={(el) => (lettersRef.current[index] = el)}
           className={`interactive-letter ${baseColorClass}`}
           onMouseEnter={(e) => handleMouseEnter(e, index)}
           onMouseLeave={(e) => handleMouseLeave(e, index)}
