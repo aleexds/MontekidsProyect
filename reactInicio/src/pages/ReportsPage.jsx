@@ -48,21 +48,19 @@ export function ReportsPage() {
   const [threads, setThreads] = useState(INITIAL_THREADS);
   const [templateData, setTemplateData] = useState(null);
 
-  // Cargar reportes almacenados en db.json a través de json-server
+  const [usersList, setUsersList] = useState([]);
+
+  // Cargar reportes y usuarios almacenados en db.json
   useEffect(() => {
-    fetch('http://localhost:3000/reports')
-      .then((res) => {
-        if (!res.ok) throw new Error('Error al obtener reportes');
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setThreads(data);
-        }
-      })
-      .catch((err) => {
-        console.warn('Servidor json-server no disponible o vacío, usando datos locales:', err);
-      });
+    Promise.all([
+      fetch('http://localhost:3000/reports').then(r => r.json()).catch(() => []),
+      fetch('http://localhost:3000/users').then(r => r.json()).catch(() => [])
+    ]).then(([repData, usrData]) => {
+      if (Array.isArray(repData) && repData.length > 0) setThreads(repData);
+      if (Array.isArray(usrData) && usrData.length > 0) setUsersList(usrData);
+    }).catch(err => {
+      console.warn('Error al cargar datos en ReportsPage:', err);
+    });
   }, []);
 
   const handleAddThread = async (newThread) => {
@@ -221,6 +219,7 @@ ${activeUser?.name || 'Tutor'}`
                 activeFilter={activeFilter}
                 threads={userThreads}
                 onDeleteThread={handleDeleteThread}
+                usersList={usersList}
               />
             </div>
 

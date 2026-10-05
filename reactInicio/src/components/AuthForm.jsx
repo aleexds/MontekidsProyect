@@ -127,7 +127,13 @@ export default function AuthForm({ activeTab, setActiveTab }) {
       if (result.success) {
         setSuccessMessage(t('auth.loginSuccess', '¡Inicio de sesión exitoso! Redirigiendo...'));
         setTimeout(() => {
-          navigate('/mi-hijo-a');
+          if (result.user.role === 'owner') {
+            navigate('/owner-dashboard');
+          } else if (result.user.role === 'teacher' || result.user.role === 'admin') {
+            navigate('/admin');
+          } else {
+            navigate('/mi-hijo-a');
+          }
         }, 1000);
       } else {
         if (result.error === 'Contraseña incorrecta' || result.error === 'Correo no registrado') {
@@ -183,7 +189,7 @@ export default function AuthForm({ activeTab, setActiveTab }) {
             <div className="relative flex items-center">
               <span className="absolute left-4 text-gray-400 material-symbols-outlined text-lg">mail</span>
               <input
-                type="email"
+                type="text"
                 required
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}

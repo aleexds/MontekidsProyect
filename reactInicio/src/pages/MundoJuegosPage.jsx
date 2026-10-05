@@ -6,8 +6,9 @@ import { GamesFooter } from '../components/GamesFooter';
 
 export function MundoJuegosPage() {
   const gameNav = [
-    { path: '/juegos', label: 'Menú de Juegos' },
-    { path: '/juegos/puntuaciones', label: 'Mis Puntos' }
+    { path: '/juegos',              label: 'Menú de Juegos' },
+    { path: '/juegos/puntuaciones', label: 'Mis Puntos'     },
+    { path: '/premios',             label: 'Premios'     },
   ];
 
   return (

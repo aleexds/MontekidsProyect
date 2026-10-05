@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/useAuth';
 import { getTeacherForUser } from '../utils/teacherHelper';
+
+const API = 'http://localhost:3000';
 
 export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
   const { t } = useLanguage();
@@ -10,6 +12,18 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
   const childName = activeUser?.child?.name || 'Mateo';
 
   const [rsvpConfirmed, setRsvpConfirmed] = useState(true);
+  const [customEvents, setCustomEvents] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/curriculumEvents`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setCustomEvents(data);
+        }
+      })
+      .catch(e => console.error(e));
+  }, []);
 
   const toggleRSVP = () => {
     setRsvpConfirmed((prev) => !prev);
@@ -17,6 +31,7 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
 
   const showSpecial = activeCategory === 'all' || activeCategory === 'special';
   const showMeetings = activeCategory === 'all' || activeCategory === 'meetings';
+  const totalCount = 2 + customEvents.length;
 
   return (
     <div className="flex flex-col gap-6 font-sans">
@@ -26,13 +41,68 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
             {t('calendarPage.upcomingSectionTitle', 'Próximos Eventos y Actividades Destacadas')}
           </h2>
           <span className="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md font-extrabold">
-            {(showSpecial && showMeetings) ? t('calendarPage.twoUpcomingBadge', '2 Próximos') : t('calendarPage.oneUpcomingBadge', '1 Próximo')}
+            {totalCount} Próximos
           </span>
         </div>
         <span className="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">
           {childName} {t('calendarPage.enrolledSubtitle', 'matriculado/a en ambas')}
         </span>
       </div>
+
+      {/* ACTIVIDADES PROGRAMADAS POR EL DOCENTE EN EL PLAN CURRICULAR */}
+      {customEvents.map(evt => {
+        const parts = evt.date ? evt.date.split('-') : [];
+        const dayNum = parts[2] || '15';
+        const yearNum = parts[0] || '2026';
+
+        return (
+          <article
+            key={evt.id}
+            className="bg-surface-container-lowest rounded-3xl p-5 md:p-6 shadow-[0_8px_30px_-4px_rgba(0,219,235,0.18)] transition-all duration-300 hover:shadow-lg relative overflow-hidden flex flex-col md:flex-row gap-6 items-start border border-primary/20"
+          >
+            <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-primary font-bold"></div>
+
+            <div className="flex md:flex-col items-center justify-center shrink-0 w-full md:w-36 bg-primary-container/30 rounded-2xl p-4 text-center">
+              <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">
+                {evt.classroom || 'Aula'}
+              </span>
+              <span className="font-['Nunito'] text-4xl font-black text-primary leading-none my-1">{dayNum}</span>
+              <span className="font-label-md text-label-md text-on-surface-variant font-bold">
+                {parts[1] ? `Mes ${parts[1]}` : ''} {yearNum}
+              </span>
+              <div className="mt-2 w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-sm">
+                <span className="material-symbols-outlined text-[20px]">event_note</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col justify-between h-full gap-3">
+              <div>
+                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span className="px-2.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">school</span>
+                    {evt.categoryLabel || 'Plan Curricular'}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-medium">
+                    {evt.teacherName || 'Docente'}
+                  </span>
+                </div>
+                <h3 className="font-['Nunito'] text-xl font-extrabold text-on-surface tracking-tight">
+                  {evt.title}
+                </h3>
+                <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md mt-1 mb-2.5">
+                  <span className="flex items-center gap-1.5 text-on-surface font-semibold">
+                    <span className="material-symbols-outlined text-primary text-[18px]">schedule</span>
+                    {evt.time}
+                  </span>
+                </div>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  {evt.description}
+                </p>
+              </div>
+            </div>
+          </article>
+        );
+      })}
 
       {/* EVENTO 1: Sombrero Loco & Huerta (Categoría: Special) */}
       {showSpecial && (

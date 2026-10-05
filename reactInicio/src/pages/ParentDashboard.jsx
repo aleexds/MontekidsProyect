@@ -1,6 +1,5 @@
 import { ParentHeader } from '../components/ParentHeader';
 import { FamilyHeroBanner } from '../components/FamilyHeroBanner';
-import { DevelopmentalMetrics } from '../components/DevelopmentalMetrics';
 import { DailyTimeline } from '../components/DailyTimeline';
 import { ParentSidebar } from '../components/ParentSidebar';
 import ParentFooter from '../components/ParentFooter';
@@ -63,8 +62,7 @@ export function ParentDashboard() {
             {/* 1. Hero Banner */}
             <FamilyHeroBanner />
 
-            {/* 2. Métricas de Desarrollo */}
-            <DevelopmentalMetrics />
+            {/* 2. Layout en 2 columnas (Bitácora del día y Sidebar) */}
 
             {/* 3 & 4. Layout en 2 columnas */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">

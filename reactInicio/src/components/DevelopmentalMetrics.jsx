@@ -5,33 +5,33 @@ export function DevelopmentalMetrics() {
 
   const metrics = [
     {
-      title: t('parentDashboard.metrics.m1Title'),
+      title: t('parentDashboard.metrics.m1Title', 'Desarrollo Motor y Autonomía'),
       score: '94%',
-      status: t('parentDashboard.metrics.m1Status'),
+      status: t('parentDashboard.metrics.m1Status', 'Excelente'),
       color: 'text-emerald-700 dark:text-emerald-300',
       bgBar: 'bg-emerald-500',
       icon: 'bolt'
     },
     {
-      title: t('parentDashboard.metrics.m2Title'),
+      title: t('parentDashboard.metrics.m2Title', 'Área Cognitiva y Lógica'),
       score: '88%',
-      status: t('parentDashboard.metrics.m2Status'),
+      status: t('parentDashboard.metrics.m2Status', 'En Avance'),
       color: 'text-purple-700 dark:text-sky-300',
       bgBar: 'bg-purple-500',
       icon: 'psychology'
     },
     {
-      title: t('parentDashboard.metrics.m3Title'),
+      title: t('parentDashboard.metrics.m3Title', 'Desarrollo Socioemocional'),
       score: '91%',
-      status: t('parentDashboard.metrics.m3Status'),
+      status: t('parentDashboard.metrics.m3Status', 'Destacado'),
       color: 'text-amber-700 dark:text-amber-300',
       bgBar: 'bg-amber-500',
       icon: 'sports_handball'
     },
     {
-      title: t('parentDashboard.metrics.m4Title'),
+      title: t('parentDashboard.metrics.m4Title', 'Lenguaje y Fonemas'),
       score: '96%',
-      status: t('parentDashboard.metrics.m4Status'),
+      status: t('parentDashboard.metrics.m4Status', 'Sobresaliente'),
       color: 'text-cyan-700 dark:text-cyan-300',
       bgBar: 'bg-cyan-500',
       icon: 'record_voice_over'

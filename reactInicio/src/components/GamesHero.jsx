@@ -5,7 +5,7 @@ export function GamesHero() {
   const handleNarrator = () => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance("¡Hola Mateo! Bienvenido a Montekids. Toca tu juego favorito para ganar estrellas doradas hoy.");
+      const utterance = new SpeechSynthesisUtterance("Bienvenido a Montekids. Toca tu juego favorito para ganar estrellas doradas hoy.");
       utterance.lang = 'es-ES';
       utterance.rate = 0.9;
       utterance.pitch = 1.2;
@@ -71,14 +71,6 @@ export function GamesHero() {
                 </span>
               </div>
             </div>
-          </div>
-          <div className="w-full sm:w-auto flex flex-col items-center justify-center p-6 bg-gradient-to-b from-surface-container to-surface-container-high rounded-2xl text-center shadow-inner">
-            <div className="relative w-32 h-32 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full bg-primary-container/40 animate-pulse"></div>
-              <img className="w-28 h-28 object-contain rounded-full relative z-10 drop-shadow-[0_8px_12px_rgba(0,105,113,0.2)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYsdOE06w7BVfWd4vWzKW5-MSY2DvSBT79BbanTNkK8eyKr87i_JXjX1kW3RslGil8yTyHBhnWxB5InpS4ILUlvp19TTnf1LXcWmRGt1VzIqrA-585t_MkS8B-lxTigxXgc7Ts-QPmrRymzjrSNMZlZqEWvxCXJTxlBzTK8IHlXQTq3OSugqCm2my1ejlUKUP3qB7H5Ug4eQDDOGVx23seb6qI0tEh3NN4vtMqRwsPsuZldTLGYLVWqw" alt="Mascota Chispa" />
-            </div>
-            <span className="mt-2 font-bold text-lg text-on-surface">Mascota Chispa</span>
-            <span className="text-xs uppercase tracking-widest text-primary font-bold">¡Tu Guía Amigo!</span>
           </div>
         </div>
       </div>
