@@ -452,7 +452,7 @@ export function AdminDashboardPage() {
     <div className="min-h-screen bg-[#f9f9fc] dark:bg-zinc-950 font-sans text-slate-900 dark:text-zinc-100 transition-colors duration-300">
       <ParentHeader customNavItems={adminNavItems} />
 
-      <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300">
+      <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300 animate-page-bounce">
         
 
 

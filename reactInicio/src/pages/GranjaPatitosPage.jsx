@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
 import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 
 /* ─────────────────────────────────────────────
    HELPER DE SÍNTESIS DE VOZ INFANTIL
@@ -469,6 +470,7 @@ export function GranjaPatitosPage() {
   const [isWaterSplashing, setIsWaterSplashing] = useState(false);
   const { awardStars } = useAwardStars();
 
+  const [errorsCount, setErrorsCount] = useState(0);
   const [feedbackMessage, setFeedbackMessage] = useState(null);
 
   const round = duckRounds[roundIndex];
@@ -530,27 +532,28 @@ export function GranjaPatitosPage() {
         if (nextIndex < duckRounds.length) {
           setRoundIndex(nextIndex);
         } else {
-          awardStars('granja-patitos', 'La Granja de Patitos', 10);
+          awardStars('granja-patitos', 'La Granja de Patitos', 10, '🐥', errorsCount);
           setGameFinished(true);
         }
       }, 3400);
-    } else if (waterCount === 0) {
-      playQuackSound();
-      const msg = `¡El estanque está vacío! Lleva ${round.target} ${round.target === 1 ? 'patito' : 'patitos'} al agua antes de enviar tu respuesta.`;
-      setFeedbackMessage(msg);
-      speak(msg, 0.88, 1.2);
-    } else if (waterCount < round.target) {
-      playQuackSound();
-      const faltan = round.target - waterCount;
-      const msg = `¡Aún faltan patitos! Pusiste ${waterCount} y necesitamos ${round.target}. Agrega ${faltan} ${faltan === 1 ? 'más' : 'más'}.`;
-      setFeedbackMessage(msg);
-      speak(msg, 0.88, 1.2);
     } else {
+      setErrorsCount(e => e + 1);
       playQuackSound();
-      const sobran = waterCount - round.target;
-      const msg = `¡Hay demasiados patitos! Pusiste ${waterCount} y solo necesitamos ${round.target}. Toca ${sobran === 1 ? 'un patito' : `${sobran} patitos`} del agua para que vuelva a la orilla.`;
-      setFeedbackMessage(msg);
-      speak(msg, 0.88, 1.2);
+      if (waterCount === 0) {
+        const msg = `¡El estanque está vacío! Lleva ${round.target} ${round.target === 1 ? 'patito' : 'patitos'} al agua antes de enviar tu respuesta.`;
+        setFeedbackMessage(msg);
+        speak(msg, 0.88, 1.2);
+      } else if (waterCount < round.target) {
+        const faltan = round.target - waterCount;
+        const msg = `¡Aún faltan patitos! Pusiste ${waterCount} y necesitamos ${round.target}. Agrega ${faltan} ${faltan === 1 ? 'más' : 'más'}.`;
+        setFeedbackMessage(msg);
+        speak(msg, 0.88, 1.2);
+      } else {
+        const sobran = waterCount - round.target;
+        const msg = `¡Hay demasiados patitos! Pusiste ${waterCount} y solo necesitábamos ${round.target}. Devuelve ${sobran} ${sobran === 1 ? 'patito' : 'patitos'} al estanque.`;
+        setFeedbackMessage(msg);
+        speak(msg, 0.88, 1.2);
+      }
     }
   };
 
@@ -684,7 +687,7 @@ export function GranjaPatitosPage() {
         </div>
       )}
 
-      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300">
+      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300 animate-page-bounce">
         <div className="flex flex-col w-full pb-16">
 
           {/* Orbes de fondo decorativos */}
@@ -985,6 +988,8 @@ export function GranjaPatitosPage() {
 
         </div>
       </main>
+
+      <Footer />
 
       {/* ESTILOS Y ANIMACIONES PERSONALIZADAS */}
       <style>{`

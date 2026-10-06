@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
+import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 
 /* ─────────────────────────────────────────────
    HELPER DE SÍNTESIS DE VOZ INFANTIL
@@ -206,6 +208,8 @@ export function MercadoNumericoPage() {
 
   // Animación de entrada
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
+  const { awardStars } = useAwardStars();
+  const [totalErrors, setTotalErrors]   = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const [wrongCount, setWrongCount] = useState(0);
 
@@ -243,11 +247,13 @@ export function MercadoNumericoPage() {
         setWrongCount(0);
         if (next >= clients.length) { 
           speak('¡Gran trabajo! Has atendido a todos los clientes del mercado.', 0.9, 1.3);
+          awardStars('mercado-numerico', 'El Mercado Numérico', 15, '⌂', totalErrors);
           setGameFinished(true); 
         }
         else { setClientIdx(next); }
       }, 1800);
     } else {
+      setTotalErrors(t => t + 1);
       speak('Ese no es el total correcto. ¡Vuelve a intentarlo!', 0.88, 1.2);
       playWrong();
       setFeedback('wrong');
@@ -258,7 +264,7 @@ export function MercadoNumericoPage() {
         if (wrongCount + 1 >= 2) setShowHint(true);
       }, 1200);
     }
-  }, [inputVal, feedback, client.total, clientIdx, clients.length, wrongCount]);
+  }, [inputVal, feedback, client.total, clientIdx, clients.length, wrongCount, awardStars, totalErrors]);
 
   const resetGame = () => {
     setClientIdx(0);
@@ -467,6 +473,7 @@ export function MercadoNumericoPage() {
           </div>
         </div>
       </main>
+      <Footer />
       <style>{`
         @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes slideUp   { from{opacity:0;transform:translateY(24px)}  to{opacity:1;transform:translateY(0)} }

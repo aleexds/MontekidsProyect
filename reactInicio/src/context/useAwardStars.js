@@ -12,7 +12,7 @@ import { addStarsToUser } from '../services/starsService';
 export function useAwardStars() {
   const { activeUser, setActiveUser } = useAuth();
 
-  const awardStars = useCallback(async (gameId, gameName, amount) => {
+  const awardStars = useCallback(async (gameId, gameName, amount, gameIcon = '', errorsCount = 0) => {
     if (!activeUser?.id) return; // Sin sesión, no hacer nada
 
     try {
@@ -21,7 +21,9 @@ export function useAwardStars() {
         activeUser.estrellas ?? 0,
         gameId,
         gameName,
-        amount
+        amount,
+        gameIcon,
+        errorsCount
       );
 
       // Actualizar el contexto y localStorage con el nuevo total

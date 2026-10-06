@@ -2,13 +2,14 @@ import { ParentHeader } from '../components/ParentHeader';
 import { GamesHero } from '../components/GamesHero';
 import { GamesGrid } from '../components/GamesGrid';
 import { GamesAchievements } from '../components/GamesAchievements';
-import { GamesFooter } from '../components/GamesFooter';
+import Footer from '../components/Footer';
 
 export function MundoJuegosPage() {
   const gameNav = [
-    { path: '/juegos',              label: 'Menú de Juegos' },
-    { path: '/juegos/puntuaciones', label: 'Mis Puntos'     },
-    { path: '/premios',             label: 'Premios'     },
+    { path: '/juegos',              label: 'Juegos' },
+    { path: '/canciones',           label: 'Canciones' },
+    { path: '/juegos/puntuaciones', label: 'Mis Estrellas' },
+    { path: '/premios',             label: 'Premios' },
   ];
 
   return (
@@ -27,7 +28,7 @@ export function MundoJuegosPage() {
           </div>
         </div>
       </main>
-      <GamesFooter />
+      <Footer />
     </div>
   );
 }

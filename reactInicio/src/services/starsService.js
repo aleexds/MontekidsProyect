@@ -11,7 +11,7 @@ const API = 'http://localhost:3000';
  * @param {string} [gameIcon]   - Emoji/ícono del juego (ej: "🐥") — opcional
  * @returns {Promise<{newTotal: number}>}
  */
-export async function addStarsToUser(userId, currentStars, gameId, gameName, amount, gameIcon = '') {
+export async function addStarsToUser(userId, currentStars, gameId, gameName, amount, gameIcon = '', errorsCount = 0) {
   const newTotal = (currentStars ?? 0) + amount;
 
   // 1. PATCH al usuario para actualizar el total de estrellas
@@ -31,6 +31,8 @@ export async function addStarsToUser(userId, currentStars, gameId, gameName, amo
       gameName,
       gameIcon,
       starsEarned: amount,
+      errorsCount,
+      flawless: errorsCount === 0,
       totalAfter: newTotal,
       playedAt: new Date().toISOString(),
     }),

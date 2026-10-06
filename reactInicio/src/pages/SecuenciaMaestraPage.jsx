@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
+import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 
 /* ──────────────────────────────────────────────
    HELPER DE SÍNTESIS DE VOZ INFANTIL
@@ -121,6 +123,8 @@ function Block({ shapeId, hex, size = 72, onClick, pulse = false }) {
 ────────────────────────────────────────────── */
 export function SecuenciaMaestraPage() {
   const [phase, setPhase]               = useState(PHASE.IDLE);
+  const { awardStars } = useAwardStars();
+  const [errorsCount, setErrorsCount]     = useState(0);
   const [roundIdx, setRoundIdx]         = useState(0);
   const [sequence, setSequence]         = useState([]);
   const [answer, setAnswer]             = useState([]);
@@ -164,6 +168,7 @@ export function SecuenciaMaestraPage() {
       const idx = next.length - 1;
       const correct = sequence[idx];
       if (!correct || block.shapeId !== correct.shapeId || block.colorId !== correct.colorId) {
+        setErrorsCount(e => e + 1);
         speak('¡Casi! Memoriza mejor para la próxima.', 0.88, 1.2);
         setTimeout(() => { playError(); setResult('wrong'); setPhase(PHASE.RESULT); }, 50);
         return next;
@@ -180,6 +185,7 @@ export function SecuenciaMaestraPage() {
     const next = roundIdx + 1;
     if (next >= ROUNDS.length) { 
       speak('¡Genial! Has completado todas las secuencias.', 0.9, 1.3);
+      awardStars('secuencia-maestra', 'Secuencia Maestra', 15, '⊞', errorsCount);
       setPhase(PHASE.FINISHED); 
       return; 
     }
@@ -419,6 +425,7 @@ export function SecuenciaMaestraPage() {
           </div>
         </div>
       </main>
+      <Footer />
       <style>{`
         @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes slideUp   { from{opacity:0;transform:translateY(24px)}  to{opacity:1;transform:translateY(0)} }

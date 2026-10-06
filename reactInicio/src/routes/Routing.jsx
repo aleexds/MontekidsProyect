@@ -17,6 +17,7 @@ import { StarAdminPage } from '../pages/StarAdminPage';
 import { PremiosPage } from '../pages/PremiosPage';
 import { AdminDashboardPage } from '../pages/AdminDashboardPage';
 import { OwnerDashboardPage } from '../pages/OwnerDashboardPage';
+import { CancionesPage } from '../pages/CancionesPage';
 import { PrivateRoute } from './PrivateRoute';
 
 export default function Routing() { 
@@ -46,6 +47,7 @@ export default function Routing() {
           <Route path="/mis-estrellas" element={<PrivateRoute><StarAdminPage /></PrivateRoute>} />
           <Route path="/juegos/puntuaciones" element={<PrivateRoute><StarAdminPage /></PrivateRoute>} />
           <Route path="/premios" element={<PrivateRoute><PremiosPage /></PrivateRoute>} />
+          <Route path="/canciones" element={<PrivateRoute><CancionesPage /></PrivateRoute>} />
           <Route path="/admin" element={<PrivateRoute><AdminDashboardPage /></PrivateRoute>} />
           <Route path="/owner-dashboard" element={<PrivateRoute><OwnerDashboardPage /></PrivateRoute>} />
           <Route path="/owner" element={<PrivateRoute><OwnerDashboardPage /></PrivateRoute>} />

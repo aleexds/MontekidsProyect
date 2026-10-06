@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
+import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 
 /* ─────────────────────────────────────────────
    HELPER DE SÍNTESIS DE VOZ INFANTIL
@@ -206,6 +208,8 @@ const cellKey = (r, c) => `${r},${c}`;
 export function SopaEstelarPage() {
   // Niveles aleatorios generados una sola vez al montar
   const [levels] = useState(() => generateLevels());
+  const { awardStars } = useAwardStars();
+  const [errorsCount, setErrorsCount] = useState(0);
   const [levelIdx, setLevelIdx] = useState(0);
   const [foundWords, setFoundWords] = useState(new Set());
   const [selecting, setSelecting] = useState(false);
@@ -252,6 +256,7 @@ export function SopaEstelarPage() {
           const nextLvl = levelIdx + 1;
           if (nextLvl >= levels.length) {
             speak('¡Completaste toda la Sopa Estelar! ¡Eres brillante!', 0.9, 1.25);
+            awardStars('sopa-estelar', 'Sopa Estelar', 13, '⭐', errorsCount);
             setGameFinished(true);
           } else {
             setLevelIdx(nextLvl);
@@ -263,7 +268,7 @@ export function SopaEstelarPage() {
       }
       return next;
     });
-  }, [level.words.length, levelIdx, levels.length]);
+  }, [level.words.length, levelIdx, levels.length, awardStars, errorsCount]);
 
   /* Drag / Touch select */
   const startSelect = useCallback((r, c) => {
@@ -304,6 +309,8 @@ export function SopaEstelarPage() {
     const placement = placements.find(p => p.word === word || p.word === wordRev);
     if (placement && !foundWords.has(placement.word)) {
       registerFound(placement.word, selCells);
+    } else if (selCells.length >= 2) {
+      setErrorsCount(e => e + 1);
     }
     setSelCells([]);
   }, [selCells, grid, placements, foundWords, registerFound]);
@@ -508,6 +515,8 @@ export function SopaEstelarPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
 
       <style>{ANIM_STYLES}</style>
     </div>
