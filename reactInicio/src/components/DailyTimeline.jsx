@@ -12,16 +12,22 @@ export function DailyTimeline() {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/teacherNotes`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          // Filtrar notas por estudiante actual si aplica
-          const studentNotes = data.filter(n => !activeUser?.id || n.studentId === activeUser.id || activeUser.role === 'teacher');
-          setNotes(studentNotes.length > 0 ? studentNotes : data);
-        }
-      })
-      .catch(e => console.error(e));
+    const loadNotes = () => {
+      fetch(`${API}/teacherNotes`)
+        .then(r => r.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            // Filtrar notas por estudiante actual si aplica
+            const studentNotes = data.filter(n => !activeUser?.id || n.studentId === activeUser.id || activeUser.role === 'teacher');
+            setNotes(studentNotes.length > 0 ? studentNotes : data);
+          }
+        })
+        .catch(e => console.error(e));
+    };
+
+    loadNotes();
+    const interval = setInterval(loadNotes, 3000);
+    return () => clearInterval(interval);
   }, [activeUser]);
 
   // Generar fecha actual formateada dinámicamente según el idioma

@@ -15,14 +15,20 @@ export function UpcomingEvents({ activeCategory, onOpenOrderModal }) {
   const [customEvents, setCustomEvents] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/curriculumEvents`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setCustomEvents(data);
-        }
-      })
-      .catch(e => console.error(e));
+    const fetchEvents = () => {
+      fetch(`${API}/curriculumEvents`)
+        .then(r => r.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setCustomEvents(data);
+          }
+        })
+        .catch(e => console.error(e));
+    };
+
+    fetchEvents();
+    const interval = setInterval(fetchEvents, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const toggleRSVP = () => {

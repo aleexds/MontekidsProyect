@@ -52,15 +52,21 @@ export function ReportsPage() {
 
   // Cargar reportes y usuarios almacenados en db.json
   useEffect(() => {
-    Promise.all([
-      fetch('http://localhost:3000/reports').then(r => r.json()).catch(() => []),
-      fetch('http://localhost:3000/users').then(r => r.json()).catch(() => [])
-    ]).then(([repData, usrData]) => {
-      if (Array.isArray(repData) && repData.length > 0) setThreads(repData);
-      if (Array.isArray(usrData) && usrData.length > 0) setUsersList(usrData);
-    }).catch(err => {
-      console.warn('Error al cargar datos en ReportsPage:', err);
-    });
+    const loadReportsData = () => {
+      Promise.all([
+        fetch('http://localhost:3000/reports').then(r => r.json()).catch(() => []),
+        fetch('http://localhost:3000/users').then(r => r.json()).catch(() => [])
+      ]).then(([repData, usrData]) => {
+        if (Array.isArray(repData) && repData.length > 0) setThreads(repData);
+        if (Array.isArray(usrData) && usrData.length > 0) setUsersList(usrData);
+      }).catch(err => {
+        console.warn('Error al cargar datos en ReportsPage:', err);
+      });
+    };
+
+    loadReportsData();
+    const interval = setInterval(loadReportsData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleAddThread = async (newThread) => {

@@ -35,9 +35,7 @@ export default function Programs() {
           <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden border-t-4 border-primary-container">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 rounded-full bg-cyan-100 text-primary font-bold text-xs">
-                  {t('programs.r1Age', '2 a 3 Años')}
-                </span>
+                
                 <span className="material-symbols-outlined text-primary text-[28px]">spa</span>
               </div>
               <h3 className="text-2xl font-bold text-on-surface">{t('programs.r1Title', 'Aula Semillitas')}</h3>
@@ -69,9 +67,7 @@ export default function Programs() {
           <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden border-t-4 border-tertiary">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 rounded-full bg-pink-100 text-tertiary font-bold text-xs">
-                  {t('programs.r2Age', '3 a 4 Años')}
-                </span>
+                
                 <span className="material-symbols-outlined text-tertiary text-[28px]">explore</span>
               </div>
               <h3 className="text-2xl font-bold text-on-surface">{t('programs.r2Title', 'Aula Exploradores')}</h3>
@@ -103,9 +99,7 @@ export default function Programs() {
           <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-md flex flex-col justify-between relative overflow-hidden border-t-4 border-secondary-container">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-bold text-xs">
-                  {t('programs.r3Age', '4 a 5 Años')}
-                </span>
+                
                 <span className="material-symbols-outlined text-secondary text-[28px]">brush</span>
               </div>
               <h3 className="text-2xl font-bold text-on-surface">{t('programs.r3Title', 'Aula Creadores')}</h3>
