@@ -185,7 +185,107 @@
       "message": "Estimada/o Docente Esteban M.,\n\nPor medio de la presente solicito su colaboración para la administración del siguiente medicamento durante la jornada escolar:\n\n• Nombre del Medicamento: [Nombre del jarabe / gotas]\n• Dosis Exacta: [Ej. 5 ml / 3 gotas]\n• Horario Fijo de Aplicación: [Ej. 10:00 AM tras la merienda]\n• Requiere Refrigeración: [Sí / No - Dejado en recepción]\n• Indicaciones Adicionales / Observaciones: [Tomar con bastante agua / Administrar después de alimentos]\n\nAdjunto la receta médica correspondiente.\n\nMuchas gracias por el cuidado y atención.\nAtentamente,\nCarlos Méndez",
       "attachment": null,
       "attachmentSize": null,
-      "reply": null
+      "reply": {
+        "author": "Docente Marcela R.",
+        "role": "Guía AMI",
+        "time": "Justo ahora",
+        "statusTag": "Atendido por la docente",
+        "text": "200 ok",
+        "avatar": "",
+        "signed": true
+      }
+    },
+    {
+      "id": "1791266970207",
+      "userId": "bcbf",
+      "category": "salud",
+      "categoryLabel": "Consulta de Salud",
+      "categoryIcon": "medical_services",
+      "time": "Enviado justo ahora",
+      "title": "Test",
+      "sender": "Alex Cubero Duarte",
+      "senderAvatar": "",
+      "message": "Test",
+      "attachment": null,
+      "attachmentSize": null,
+      "reply": {
+        "author": "Docente Marcela R.",
+        "role": "Guía AMI",
+        "time": "Justo ahora",
+        "statusTag": "Atendido por la docente",
+        "text": "¡Recibido! Con mucho gusto atiendo su consulta.",
+        "avatar": "",
+        "signed": true
+      }
+    },
+    {
+      "id": "1791270002501",
+      "userId": "bcbf",
+      "category": "salud",
+      "categoryLabel": "Consulta de Salud",
+      "categoryIcon": "medical_services",
+      "time": "Enviado justo ahora",
+      "title": "prueba",
+      "sender": "Alex Cubero Duarte",
+      "senderAvatar": "",
+      "message": "pruebaaaa",
+      "attachment": null,
+      "attachmentSize": null,
+      "reply": {
+        "author": "Docente Marcela R.",
+        "role": "Guía AMI",
+        "time": "Justo ahora",
+        "statusTag": "Atendido por la docente",
+        "text": "200 ok",
+        "avatar": "",
+        "signed": true
+      }
+    },
+    {
+      "id": "1791270869165",
+      "userId": "bcbf",
+      "category": "salud",
+      "categoryLabel": "Consulta de Salud",
+      "categoryIcon": "medical_services",
+      "time": "Enviado justo ahora",
+      "title": "holaa",
+      "sender": "Alex Cubero Duarte",
+      "senderAvatar": "",
+      "message": "holaaaaaaaa",
+      "attachment": null,
+      "attachmentSize": null,
+      "reply": {
+        "author": "Docente Marcela R.",
+        "role": "Guía AMI",
+        "time": "Justo ahora",
+        "statusTag": "Atendido por la docente",
+        "text": "200 ok",
+        "avatar": "",
+        "signed": true
+      }
+    },
+    {
+      "id": "1791290163832",
+      "userId": "bcbf",
+      "category": "pedagogica",
+      "categoryLabel": "Observación Pedagógica",
+      "categoryIcon": "school",
+      "time": "Enviado justo ahora",
+      "title": "prueba2",
+      "sender": "Alex Cubero Duarte",
+      "senderAvatar": "",
+      "message": "pruebaaaaaaaa222222",
+      "attachment": null,
+      "attachmentSize": null,
+      "reply": {
+        "author": "Docente Marcela R.",
+        "role": "Guía AMI",
+        "time": "Justo ahora",
+        "statusTag": "Atendido por la docente",
+        "text": "¡Recibido! Con mucho gusto atiendo su consulta.",
+        "avatar": "",
+        "signed": true
+      }
     }
   ],
   "gameHistory": [
@@ -566,6 +666,42 @@
       "time": "hace unos momentos",
       "createdAt": "2026-10-05T17:36:18.008Z",
       "text": "Observación test"
+    },
+    {
+      "id": "tn_1791268677527",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "teacherName": "Docente Marcela R.",
+      "time": "Justo ahora",
+      "createdAt": "2026-10-06T06:37:57.527Z",
+      "text": "Nota registrada en la bitácora"
+    },
+    {
+      "id": "tn_1791269005842",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "teacherName": "Docente Marcela R.",
+      "time": "Justo ahora",
+      "createdAt": "2026-10-06T06:43:25.842Z",
+      "text": "Nota registrada en la bitácora"
+    },
+    {
+      "id": "tn_1791297875765",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "teacherName": "Docente Marcela R.",
+      "time": "Justo ahora",
+      "createdAt": "2026-10-06T14:44:35.765Z",
+      "text": "envia un comentario a bitacora a la alumna Adara Cubero con el asunto \"bitacora de prueba\""
+    },
+    {
+      "id": "tn_1791305589127",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "teacherName": "Docente Marcela R.",
+      "time": "Justo ahora",
+      "createdAt": "2026-10-06T16:53:09.127Z",
+      "text": "envia un nuevo material de asunto vasos plasticos a la estudiante Adara Cubero"
     }
   ],
   "assignedActivities": [
@@ -637,6 +773,26 @@
       "subtitle": "Evento test",
       "checked": false,
       "icon": "checklist",
+      "isPending": true
+    },
+    {
+      "id": "act_1791297968461",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "text": "Muda de ropa adicional para la actividad de huertas",
+      "subtitle": "Asignado por Docente Marcela R.",
+      "checked": false,
+      "icon": "pending_actions",
+      "isPending": true
+    },
+    {
+      "id": "act_1791300205571",
+      "studentId": "bcbf",
+      "studentName": "Adara Cubero",
+      "text": "vasos plasticos",
+      "subtitle": "Asignado por Docente Marcela R.",
+      "checked": false,
+      "icon": "pending_actions",
       "isPending": true
     }
   ],

@@ -19,14 +19,20 @@ export function CalendarGrid({
     : (activeUser?.child?.classroom || null);
 
   useEffect(() => {
-    fetch(`${API}/curriculumEvents`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setApiEvents(data);
-        }
-      })
-      .catch(e => console.error(e));
+    const fetchEvents = () => {
+      fetch(`${API}/curriculumEvents`)
+        .then(r => r.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setApiEvents(data);
+          }
+        })
+        .catch(e => console.error(e));
+    };
+
+    fetchEvents();
+    const interval = setInterval(fetchEvents, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const defaultMonths = [

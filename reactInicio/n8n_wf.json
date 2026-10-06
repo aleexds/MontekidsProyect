@@ -1,0 +1,315 @@
+{
+  "id": "0u34p0wy4VeQj0AX",
+  "name": "Montekids - Login con OTP y Recuperacion",
+  "description": null,
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-09-30T15:23:07.916Z",
+  "updatedAt": "2026-09-30T17:42:39.032Z",
+  "isArchived": false,
+  "versionId": "00fbad61-3557-4c99-8e66-6600d991d8f8",
+  "versionCounter": 68,
+  "sourceWorkflowId": null,
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "forgot-password",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fbcc2034-bac1-48c8-bf8e-fa4f745fe425",
+      "name": "Webhook",
+      "webhookId": "25b0799e-6432-4b2a-8f92-ba01beb1a009"
+    },
+    {
+      "parameters": {
+        "url": "=http://localhost:3000/users?email={{ $json.body.email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        432,
+        -96
+      ],
+      "id": "095a9e4c-a980-4c47-8ef5-be8f10e6bdcc",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=http://localhost:3000/users/{{ $('HTTP Request1').first().json.id }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"resetCode\": \"{{ $('Webhook').item.json.body.code }}\",\n  \"resetCodeExpiresAt\": \"{{ $('Webhook').item.json.body.expiresAt }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        672,
+        -128
+      ],
+      "id": "ccbd4807-8630-41f5-b032-6db21eee23d4",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Código de recuperación de contraseña - Montekids",
+        "message": "=<div style=\"font-family: Arial, sans-serif; color: #333;\">   <h2>Solicitud de Recuperación de Contraseña</h2>   <p>Hola, has solicitado restablecer tu contraseña en Montekids.</p>   <p>Tu código de verificación de 6 dígitos es:</p>   <h1 style=\"color: #F5009B; letter-spacing: 4px;\">{{ $('Webhook').item.json.body.code }}</h1>   <p>Este código expirará en 10 minutos.</p>   <p style=\"font-size: 12px; color: #666;\">Si no solicitaste este cambio, puedes ignorar este mensaje.</p> </div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        -128
+      ],
+      "id": "f810d800-c3e8-4a44-bdcd-902ae9b69850",
+      "name": "Send a message",
+      "webhookId": "536c5411-3d27-460e-84c7-46fcfc494518",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "W4c2Icek5I14azEh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"message\": \"Código enviado y registrado correctamente\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1120,
+        -128
+      ],
+      "id": "f670b48d-0edd-4e3f-9e8b-b06c10e76d0f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "url": "=http://localhost:3000/users",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.body.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        160
+      ],
+      "name": "HTTP Request - Buscar Usuario",
+      "id": "8eeb8170-53af-4599-900a-00ed84a21a5c"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtenemos los datos que mandó React desde el webhook principal\nconst webhookData = $('Webhook').first().json.body; \nconst userCode = webhookData.code; // El código de 6 dígitos que envió el frontend\nconst userEmail = webhookData.email;\n\n// Y el usuario que viene de json-server (el nodo anterior)\nconst dbUser = $input.first().json;\n\n// Si json-server devuelve un array o un objeto directo:\nconst usuario = Array.isArray(dbUser) ? dbUser[0] : dbUser;\n\nif (!usuario) {\n  return [{ json: { success: false, message: \"El usuario no existe.\" } }];\n}\n\nconst storedCode = usuario.resetCode;\nconst expiresAt = usuario.resetCodeExpiresAt;\nconst now = new Date();\n\n// 1. Validar si el código existe en la BD\nif (!storedCode) {\n  return [{ json: { success: false, message: \"No hay ninguna solicitud de código activa para este correo.\" } }];\n}\n\n// 2. Validar si expiró\nif (expiresAt && new Date(expiresAt) < now) {\n  return [{ json: { success: false, message: \"El código de verificación ha expirado. Solicita uno nuevo.\" } }];\n}\n\n// 3. Validar si coinciden estrictamente\nif (String(storedCode).trim() !== String(userCode).trim()) {\n  return [{ json: { success: false, message: \"El código de verificación es incorrecto.\" } }];\n}\n\n// 4. Todo correcto\nreturn [{ json: { success: true, message: \"Código validado correctamente.\" } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        208
+      ],
+      "name": "Code - Validar OTP",
+      "id": "fdf0c015-7525-4b26-b844-2cf712630530"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "verify",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "fceec8a5-30a8-4fbd-b551-936d609d6ca9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Verificar OTP"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        224,
+        32
+      ],
+      "name": "Switch1",
+      "id": "a6e7f31a-11e9-4369-949b-203d491688de"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        928,
+        208
+      ],
+      "name": "Respond to Webhook1",
+      "id": "8f9b99fb-4313-4528-a7c8-cab0f7e58ae5"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Buscar Usuario": {
+      "main": [
+        [
+          {
+            "node": "Code - Validar OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Validar OTP": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Buscar Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "0u34p0wy4VeQj0AX",
+      "projectId": "Yw0CB9A3veDsXC89",
+      "project": {
+        "id": "Yw0CB9A3veDsXC89",
+        "name": "Alex Cubero <cuberoduartealex@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "8cce9e88-dae5-44cf-b5a0-e25201057257",
+        "createdAt": "2026-09-10T15:12:37.726Z",
+        "updatedAt": "2026-09-10T17:09:36.310Z"
+      },
+      "createdAt": "2026-09-30T15:23:07.932Z",
+      "updatedAt": "2026-09-30T15:23:07.932Z"
+    }
+  ],
+  "activeVersion": null
+}
