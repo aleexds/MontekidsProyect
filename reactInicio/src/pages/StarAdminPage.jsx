@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import { ParentHeader } from '../components/ParentHeader';
-import ParentFooter from '../components/ParentFooter';
+import Footer from '../components/Footer';
 
 /* ════════════════════════════════════════════════
    CONSTANTES DE NIVELES
@@ -890,7 +890,7 @@ export function StarAdminPage() {
               </div>
             </section>
 
-            <ParentFooter />
+            <Footer />
           </main>
         )}
       </div>

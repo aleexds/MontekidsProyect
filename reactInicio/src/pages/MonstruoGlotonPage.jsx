@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
 import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 
 /* ─────────────────────────────────────────────
    HELPER DE SÍNTESIS DE VOZ INFANTIL
@@ -723,6 +724,7 @@ function GlotonMonster({
 ───────────────────────────────────────────── */
 export function MonstruoGlotonPage() {
   const [roundIndex, setRoundIndex]       = useState(0);
+  const [errorsCount, setErrorsCount]     = useState(0);
   const [eatenIds, setEatenIds]           = useState([]);
   const [selectedId, setSelectedId]       = useState(null);
   const [isDragging, setIsDragging]       = useState(false);
@@ -802,7 +804,7 @@ export function MonstruoGlotonPage() {
               setShowCelebration(false);
               setRoundIndex(nextRound);
             } else {
-              awardStars('monstruo-gloton', 'El Monstruo Glotón', 10);
+              awardStars('monstruo-gloton', 'El Monstruo Glotón', 10, '👾', errorsCount);
               setGameFinished(true);
             }
           }, 3200);
@@ -814,6 +816,7 @@ export function MonstruoGlotonPage() {
         }
       } else {
         // ERROR: Gesto gracioso de puaj y regreso de la figura
+        setErrorsCount(e => e + 1);
         playPuajSound();
         setMonsterState('puaj');
         setWrongFlashId(itemId);
@@ -826,7 +829,7 @@ export function MonstruoGlotonPage() {
         }, 1100);
       }
     },
-    [monsterState, eatenIds, round, checkItemMatch, roundIndex, awardStars]
+    [monsterState, eatenIds, round, checkItemMatch, roundIndex, awardStars, errorsCount]
   );
 
   // Manejo de Drag and Drop
@@ -968,7 +971,7 @@ export function MonstruoGlotonPage() {
         </div>
       )}
 
-      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300">
+      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300 animate-page-bounce">
         <div className="flex flex-col w-full pb-16">
 
           {/* Orbes de fondo decorativos */}
@@ -1212,6 +1215,8 @@ export function MonstruoGlotonPage() {
 
         </div>
       </main>
+
+      <Footer />
 
       {/* ESTILOS Y ANIMACIONES PERSONALIZADAS */}
       <style>{`

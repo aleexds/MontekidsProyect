@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/useAuth';
 import { ParentHeader } from '../components/ParentHeader';
-import ParentFooter from '../components/ParentFooter';
+import Footer from '../components/Footer';
 
 const API = 'http://localhost:3000';
 
@@ -461,7 +461,7 @@ export function PremiosPage() {
               </div>
             </section>
 
-            <ParentFooter />
+            <Footer />
           </>
         )}
       </div>

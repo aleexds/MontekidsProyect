@@ -1,11 +1,61 @@
 
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/useAuth';
 import AnimatedInteractiveWord from './AnimatedInteractiveWord';
 
+const API = 'http://localhost:3000';
+
+const isToday = (dateString) => {
+  if (!dateString) return false;
+  const d = new Date(dateString);
+  const now = new Date();
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
+};
+
 export function GamesHero() {
+  const { activeUser } = useAuth();
+  const [starsToday, setStarsToday] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const userId = activeUser?.id || localStorage.getItem('currentUserId');
+    if (!userId) return;
+
+    fetch(`${API}/gameHistory?userId=${userId}`)
+      .then(r => r.ok ? r.json() : [])
+      .then(history => {
+        if (isMounted && Array.isArray(history)) {
+          const totalToday = history
+            .filter(item => isToday(item.playedAt))
+            .reduce((sum, item) => sum + (Number(item.starsEarned) || 0), 0);
+          setStarsToday(totalToday);
+        }
+      })
+      .catch(err => console.error('Error cargando estrellas de hoy:', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeUser?.id]);
+
   const handleNarrator = () => {
+    const userId = activeUser?.id || localStorage.getItem('currentUserId');
+    const todayStr = new Date().toISOString().slice(0, 10);
+    if (userId) {
+      localStorage.setItem(`mk_audio_listened_${userId}_${todayStr}`, 'true');
+      window.dispatchEvent(new Event('mkAudioListened'));
+    }
+
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance("Bienvenido a Montekids. Toca tu juego favorito para ganar estrellas doradas hoy.");
+      const textToSpeak = starsToday > 0 
+        ? `Bienvenido a Montekids. Llevas ${starsToday} estrellas ganadas hoy. Toca tu juego favorito para seguir ganando.`
+        : "Bienvenido a Montekids. Toca tu juego favorito para ganar estrellas doradas hoy.";
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = 'es-ES';
       utterance.rate = 0.9;
       utterance.pitch = 1.2;
@@ -59,15 +109,17 @@ export function GamesHero() {
                 <span>¡Escuchar Audio!</span>
                 <span className="inline-flex w-3 h-3 rounded-full bg-primary-container animate-ping"></span>
               </button>
-              <div className="inline-flex items-center gap-2 px-4 py-3 rounded-full bg-secondary-fixed text-on-secondary-fixed shadow-[0_6px_0_#ffb95d,0_10px_20px_rgba(254,166,24,0.22)] font-bold">
+              <div className="inline-flex items-center gap-2 px-4 py-3 rounded-full bg-secondary-fixed text-on-secondary-fixed shadow-[0_6px_0_#ffb95d,0_10px_20px_rgba(254,166,24,0.22)] font-bold transition-all duration-300">
                 <span className="material-symbols-outlined text-secondary text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                 <span className="flex items-center gap-1">
-                  <span>3 Estrellas ganadas hoy</span>
-                  <span className="inline-flex gap-0.5 text-secondary">
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                  </span>
+                  <span>{starsToday} {starsToday === 1 ? 'Estrella ganada hoy' : 'Estrellas ganadas hoy'}</span>
+                  {starsToday > 0 && (
+                    <span className="inline-flex gap-0.5 text-secondary ml-1">
+                      {Array.from({ length: Math.min(starsToday, 5) }).map((_, i) => (
+                        <span key={i} className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                      ))}
+                    </span>
+                  )}
                 </span>
               </div>
             </div>

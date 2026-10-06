@@ -376,7 +376,7 @@ export function OwnerDashboardPage() {
       {/* HEADER EXCLUSIVO PARA EL DUEÑO CON hideLanguage={true} */}
       <ParentHeader customNavItems={ownerNavItems} hideLanguage={true} />
 
-      <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300">
+      <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300 animate-page-bounce">
         
         {/* BANNER BIENVENIDA DIRECCIÓN */}
         <div className="bg-gradient-to-r from-purple-700 via-pink-700 to-amber-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">

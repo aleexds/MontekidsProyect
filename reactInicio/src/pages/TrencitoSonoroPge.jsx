@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { ParentHeader } from '../components/ParentHeader';
 import { Link } from 'react-router-dom';
 import { useAwardStars } from '../context/useAwardStars';
+import Footer from '../components/Footer';
 import duckImg from '../img/duck.jpeg';
 import frogImg from '../img/frog.jpg';
 import catImg from '../img/cat.jpg';
@@ -520,6 +521,7 @@ export function TrencitoSonoroPge() {
   );
 
   const { awardStars } = useAwardStars();
+  const [errorsCount, setErrorsCount] = useState(0);
   const trainTrackRef = useRef(null);
   const awardedRef   = useRef(false); // guard: evita doble llamada a awardStars
   const round = ROUNDS[roundIndex];
@@ -577,7 +579,7 @@ export function TrencitoSonoroPge() {
             // Guard: solo llamar una vez aunque StrictMode re-ejecute el updater
             if (!awardedRef.current) {
               awardedRef.current = true;
-              awardStars('trencito-sonoro', 'El Trencito Sonoro', 10, '🚂');
+              awardStars('trencito-sonoro', 'El Trencito Sonoro', 10, '🚂', errorsCount);
             }
             setCompleted(true);
           }
@@ -585,7 +587,7 @@ export function TrencitoSonoroPge() {
       }
       return next;
     });
-  }, [round.wagons, roundIndex, awardStars]);
+  }, [round.wagons, roundIndex, awardStars, errorsCount]);
 
   // Intento de emparejamiento
   const tryMatch = useCallback((bubbleId, wagonId) => {
@@ -594,6 +596,7 @@ export function TrencitoSonoroPge() {
     if (bubbleId === wagonId) {
       handleSuccess(wagonId);
     } else {
+      setErrorsCount(e => e + 1);
       speak('¡Casi! Escucha el sonido con atención y prueba con otro animal.', 0.85, 1.1);
       setWrongFlash(wagonId);
       setTimeout(() => setWrongFlash(null), 700);
@@ -728,7 +731,7 @@ export function TrencitoSonoroPge() {
         </div>
       )}
 
-      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300">
+      <main className="w-full pt-20 bg-background flex-1 max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 transition-colors duration-300 animate-page-bounce">
         <div className="flex flex-col w-full pb-16">
 
           {/* Orbes de fondo decorativos */}
@@ -965,6 +968,8 @@ export function TrencitoSonoroPge() {
 
         </div>
       </main>
+
+      <Footer />
 
       {/* ESTILOS Y ANIMACIONES CSS PERSONALIZADAS */}
       <style>{`
