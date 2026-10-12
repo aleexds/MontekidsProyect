@@ -37,9 +37,11 @@ export default function Navbar() {
     setFontSizeIndex(nextIndex);
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md border-b border-surface-container-high transition-colors duration-300 px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo dinámico (Modo Claro / Modo Oscuro) */}
@@ -47,16 +49,16 @@ export default function Navbar() {
             <img 
               src={logoMontekids} 
               alt="Logo MonteKids" 
-              className="h-9 sm:h-20 w-auto block dark:hidden transition-opacity duration-300"
+              className="h-9 sm:h-16 lg:h-20 w-auto block dark:hidden transition-opacity duration-300"
             />
             <img 
               src={logoDark} 
               alt="Logo MonteKids Dark" 
-              className="h-9 sm:h-20 w-auto hidden dark:block transition-opacity duration-300"
+              className="h-9 sm:h-16 lg:h-20 w-auto hidden dark:block transition-opacity duration-300"
             />
           </a>
 
-          {/* Links de Navegación */}
+          {/* Links de Navegación (Escritorio) */}
           <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-on-surface-variant">
             <a href="#inicio" className="hover:text-primary transition-colors">{t('nav.home', 'Inicio')}</a>
             <a href="#filosofia" className="hover:text-primary transition-colors">{t('nav.philosophy', 'Filosofía')}</a>
@@ -65,14 +67,14 @@ export default function Navbar() {
             <a href="#ubicacion" className="hover:text-primary transition-colors">{t('nav.contact', 'Ubicación & Contacto')}</a>
           </div>
 
-          {/* Acciones & Controles de Accesibilidad */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Acciones & Controles de Accesibilidad (Escritorio) */}
+          <div className="hidden md:flex items-center gap-2 sm:gap-3">
             
             {/* Botón Aumentar/Cambiar Tamaño de Texto */}
             <button
               onClick={toggleFontSize}
               title="Cambiar tamaño de texto"
-              className="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-extrabold text-xs hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm"
+              className="px-2.5 py-1.5 rounded-full bg-surface-container-high text-on-surface font-extrabold text-xs hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] mr-1">text_fields</span>
               {fontLabels[fontSizeIndex]}
@@ -88,14 +90,14 @@ export default function Navbar() {
             <button
               onClick={() => setIsDark(!isDark)}
               aria-label="Cambiar tema"
-              className="p-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm"
+              className="p-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">
                 {isDark ? 'light_mode' : 'dark_mode'}
               </span>
             </button>
 
-            {/* Botón Iniciar Sesión */}
+            {/* Botón Iniciar Sesión (Escritorio) */}
             <Link 
               to="/LOGIN" 
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-tertiary text-white font-bold text-xs hover:brightness-110 active:scale-95 transition-all shadow-sm cursor-pointer"
@@ -103,9 +105,121 @@ export default function Navbar() {
               <span className="material-symbols-outlined text-[18px]">lock</span>
               <span>{t('nav.login', 'Iniciar Sesión')}</span>
             </Link>
-
           </div>
+
+          {/* Acciones Móvil: Modo Oscuro + Hamburguesa */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => setIsDark(!isDark)}
+              aria-label="Cambiar tema"
+              className="p-2 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {isDark ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              type="button"
+              aria-label="Menú principal"
+              className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all flex items-center justify-center cursor-pointer shadow-md active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[24px]">
+                {isMobileMenuOpen ? 'close' : 'menu'}
+              </span>
+            </button>
+          </div>
+
         </div>
+
+        {/* Menú Desplegable Móvil */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-surface-container-high/60 bg-surface-container-lowest/98 backdrop-blur-md mt-3 pt-4 pb-4 px-4 flex flex-col gap-4 shadow-xl rounded-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70 px-2 mb-1">
+                Navegación
+              </span>
+              <a 
+                href="#inicio" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm text-on-surface hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-primary text-[20px]">home</span>
+                <span>{t('nav.home', 'Inicio')}</span>
+              </a>
+              <a 
+                href="#filosofia" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm text-on-surface hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-primary text-[20px]">psychology</span>
+                <span>{t('nav.philosophy', 'Filosofía')}</span>
+              </a>
+              <a 
+                href="#aulas" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm text-on-surface hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-primary text-[20px]">school</span>
+                <span>{t('nav.classrooms', 'Aulas')}</span>
+              </a>
+              <a 
+                href="#opiniones" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm text-on-surface hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-primary text-[20px]">rate_review</span>
+                <span>{t('nav.reviews', 'Opiniones')}</span>
+              </a>
+              <a 
+                href="#ubicacion" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-sm text-on-surface hover:bg-surface-container-high transition-colors"
+              >
+                <span className="material-symbols-outlined text-primary text-[20px]">location_on</span>
+                <span>{t('nav.contact', 'Ubicación & Contacto')}</span>
+              </a>
+            </div>
+
+            {/* Accesibilidad Móvil */}
+            <div className="pt-3 border-t border-surface-container-high/40 flex flex-col gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70 px-2">
+                Herramientas y Configuración
+              </span>
+              <div className="flex items-center justify-between gap-2 p-2 bg-surface-container-low rounded-xl">
+                <span className="text-xs font-bold text-on-surface px-2">Tamaño de Texto</span>
+                <button
+                  onClick={toggleFontSize}
+                  className="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-extrabold text-xs"
+                >
+                  {fontLabels[fontSizeIndex]}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 p-2 bg-surface-container-low rounded-xl">
+                <span className="text-xs font-bold text-on-surface px-2">Accesibilidad Color</span>
+                <ColorblindToggle />
+              </div>
+
+              <div className="flex items-center justify-between gap-2 p-2 bg-surface-container-low rounded-xl">
+                <span className="text-xs font-bold text-on-surface px-2">Idioma</span>
+                <LanguageToggle />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-surface-container-high/40">
+              <Link 
+                to="/LOGIN" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-tertiary text-white font-bold text-sm hover:brightness-110 active:scale-95 transition-all shadow-md cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">lock</span>
+                <span>{t('nav.login', 'Iniciar Sesión')}</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* BOTÓN FLOTANTE ASISTENTE IA (Fijo en esquina inferior derecha) */}

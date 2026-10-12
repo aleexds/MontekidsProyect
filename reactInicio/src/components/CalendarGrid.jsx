@@ -269,8 +269,9 @@ export function CalendarGrid({
         </div>
       </div>
 
-      <div className="w-full border border-surface-container-low rounded-2xl overflow-hidden bg-surface-container-low dark:bg-zinc-800/90">
-        <div className="grid grid-cols-7 bg-surface-container-low dark:bg-zinc-800 text-center border-b border-surface-container-low dark:border-zinc-700/60">
+      <div className="w-full border border-surface-container-low rounded-2xl overflow-x-auto bg-surface-container-low dark:bg-zinc-800/90">
+        <div className="min-w-[550px] sm:min-w-full">
+          <div className="grid grid-cols-7 bg-surface-container-low dark:bg-zinc-800 text-center border-b border-surface-container-low dark:border-zinc-700/60">
           {daysOfWeek.map((day) => (
             <div key={day} className="py-2.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider">
               {day}
@@ -343,5 +344,6 @@ export function CalendarGrid({
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
