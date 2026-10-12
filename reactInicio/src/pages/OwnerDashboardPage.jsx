@@ -378,8 +378,29 @@ export function OwnerDashboardPage() {
 
       <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300 animate-page-bounce">
         
-        {/* BANNER BIENVENIDA DIRECCIÓN */}
-        <div className="bg-gradient-to-r from-purple-700 via-pink-700 to-amber-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+        {/* AVISO DE ACCESO DESDE COMPUTADORA EN MÓVIL */}
+        <div className="lg:hidden my-8 p-8 bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-slate-200 dark:border-zinc-800 text-center flex flex-col items-center justify-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-inner">
+            <span className="material-symbols-outlined text-[36px]">laptop_mac</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+            Por favor ingresa desde una computadora
+          </h2>
+          <p className="text-sm text-slate-600 dark:text-zinc-300 max-w-md leading-relaxed font-medium">
+            El Panel Exclusivo de Dirección (Dueño) requiere una pantalla de computadora para la supervisión completa de aulas, administración de perfiles y envío de comunicaciones pedagógicas. Por favor accede desde una laptop o computadora de escritorio.
+          </p>
+          <a
+            href="/mi-hijo-a"
+            className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-purple-600 text-white font-bold text-sm shadow-md hover:brightness-110 active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+            <span>Volver al Panel de Padres</span>
+          </a>
+        </div>
+
+        <div className="hidden lg:block">
+          {/* BANNER BIENVENIDA DIRECCIÓN */}
+          <div className="bg-gradient-to-r from-purple-700 via-pink-700 to-amber-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 opacity-15 text-9xl pointer-events-none select-none">
             🏫
           </div>
@@ -955,10 +976,9 @@ export function OwnerDashboardPage() {
                 ))
               )}
             </div>
-
           </div>
         )}
-
+        </div>
       </main>
 
       {/* ========================================================================= */}

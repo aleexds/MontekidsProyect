@@ -454,11 +454,30 @@ export function AdminDashboardPage() {
 
       <main className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto w-full transition-colors duration-300 animate-page-bounce">
         
+        {/* AVISO DE ACCESO DESDE COMPUTADORA EN MÓVIL */}
+        <div className="lg:hidden my-8 p-8 bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-slate-200 dark:border-zinc-800 text-center flex flex-col items-center justify-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-cyan-100 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-inner">
+            <span className="material-symbols-outlined text-[36px]">desktop_windows</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+            Por favor ingresa desde una computadora
+          </h2>
+          <p className="text-sm text-slate-600 dark:text-zinc-300 max-w-md leading-relaxed font-medium">
+            El Panel de Docentes y Administración contiene herramientas avanzadas de supervisión y gestión curricular optimizadas exclusivamente para pantallas de computadora. Por favor accede desde un dispositivo de escritorio para utilizar este panel.
+          </p>
+          <a
+            href="/mi-hijo-a"
+            className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-bold text-sm shadow-md hover:brightness-110 active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+            <span>Volver al Panel de Padres</span>
+          </a>
+        </div>
 
-
-        {/* ========================================================================= */}
-        {/* PESTAÑA 1: DASHBOARD OVERVIEW */}
-        {/* ========================================================================= */}
+        <div className="hidden lg:block">
+          {/* ========================================================================= */}
+          {/* PESTAÑA 1: DASHBOARD OVERVIEW */}
+          {/* ========================================================================= */}
         {activeTab === 'dashboard' && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 w-full items-start">
             
@@ -1375,7 +1394,7 @@ export function AdminDashboardPage() {
             </div>
           );
         })()}
-
+        </div>
       </main>
 
       {/* ========================================================================= */}

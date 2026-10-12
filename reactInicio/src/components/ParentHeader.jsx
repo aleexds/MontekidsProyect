@@ -225,6 +225,8 @@ export function ParentHeader({ customNavItems, hideLanguage = false }) {
     setFontSizeIndex(nextIndex);
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Enlaces por defecto (Padres) o personalizados (Juegos u otras vistas)
   const defaultNavItems = [
     { path: '/mi-hijo-a', label: t('parentDashboard.nav.myChild', 'Mi Hijo/a') },
@@ -296,12 +298,13 @@ export function ParentHeader({ customNavItems, hideLanguage = false }) {
             )}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Acciones & Controles (Escritorio) */}
+          <div className="hidden lg:flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={toggleFontSize}
               title={t('nav.changeTextSize', 'Cambiar tamaño de texto')}
               type="button"
-              className="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-extrabold text-xs hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
+              className="px-2.5 py-1.5 rounded-full bg-surface-container-high text-on-surface font-extrabold text-xs hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] mr-1">text_fields</span>
               {fontLabels[fontSizeIndex]}
@@ -321,7 +324,7 @@ export function ParentHeader({ customNavItems, hideLanguage = false }) {
               </span>
             </button>
 
-            {/* SECCIÓN PERFIL */}
+            {/* SECCIÓN PERFIL (Escritorio) */}
             <div className="relative" ref={settingsRef}>
               <div className="flex items-center gap-2 pl-1.5 py-1 pr-2.5 bg-surface-container-low border border-surface-container-high rounded-full shadow-2xs">
                 <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-bold flex items-center justify-center text-xs shrink-0 overflow-hidden ring-1 ring-primary/20">
@@ -593,9 +596,175 @@ export function ParentHeader({ customNavItems, hideLanguage = false }) {
                 </form>
               </div>
             </div>
-
           </div>
+
+          {/* Acciones Móvil (< lg): Tema + Menú Hamburguesa */}
+          <div className="flex lg:hidden items-center gap-2">
+            <button
+              onClick={() => setIsDark(!isDark)}
+              aria-label={t('nav.changeTheme', 'Cambiar tema')}
+              type="button"
+              className="p-2 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-low transition-all flex items-center justify-center shadow-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {isDark ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              type="button"
+              aria-label="Menú principal"
+              className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary/90 transition-all flex items-center justify-center cursor-pointer shadow-md active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[24px]">
+                {isMobileMenuOpen ? 'close' : 'menu'}
+              </span>
+            </button>
+          </div>
+
         </div>
+
+        {/* Menú Desplegable Móvil (< lg) */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-surface-container-high/60 bg-surface-container-lowest/98 backdrop-blur-md px-4 py-4 flex flex-col gap-4 shadow-xl max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex flex-col gap-1.5 pb-3 border-b border-surface-container-high/50">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70 px-2 mb-1">
+                {t('nav.navigation', 'Navegación')}
+              </span>
+              {navItems.map((item) => {
+                const currentFullPath = location.pathname + location.hash;
+                const isActive =
+                  location.pathname === item.path ||
+                  currentFullPath === item.path ||
+                  (item.path === '/admin#dashboard' && location.pathname === '/admin' && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                  (item.path === '/admin' && location.pathname === '/admin' && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                  (item.path === '/owner-dashboard#dashboard' && (location.pathname === '/owner-dashboard' || location.pathname === '/owner' || location.pathname === '/dueno-dashboard') && (!location.hash || location.hash === '#dashboard' || location.hash === '')) ||
+                  (item.path === '/mi-hijo-a' && (location.pathname === '/' || location.pathname === '/parent-dashboard'));
+
+                return (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all ${
+                      isActive
+                        ? 'font-bold bg-tertiary-container text-on-tertiary-container shadow-xs'
+                        : 'font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-highest'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[20px]">
+                      {item.path.includes('hijo') ? 'child_care' : item.path.includes('reportes') ? 'assignment' : item.path.includes('calendario') ? 'calendar_month' : 'star'}
+                    </span>
+                    <span>{item.label}</span>
+                  </NavLink>
+                );
+              })}
+
+              {!isAdminView && (
+                isGameView ? (
+                  <NavLink
+                    to="/mi-hijo-a"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-primary dark:text-primary-container bg-primary-container/20 hover:bg-primary-container/30 transition-all mt-1"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">dashboard</span>
+                    <span>{t('parentDashboard.nav.backToDashboard', 'Panel de Padres')}</span>
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to="/juegos"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 transition-all mt-1"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">sports_esports</span>
+                    <span>{t('parentDashboard.nav.games', 'Juegos')}</span>
+                  </NavLink>
+                )
+              )}
+            </div>
+
+            {/* Accesibilidad en Móvil */}
+            <div className="pb-3 border-b border-surface-container-high/50 flex flex-col gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70 px-2">
+                Accesibilidad y Vista
+              </span>
+              <div className="flex items-center justify-between gap-2 p-2.5 bg-surface-container-low rounded-xl">
+                <span className="text-xs font-bold text-on-surface px-2">Tamaño de Texto</span>
+                <button
+                  onClick={toggleFontSize}
+                  type="button"
+                  className="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-extrabold text-xs shadow-2xs"
+                >
+                  {fontLabels[fontSizeIndex]}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 p-2.5 bg-surface-container-low rounded-xl">
+                <span className="text-xs font-bold text-on-surface px-2">Accesibilidad Color</span>
+                <ColorblindToggle />
+              </div>
+
+              {!hideLanguage && (
+                <div className="flex items-center justify-between gap-2 p-2.5 bg-surface-container-low rounded-xl">
+                  <span className="text-xs font-bold text-on-surface px-2">Idioma</span>
+                  <LanguageToggle />
+                </div>
+              )}
+            </div>
+
+            {/* Perfil & Acciones de usuario en menú móvil */}
+            {userProfile.isLoggedIn && (
+              <div className="pt-2 flex flex-col gap-2">
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-surface-container-high">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container font-bold flex items-center justify-center text-sm shrink-0 overflow-hidden ring-2 ring-primary/20">
+                      {userProfile.avatar && failedAvatar !== userProfile.avatar ? (
+                        <img src={userProfile.avatar} alt={userProfile.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span>{userProfile.initials}</span>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-on-surface leading-tight">
+                        {userProfile.name}
+                      </span>
+                      <span className="text-xs text-on-surface-variant font-medium">
+                        {userProfile.role}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        handleToggleSettings();
+                      }}
+                      type="button"
+                      className="p-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                      title={t('parentDashboard.profileSettings.settingsTooltip', 'Configuración de perfil')}
+                    >
+                      <span className="material-symbols-outlined text-[20px]">settings</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        logout();
+                        navigate('/LOGIN');
+                      }}
+                      type="button"
+                      className="p-2 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 transition-colors cursor-pointer"
+                      title={t('auth.logout', 'Cerrar sesión')}
+                    >
+                      <span className="material-symbols-outlined text-[20px]">logout</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </header>
 
       {/* BOTÓN FLOTANTE ASISTENTE IA (Fijo en esquina inferior derecha) */}
